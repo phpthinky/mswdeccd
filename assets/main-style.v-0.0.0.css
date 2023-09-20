@@ -1,0 +1,15 @@
+.main-sidebar{
+	background-color: forestgreen !important;
+}
+.dataTables_length, .dataTables_filter{
+		display: 	none;
+}
+select.form-control{
+	display: inline-block;
+	width: 100%;
+}
+.form-control{
+
+	border-bottom: 	1px solid forestgreen; !important;
+	background-color: lightgray;
+}
