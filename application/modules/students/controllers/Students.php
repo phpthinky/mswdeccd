@@ -52,7 +52,6 @@ class Students extends MY_Controller
     $this->form_validation->set_rules('firstName','First Name','required');
     $this->form_validation->set_rules('lastName','Last Name','required');
     $this->form_validation->set_rules('birthDate','Birthday','required');
-    $this->form_validation->set_rules('sector','Sector','required');
     $this->form_validation->set_rules('address','Residential Address','required');
     $this->form_validation->set_rules('gender','Gender','required');
     
@@ -69,28 +68,31 @@ class Students extends MY_Controller
     $data->ext = $this->input->post('ext');
     $data->birthDate = $this->input->post('birthDate');
     $data->gender = $this->input->post('gender');
-    $data->sector = $this->input->post('sector');
     $data->address = $this->input->post('address');
     
-    $data->centerId = $this->input->post('centerId');
-    $data->workersId = $this->input->post('workersId');
+//    $data->centerId = $this->input->post('centerId');
+  //  $data->workersId = $this->input->post('workersId');
 
 
       if($this->pupils_model->if_nameexist($data)){
       echo json_encode(recordexist());
        }else{
 
-        $StudentId = $this->students_model->save($data);
+        if($StudentId = $this->students_model->save($data)){
 
-        if($StudentId > 0){
           $data2 = new stdClass();
           $data2->YearId =  $this->input->post('YearId');
           $data2->StudentId = $StudentId;
           $data2->StudentType = $this->input->post('StudentType');
           $data2->workersId = $this->input->post('workersId');
           $data2->Status = 1;
-          $this->workers_model->addtomystudent($data2);
+          if($this->workers_model->addtomystudent($data2)){
               echo json_encode(savesuccess());
+
+          }else{
+              echo json_encode(array('status'=>false,'msg'=>'Student was not added into my list. Database error occcured.'));
+
+          }
               exit();
         }else{
               echo json_encode(unknownerror());
@@ -207,6 +209,7 @@ class Students extends MY_Controller
 
         $result = $this->settings_model->addstudentfeeding($data);
         echo json_encode(showresponse($result));
+        
       }else{
         echo json_encode(showresponse(3));
       }
@@ -337,7 +340,10 @@ public function listbyclassess($yearId='',$worker='')
 
   }
 
-
+  public function calculate($value='')
+  {
+    // code...
+  }
 
 }
 

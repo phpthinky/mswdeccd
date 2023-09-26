@@ -42,7 +42,7 @@
               			<div class="col-md-3"></div>
               			<div class="col-md-9"><div class="error-area"></div></div>
               		</div>
-              		<form class="form-horizontal" method="POST" action="<?=site_url('centers')?>">
+              		<form class="form-horizontal" method="POST" action="<?=site_url('centers')?>" id="frmaddcenter">
 
 
                           <?php echo validation_errors(); ?>

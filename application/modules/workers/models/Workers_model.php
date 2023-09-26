@@ -34,6 +34,42 @@ class Workers_model extends CI_model
 							return false;
 
 	}
+	public function list_active_Workers($center_id='')
+	{
+		// code...
+		if (!empty($center_id)) {
+			// code...
+			return $this->db->get_where('center_workers_schoolyear',array('center_id'=>$center_id))->result();
+
+		}else{
+			return $this->db->get('center_workers_schoolyear')->result();
+		}
+	}
+
+
+	public function list_inactive_Workers($center_id='')
+	{
+		// code...
+		if (!empty($center_id)) {
+			// code...
+			return $this->db->get_where('eworkers_inactive',array('center_id'=>$center_id))->result();
+
+		}else{
+			return $this->db->get('eworkers_inactive')->result();
+			
+		}
+	}
+	public function list_all_Workers($center_id='')
+	{
+		// code...
+		if (!empty($center_id)) {
+			// code...
+			return $this->db->get_where('eworkers',array('centerId'=>$center_id))->result();
+
+		}else{
+			return $this->db->get('eworkers')->result();
+		}
+	}
 	public function save($data='')
 	{
 		// code...
@@ -146,13 +182,13 @@ class Workers_model extends CI_model
 	public function getTotalStudents($YearId,$workersId)
 	{
 		// code...
-	$this->db->select("*");
+	$this->db->select("c.*");
     $this->db->from('eschoolyear_by_worker a');
     $this->db->join('eschoolyear_by_worker_students b','b.YearId = a.YearId','left');
     $this->db->join('epupils c','c.pupilsId = b.studentId','left');
     $this->db->where('b.YearId',$YearId);
     $this->db->where('b.workersId',$workersId  );
-    $this->db->group_by('pupilsId');
+    $this->db->group_by('c.pupilsId');
     $query = $this->db->get();
     return $query->num_rows();
 	}
@@ -160,7 +196,7 @@ class Workers_model extends CI_model
 	public function getTotalStudentsByType($YearId,$workersId,$type)
 	{
 		// code...
-	$this->db->select("*");
+	$this->db->select("c.*");
     $this->db->from('eschoolyear_by_worker a');
     $this->db->join('eschoolyear_by_worker_students b','b.YearId = a.YearId','left');
     $this->db->join('epupils c','c.pupilsId = b.studentId','left');
@@ -207,6 +243,7 @@ class Workers_model extends CI_model
 				// code...
 
 			 $this->db->insert('eschoolyear_by_worker_students',$data);
+
 			 return true;
 			}
 			return false;
@@ -218,7 +255,7 @@ class Workers_model extends CI_model
 		$this->db->from('eschoolyear_by_worker_students a');
 		$this->db->join('eschoolyear_by_worker b','b.YearId = a.YearId');
 		$this->db->where('a.YearId',$data->YearId);
-		$this->db->where('a.StudentId',$data->YearId);
+		$this->db->where('a.StudentId',$data->StudentId);
 		$this->db->where('b.workersId',$data->workersId);
 		$query = $this->db->get('eschoolyear_by_worker_students');
 		if($query->num_rows() > 0){

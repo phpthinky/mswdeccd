@@ -85,9 +85,29 @@ if (!function_exists('unknownerror')) {
 		}
 }
 
+if (!function_exists('saveError')) {
+			function saveError($type=false){
+				if (!$type) {
+					// code...
+		return array('status'=>false,'msg'=>'No data was added. Database error occcured.');
+				}else{
+
+		return json_encode(array('status'=>false,'msg'=>'No data was added. Database error occcured.'));
+				}
+
+		}
+}
 if (!function_exists('savesuccess')) {
-			function savesuccess(){
+			function savesuccess($type=false){
+				if (!$type) {
+					// code...
+
 		return array('status'=>true,'msg'=>'Successfully added.');
+				}else{
+
+		return json_encode(array('status'=>true,'msg'=>'Successfully added.'));
+				}
+
 
 		}
 }

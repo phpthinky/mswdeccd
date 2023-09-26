@@ -62,8 +62,72 @@ if (sidebarcollapse) {
 				}
 			}
 		})
-	})
+	});
+    $('#schoolyears').on('change',function (){
+		
+		var frmdata = {};
+			frmdata.yearId = $(this).val();
 
+			console.log(frmdata)
+
+			$.ajax({
+				url: site_url+'/workers/list_workers',
+				method: 'POST',
+				dataType:'json',
+				data:frmdata,
+				success: function(response){
+					if (response.status == true) {
+		                $('#all_workers').replaceOptions(response.data);
+
+					}else{
+
+		                $('#workersOption').replaceOptions(data.data);
+					}
+				}
+			})
+
+	});
+	$('#frmselectschoolyear').on('submit',function(e){
+		e.preventDefault();
+		var frmdata = $(this).serializeArray();
+		url = site_url+'/workers/addtomyschoolyear';
+		var result = submit_basicform(url,frmdata);
+		console.log(result)
+	})
+	function submit_basicform(url,frmdata,method="POST",dataType="JSON",result){
+
+			$.ajax({
+				url: url,
+				method: method,
+				dataType:'json',
+				data:frmdata,
+				beforeSubmit:function(){
+					$('.response').removeClass('alert-success')
+					$('.response').removeClass('alert-danger')
+					$('.response').addClass('text-success').text('Processing...')
+
+				},
+				success: function(response){
+					result = response;
+					$('.response').removeClass('text-success')
+
+					if (response.status == true) {
+						$('.response').addClass('alert-success').text(response.msg)
+					}else{
+						$('.response').addClass('alert-success').text(response.msg)
+
+					}
+				},
+				error: function(i,e){
+					console.log(i.responseText)
+					alert('No data was save. Please try again.')
+				},
+				complete:function(){
+					return result;
+				}
+			})
+
+	}
 
 })
 

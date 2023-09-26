@@ -48,6 +48,13 @@ class Centers_model extends CI_model
 		// code...
 		return $this->db->get('ecenter')->result();
 	}
+	
+	public function getAll_v()
+	{
+		// code...
+		return $this->db->get('center_schoolyear')->result();
+	}
+
 	public function getCountAll()
 	{
 		// code...

@@ -61,7 +61,6 @@
 
       $data->centerName = $this->input->post('centerName');
       $data->centerAddress = $this->input->post('centerAddress');
-      $data->addedBy = $this->input->post('workersId');
 
 
     $this->form_validation->set_rules('centerName','Name of Center','required');
@@ -70,37 +69,16 @@
       // code...
 
     if ($this->form_validation->run() === false) {
-    $data->content = 'centers/index';
-    $data->action = 'add';
-
-    $this->template->dashboard($data);
-
+        echo json_encode(array('status'=>false,'msg'=>"Please complete all required form."));
     }else{
 
 
-      $result = $this->centers_model->save($data);
-      if ($result['status'] == true) {
-        // code...
-
-    $centers = $this->centers_model->getAll();
-    $data->centers = $centers;
-           // echo $result['msg'];
-          
-          $data->action = 'added';
-          $data->hasErrors = '<div class="alert alert-success">'.$result['msg'].'</div>';
-
-          $data->msg = $result['msg'];
-          $data->content = 'centers/index';
-          $this->template->dashboard($data);
+      if($result = $this->centers_model->save($data)){
+        echo json_encode(savesuccess());
 
 
       }else{
-          $data->hasErrors = '<div class="alert alert-danger">'.$result['msg'].'</div>';
-            $data->action = 'add';
-            $data->content = 'centers/index';
-
-            $this->template->dashboard($data);
-
+        echo json_encode(array('status'=>false,'msg'=>'No data was added.'));
       }
 
     }
@@ -119,19 +97,20 @@
 
        //$data->totalPupils = $this->pupils_model->getCountAll(0,0);
        //$data->totalWorker = $this->workers_model->getCountAll();
-    if($centers = $this->centers_model->getAll()){
+    if($centers = $this->centers_model->getAll_v()){
         $data = array();
       foreach ($centers as $key => $value) {
         // code...
-        $students = $this->students_model->countAll($value->centerId);
-        $workers= $this->workers_model->getCountAll($value->centerId);
+
+       // $students = $this->students_model->countAll($value->centerId);
+        // $workers= $this->workers_model->getCountAll($value->centerId);
         $data[] = array(
-          $value->centerId,
-          $value->centerName,
-          $value->centerAddress,
-          $workers,
-          $students,
-          '<button class="btn btn-default bt-sm btn-trash" data-id="'.$value->centerId.'" type="button"><i class="fas fa-trash"></i></button>'
+          $value->center_id,
+          $value->center_name,
+          $value->center_address,
+          $value->total_workers,
+          $value->total_students,
+          '<button class="btn btn-default bt-sm btn-trash" data-id="'.$value->center_id.'" type="button"><i class="fas fa-trash"></i></button>'
         ); 
       }
       echo json_encode(array('data'=>$data));

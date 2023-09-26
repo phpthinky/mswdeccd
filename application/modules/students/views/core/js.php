@@ -211,5 +211,18 @@ $('.nav-link').on('click',function(){
   showhidden()
 })
 
+$('#btn-calculate').on('click',function(){
+  var w = $('#weight').val()
+  var h = $('#height').val()
+  var frmdata = {}
+    frmdata.weight = w;
+    frmdata.height = h;
+    $.ajax({
+      url:site_url+'/students/calculate',
+      data: frmdata,
+      
+    })
+})
+
 })
 </script>	

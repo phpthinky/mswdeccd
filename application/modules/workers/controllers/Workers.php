@@ -32,7 +32,9 @@
     $data = new stdClass();
 
     $data->centers = $this->centers_model->getCenters();
-    $data->workers = $this->workers_model->getWorkers();
+    $data->workers = $this->workers_model->list_active_Workers();
+    $data->all_workers = $this->workers_model->list_all_Workers();
+    $data->schoolyears = $this->settings_model->listschoolyears();
     $data->content = 'workers/index';
 
     $this->template->dashboard($data);
@@ -50,12 +52,13 @@
       $data2->ext = $this->input->post('ext');
       $data2->address = $this->input->post('address');
       $data2->centerId = $this->input->post('centerId');
+
       $data2->userId = $this->aauth->create_user($this->input->post('email'),'123456');
       
         if($result = $this->workers_model->save($data2)){
-          echo json_encode(savesuccess());
+          echo savesuccess(1);
         }else{
-          echo json_encode(showresponse(2));
+          echo saveError(1);
 
         }
           
@@ -63,63 +66,6 @@
 
 
   }
-  public function add2()
-  {
-    // code...
-    if ($this->input->post()) {
-      // code...
-      $data = new stdClass();
-
-
-      $data->fName = $this->input->post('firstName');
-      $data->mName = $this->input->post('middleName');
-      $data->lName = $this->input->post('lastName');
-      $data->ext = $this->input->post('ext');
-      $data->address = $this->input->post('address');
-      $data->centerId = $this->input->post('centerId');
-      $data->email = $this->input->post('email');
-
-    $this->form_validation->set_rules('firstName','First Name','required');
-    $this->form_validation->set_rules('email','Email','required');
-    $this->form_validation->set_rules('lastName','Last Name','required');
-    $this->form_validation->set_rules('address','Address','required');
-
-    $this->form_validation->set_rules('centerId','Center','required');
-
-      // code...
-
-    if ($this->form_validation->run() === false) {
-    $data = new stdClass();
-    $data->content = 'workers/index';
-    $data->action = 'add';
-
-    $this->template->dashboard($data);
-
-    }else{
-      $result = $this->workers_model->save($data);
-      if ($result['status'] == true) {
-        // code...
-       // echo $result['msg'];
-          $data->msg = $result['msg'];
-          $data->content = 'workers/index';
-          $this->template->dashboard($data);
-
-
-      }else{
-          $data->hasErrors = '<div class="alert alert-danger">'.$result['msg'].'</div>';
-            $data->action = 'add';
-            $data->content = 'workers/index';
-
-            $this->template->dashboard($data);
-
-      }
-
-    }
-    }else{
-      redirect('centers');
-    }
-  }
-
   public function removeuser($value='')
   {
     // code...
@@ -167,6 +113,28 @@
         exit();
       }
       echo json_encode(array('status'=>false,'data'=>'No input data.'));
+
+    }
+
+    public function list_workers($value='')
+    {
+      // code...
+      if($result = $this->workers_model->list_inactive_Workers()){
+          $data = array();
+        foreach ($result as $key => $value) {
+          // code...
+          $data[] = array(
+            'text'=>$value->worker_name,
+            'value'=>$value->worker_id
+
+          );
+        }
+          echo json_encode(array('status'=>true,'data'=>$data));
+
+       
+      }else{
+          echo json_encode(array('status'=>false,'data'=>array('text'=>'No data','value'=>0)));
+        }
 
     }
  } ?>

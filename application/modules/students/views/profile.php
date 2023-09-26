@@ -183,7 +183,10 @@
                       <div class="form-group row">
                         <label for="height" class="col-sm-12 col-form-label">Height</label>
                         <div class="col-sm-12">
-                          <input type="number" class="form-control" id="height" name="height" placeholder="0">
+                           <div class="col-md-9">
+                                <input class="form-control" type="number" placeholder="0.00" required name="height" min="0" value="0" step="0.01" title="Currency" pattern="^\d+(?:\.\d{1,2})?$" onblur="
+this.parentNode.parentNode.style.backgroundColor=/^\d+(?:\.\d{1,2})?$/.test(this.value)?'inherit':'red'
+"></div>
                         </div>
                       </div>
 

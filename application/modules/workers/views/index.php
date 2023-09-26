@@ -27,6 +27,7 @@
                                     <ul class="nav nav-pills">
                   <li class="nav-item"><a class="nav-link <?=(!empty($action) ? '' : 'active')?>" href="#home" data-toggle="tab">Daycare Workers</a></li>
                   <li class="nav-item"><a class="nav-link <?=(!empty($action) ? 'active' : '')?>" href="#addWorker" data-toggle="tab">Add Worker</a></li>
+                  <li class="nav-item"><a class="nav-link <?=(!empty($action) ? 'active' : '')?>" href="#addschedule" data-toggle="tab">Assign worker class schedule</a></li>
                 </ul>
 
 
@@ -37,16 +38,19 @@
                             <div class="tab-pane <?=(!empty($action) ? '' : 'active')?>" id="home">
                               
                                 <div class="row">
-                                  
+                     <span class="text-title">List of worker with assigned classess</span>             
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>ID</th>
                     <th>Name</th>
                     <th>Address</th>
-                    <th>Contact No.</th>
                     <th>Center</th>
                     <th>Job Status</th>
+                    <th>Class Start</th>
+                    <th>Class End</th>
+                    <th>Class status</th>
+                    <th>Total Students</th>
                     <th style="max-width:   100px !important;"></th>
                   </tr>
                   </thead>
@@ -56,13 +60,17 @@
                       <?php foreach ($workers as $key => $value): ?>
                         
                         <tr>
-                          <td><?=$value->workersId?></td>
-                          <td><?=$value->workerName?></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td><a href="<?=site_url('workers/profile/'.$value->workersId)?>"><i class="fas fa-list"></i></a></td>
+                          <td><?=$value->worker_id?></td>
+                          <td><?=$value->worker_name?></td>
+                          <td><?=$value->worker_address?></td>
+                          <td><?=$value->center_name?></td>
+                          <td><?=$value->job_status?></td>
+                          <td><?=$value->class_start?></td>
+                          <td><?=$value->class_end?></td>
+                          <td><?=$value->class_status?></td>
+                          <td><?=$value->total_students?></td>
+                          
+                          <td><a href="<?=site_url('workers/profile/'.$value->worker_id)?>"><i class="fas fa-list"></i></a></td>
                         </tr>
                       <?php endforeach ?>
                     <?php endif ?>
@@ -163,6 +171,57 @@
                 </div>
               </form>
             </div>
+            <!-- /tab-add-worker -->
+
+            <!-- tab-assign-schedule -->
+            <div class="tab-pane" id="addschedule">
+              <form class="form-responsive" id="frmselectschoolyear" method="post" action="<?=site_url('workers/addtomyschoolyear')?>">
+                      <div class="row">
+                        <div class="col-md-3">&nbsp;</div>
+                        <div class="col-md-9"><div class="pull-right"><span id="error-area"></span></div></div>
+                      </div>
+                      <div class="d-none">
+                        
+                        <input type="hidden" name="workersId" value="">
+
+                      </div>
+
+                        <div class="row form-group">
+                          <div class="col-md-3"><label>Select school year</label></div>
+                          <div class="col-md-9">
+                            <select class="form-control" id="schoolyears" name="schoolyears" required>
+                              <option value="">Select here..</option>
+                              <?php if (!empty($schoolyears)): ?>
+                                <?php foreach ($schoolyears as $key => $value): ?>
+                                  <option value="<?=$value->YearId?>"><?=tomdy($value->YearStart)?> to <?=tomdy($value->YearEnd)?></option>
+                                <?php endforeach ?>
+                              <?php endif ?>
+                            </select>
+                          </div>
+                        </div>
+
+                      <div class="row form-group">
+                          <div class="col-md-3"><label>Select worker</label></div>
+                          <div class="col-md-9">
+                            <select class="form-control" id="all_workers" name="workersId" required>
+                              <option value="">Select here..</option>
+                              <?php if (!empty($all_workers)): ?>
+                                <?php foreach ($all_workers as $key => $value): ?>
+                                  <option value="<?=$value->workersId?>"><?=$value->fName.', '.$value->fName.' '.$value->mName. ' '. $value->ext?></option>
+                                <?php endforeach ?>
+                              <?php endif ?>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="row form-group">
+                          <div class="col-md-3"><label>&nbsp;</label></div>
+                          <div class="col-md-9"><button type="submit" class="btn btn-danger">Save</button></div>
+                        </div>
+                    </form>
+            </div>
+            <!-- /tab-assign-schedule -->
+
 
           </div>
 

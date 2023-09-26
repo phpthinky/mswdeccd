@@ -216,6 +216,7 @@
                             <div class="row form-group">
                               <label class="col-md-3"></label>
                               <div class="col-md-9"><span class="errors"></span></div>
+                              <div class="col-md-9"><span class="results"></span></div>
                             </div>
                             <div class="row form-group">
                               <label class="col-md-3">Date of weighing</label>
@@ -223,18 +224,18 @@
                             </div>
                             <div class="row form-group">
                               <label class="col-md-3">Weigh kg</label>
-                              <div class="col-md-9"><input type="number" name="weight" class="form-control"></div>
+                              <div class="col-md-9"><input type="number" name="weight" id="weight"  class="form-control"></div>
                             </div>
                             <div class="row form-group">
                               <label class="col-md-3">Height cm</label>
                               <div class="col-md-9">
-                                <input class="form-control" type="number" placeholder="0.00" required name="height" min="0" value="0" step="0.01" title="Currency" pattern="^\d+(?:\.\d{1,2})?$" onblur="
-this.parentNode.parentNode.style.backgroundColor=/^\d+(?:\.\d{1,2})?$/.test(this.value)?'inherit':'red'
-"></div>
+                          <input type="number" class="form-control" id="height" name="height"  id="height" placeholder="0">
+                               
+                               </div>
                             </div>
                             <div class="row form-group">
                               <label class="col-md-3"></label>
-                              <div class="col-md-9"><input type="submit" name="btnSave" value="Save" class="btn btn-outline-primary"></div>
+                              <div class="col-md-9"><input type="submit" name="btnSave" value="Save" class="btn btn-outline-primary"> <button id="btn-calculate" type="button">calculate</button></div>
                             </div>
                           </form>
                         </div>

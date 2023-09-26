@@ -15,28 +15,33 @@
   public function countAll($centerId=false)
   {
     // code...
+    if (!empty($centerId)) {
+      $sql = "SELECT count(*) as totalstudent FROM `epupils` JOIN eschoolyear_by_worker_students ON studentId = pupilsId JOIN eschoolyear_by_worker ON eschoolyear_by_worker.workersId = eschoolyear_by_worker_students.workersId JOIN eworkers ON eworkers.workersId = eschoolyear_by_worker.workersId where centerId = $centerId";
+      $query = $this->db->query($sql);
+    }else{
+
     $this->db->select('*');
     $this->db->from('epupils');
-    if (!empty($centerId)) {
-      // code...
-    
-    $this->db->where('centerId',$centerId);
-    }
     $query = $this->db->get();
+
+    }
     return $query->num_rows();
     }
 
   public function listAll($centerId=false)
   {
     // code...
+    
+    if (!empty($centerId)) {
+      $sql = "SELECT count(*) as totalstudent FROM `epupils` JOIN eschoolyear_by_worker_students ON studentId = pupilsId JOIN eschoolyear_by_worker ON eschoolyear_by_worker.workersId = eschoolyear_by_worker_students.workersId JOIN eworkers ON eworkers.workersId = eschoolyear_by_worker.workersId where centerId = $centerId";
+      $query = $this->db->query($sql);
+    }else{
+
     $this->db->select('*');
     $this->db->from('epupils');
-    if (!empty($centerId)) {
-      // code...
-    
-    $this->db->where('centerId',$centerId);
-    }
     $query = $this->db->get();
+
+    }
     return $query->result();
     }
 
@@ -76,15 +81,16 @@
     public function listmystudents($YearId,$workersId)
   {
     // code...
-    $this->db->select("c.pupilsId as id, CONCAT(c.fName,' ', c.mName,' ', c.lName,' ', c.ext) as studentName,address,gender,age,b.StudentType,birthDate");
-    $this->db->from('eschoolyear_by_worker a');
-    $this->db->join('eschoolyear_by_worker_students b','b.YearId = a.YearId','left');
-    $this->db->join('epupils c','c.pupilsId = b.studentId','left');
+    $this->db->select("pupilsId as id, workersId ,YearId  ,CONCAT(fName,' ', mName,' ', lName,' ', ext) as studentName,address,gender,age,StudentType,birthDate");
+    $this->db->from('epupils');
+    $this->db->join('eschoolyear_by_worker_students s','s.studentId = pupilsId','inner');
     $this->db->order_by('studentName','asc');
-    $this->db->group_by('pupilsId');
-    $this->db->where('b.YearId',$YearId);
-    $this->db->where('b.workersId',$workersId  );
-    $query = $this->db->get();
+    $this->db->group_by('pupilsId,workersId,StudentType');
+    $this->db->where('YearId',$YearId);
+    $this->db->where('workersId',$workersId  );
+
+    $query = $this->db->get(); 
+    
     return $query->result();
   }
   
