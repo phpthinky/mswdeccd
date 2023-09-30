@@ -343,6 +343,16 @@ public function listbyclassess($yearId='',$worker='')
   public function calculate($value='')
   {
     // code...
+    $w = 8;
+    $h = 65;
+    $this->load->library('bmi');
+    $result = $this->bmi->get($w,$h);
+    var_dump($result);
+   // $this->bmi->weight = $w;
+   // $this->bmi->height = $h;
+   // $bmi = new Bmi();
+    // $bmi::weight = $w;  
+
   }
 
 }

@@ -154,7 +154,13 @@ if (!function_exists('getAge')) {
 	function getAge($dob,$cod=false,$format = false){
 
 	$dateofbirth = new DateTime($dob);
+	if (!empty($cod)) {
+		// code...
+	$today = new DateTime($cod);
+	}else{
 	$today = new DateTime(date('Y-m-d'));
+
+	}
 		$age = $today->diff($dateofbirth);
 		return $age;
 	}

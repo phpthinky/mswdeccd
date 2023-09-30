@@ -30,10 +30,6 @@ class Pupils extends MY_Controller
     $data->workers = $this->workers_model->getWorkers();
 
 
-    if ($result = $this->pupils_model->getAll()) {
-      // code...
-      $data->listAll = $result;
-    }
     $this->template->dashboard($data);
     
   }
@@ -58,17 +54,17 @@ class Pupils extends MY_Controller
   public function getList($centerId=0,$workersId=0,$q=null)
   {
     // code...
-   if($result = $this->pupils_model->getAll($centerId,$workersId)){
+   if($result = $this->pupils_model->getAll_v($centerId,$workersId)){
     $data = array();
     foreach ($result as $key => $value) {
       // code...
-      $age = getAge($value->birthDate);
-      $data[] = array($value->pupilsId,
-        $value->fName,
+      $age = getAge($value->birthdate);
+      $data[] = array($value->student_id,
+        $value->student_name,
         $age->y.' year '.$age->m.' month',
         gender($value->gender),
         $value->barangay,
-        '<a href="'.site_url('students/profile/').$value->pupilsId.'" class="btn btn-default btn-xs" title="View pupil info."><i class="fas fa-list"></i></a>');
+        '<a href="'.site_url('students/profile/').$value->student_id.'" class="btn btn-default btn-xs" title="View pupil info."><i class="fas fa-list"></i></a>');
       }
 
         echo json_encode(array("data"=>$data));

@@ -230,5 +230,20 @@
       $data->content = 'settings/standardscoretable';
       $this->template->dashboard($data);
     }
+    public function zscore($value='')
+    {
+      // code...
+      if ($this->input->post()) {
+        // code...
+        
+        exit();
+      }
+      $data = new stdClass();
+
+      $data->title = 'Z Score Table';
+      $data->content = 'settings/zscore';
+      $this->template->dashboard($data);
+      
+    }
  } ?>
 

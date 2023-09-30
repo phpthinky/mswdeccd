@@ -15,6 +15,22 @@
  		return $this->db->get_where('epupils',['pupilsId'=>$id])->row(0);
  	}
 
+ 	public function getAll_v($centerId=0,$workersId=0){
+ 		if ($centerId > 0 && $workersId > 0) {
+ 			// code...
+ 			$this->db->where('worker_id',$workersId);
+ 			$this->db->where('center_id',$centerId);
+ 			return $this->db->get('estudents')->result();
+
+ 		}elseif($centerId > 0){
+			$this->db->where('center_id',$centerId);
+ 			return $this->db->get('estudents')->result();
+
+ 		}else{
+
+ 			return $this->db->get('estudents')->result();
+ 		}
+ 	}
  	public function getAll($centerId=0,$workersId=0){
  		if ($centerId > 0 && $workersId > 0) {
  			// code...

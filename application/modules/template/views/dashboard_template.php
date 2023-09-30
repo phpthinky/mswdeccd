@@ -248,6 +248,12 @@
               </li>
 
               <li class="nav-item">
+                <a href="<?=site_url('settings/zscore')?>" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Z-Score Table</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="<?=site_url('settings/feeding')?>" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Feeding Schedule</p>

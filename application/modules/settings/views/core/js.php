@@ -271,5 +271,12 @@ $(document).on('click','.btn-save',function(){
 
 
 	});
+
+	$('#form-add-zscore').on('submit',function (e) {
+		// body...
+		e.preventDefault();
+		var formdata = $(this).serializeArray	();
+		console	.log(formdata	)
+	})
 });
 </script>

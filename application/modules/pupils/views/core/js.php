@@ -9,6 +9,7 @@
       })
 
       function refreshTable(centerId,workersId){
+        console.log(centerId+' '+workersId)
         table.DataTable({
         ajax:"<?=site_url('pupils/getList/')?>"+centerId+'/'+workersId,
         destroy:true
@@ -18,6 +19,7 @@
       $('#btn-go').on('click',function(){
         var centerId = $('#centersOption').val()
         var workersId = $('#workersOption').val()
+        console.log(workersId)
         refreshTable(centerId,workersId)
       })
 
@@ -53,8 +55,8 @@
 
 */
     $('#centersOption').on('change',function (){
-       var centerId  = this.value;
-    
+       var centerId  = $(this).val();
+        var workersId = 0;
       $.ajax({
         url:site_url+'/pupils/getworkers',
         data:{center:centerId},
@@ -64,22 +66,25 @@
           console.log(response)
           if (response.status == true) {
             $('#workersOption').replaceOptions(response.data);
-          }else{
+            var data = response.data;
+            workersId = data[0].value
+            }else{
             $('#workersOption').replaceOptions([{value:'',text:'No workers yet.'}]);
 
           }
         },complete:function(){
-                refreshTable(centerId)
+                refreshTable(centerId,workersId)
 
         }
       })
     })
 
     $('#workersOption').on('change',function (){
-      var workersId = this.value
+      var workersId = $(this).val()
+      console.log(workersId)
       var centerId = $('#centersOption').val();
           table.DataTable().clear().destroy();
-                refreshTable(centerId)
+                refreshTable(centerId,workersId)
 
     })
     $('#searchstring').on('keyup',function(){
