@@ -132,5 +132,27 @@
     }
     return false;
   }
+  public function getWFH($data='')
+  {
+    // code...
+    if (!empty($data)) {
+      // code...
+      return $this->db->get_where('e_zscore_wfh',$data)->result();
+
+    }else{
+      return $this->db->get('e_zscore_wfh')->result();
+    }
+  }
+  public function addWFH($data='')
+  {
+    // code...
+    if($this->db->get_where('e_zscore_wfh',array('height'=>$data['height'],'gender'=>$data['gender']))->result()){
+      $this->db->where(array('height'=>$data['height'],'gender'=>$data['gender']));
+      return $this->db->update('e_zscore_wfh',$data);
+    }else{
+      return $this->db->insert('e_zscore_wfh',$data);
+
+    }
+  }
 
  } ?>

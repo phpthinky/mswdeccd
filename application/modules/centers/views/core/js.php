@@ -15,7 +15,8 @@ $(function(){
 	}
 	$(document).on('click','.btn-trash',function() {
 		// body...
-		var centerId = $(this).data('id');
+		if (confirm('This center and all of its record will be deleted permanently. Make you have a backup.')) {
+			var centerId = $(this).data('id');
 		$.ajax({
 			url:current_url,
 			data:{form:'remove',id:centerId},
@@ -23,8 +24,11 @@ $(function(){
 			method:'post',
 
 		})
-		refreshTable(table,site_url+'centers/listall')
+		refreshTable(table,site_url+'/centers/listall')
 		$(this).parent().parent().remove()
+
+		}
+		
 	})
 	$(document).on('submit','#frmaddcenter',function(e){
 		e.preventDefault();

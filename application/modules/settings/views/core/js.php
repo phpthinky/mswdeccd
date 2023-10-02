@@ -272,11 +272,30 @@ $(document).on('click','.btn-save',function(){
 
 	});
 
-	$('#form-add-zscore').on('submit',function (e) {
+	 var tablewfh =   $('#table-zscore');
+      tablewfh.DataTable({
+        ajax:current_url+'?form=list'
+      })
+	$('#form-add-wfh').on('submit',function (e) {
 		// body...
 		e.preventDefault();
 		var formdata = $(this).serializeArray	();
-		console	.log(formdata	)
+
+		$.ajax({
+		url:current_url,
+		data:formdata,
+		dataType:'json',
+		method:'POST',
+		success:function(response){
+			console.log(response)
+		},
+					complete:function(){
+  		 			 		refreshTableData(tablewfh,current_url+'?form=list');
+
+			}
+
 	})
+	});
+
 });
 </script>

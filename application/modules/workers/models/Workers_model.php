@@ -64,10 +64,10 @@ class Workers_model extends CI_model
 		// code...
 		if (!empty($center_id)) {
 			// code...
-			return $this->db->get_where('eworkers',array('centerId'=>$center_id))->result();
+			return $this->db->get_where('center_workers',array('center_id'=>$center_id))->result();
 
 		}else{
-			return $this->db->get('eworkers')->result();
+			return $this->db->get('center_workers')->result();
 		}
 	}
 	public function save($data='')
@@ -264,6 +264,14 @@ class Workers_model extends CI_model
 		return false;
 	}
 	
-
+	public function remove($id='')
+	{
+		// code...
+	// code...
+		$this->db->delete('eschoolyear_by_worker',array('workersId',$id));
+		$this->db->delete('eschoolyear_by_worker_students',array('workersId',$id));
+		$this->db->delete('eworkers',array('workersId'=>$id));
+		return true;
+	}
 }
  ?>

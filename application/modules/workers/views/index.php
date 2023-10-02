@@ -36,10 +36,24 @@
             <div class="tab-content">
 
                             <div class="tab-pane <?=(!empty($action) ? '' : 'active')?>" id="home">
-                              
-                                <div class="row">
-                     <span class="text-title">List of worker with assigned classess</span>             
-                <table id="example1" class="table table-bordered table-striped">
+                              <div class="row">
+                                <div class="col-md-3">
+                                  
+                                  <label for="workertype">Select Worker Type</label>
+                                  <select id="workertype" name="workertype" class="form-control">
+                                    <option value="0">List all workers</option>
+                                    <option value="1">List all workers with assigned classess</option>
+                                  </select>
+                                </div>
+                                <div class="col-md-9">
+                                  <label for="searchstring">Searh here..</label>
+                                  <input type="search" id="searchstring" name="searchstring" placeholder="Search here..." class="form-control">
+                                </div>
+                              </div>
+                                <div class="table-responsive">
+                                  <hr>
+                <h4 class="table-title text-title">List all workers</h4>
+                <table id="worker-table" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>ID</th>
@@ -51,29 +65,11 @@
                     <th>Class End</th>
                     <th>Class status</th>
                     <th>Total Students</th>
-                    <th style="max-width:   100px !important;"></th>
+                    <th></th>
                   </tr>
                   </thead>
                   <tbody>
 
-                    <?php if (!empty($workers)): ?>
-                      <?php foreach ($workers as $key => $value): ?>
-                        
-                        <tr>
-                          <td><?=$value->worker_id?></td>
-                          <td><?=$value->worker_name?></td>
-                          <td><?=$value->worker_address?></td>
-                          <td><?=$value->center_name?></td>
-                          <td><?=$value->job_status?></td>
-                          <td><?=$value->class_start?></td>
-                          <td><?=$value->class_end?></td>
-                          <td><?=$value->class_status?></td>
-                          <td><?=$value->total_students?></td>
-                          
-                          <td><a href="<?=site_url('workers/profile/'.$value->worker_id)?>"><i class="fas fa-list"></i></a></td>
-                        </tr>
-                      <?php endforeach ?>
-                    <?php endif ?>
                   
                   </tbody>
                 </table>

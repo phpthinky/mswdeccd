@@ -230,20 +230,115 @@
       $data->content = 'settings/standardscoretable';
       $this->template->dashboard($data);
     }
-    public function zscore($value='')
+    public function zscorewfh($form='')
     {
       // code...
+      if (!empty($_GET['form'])) {
+        // code...
+        $form = $_GET['form'];
+        $listdata = $this->settings_model->getWFH();
+        if (!empty($listdata)) {
+          // code...
+          $data = array();
+          foreach ($listdata as $key => $value) {
+            // code...
+            $data[] = array(
+              $value->height,
+              $value->su_weight,
+              $value->u_weight,
+              $value->n_weight,
+              $value->ov_weight,
+              $value->ob_weight,
+              ''
+
+            );
+
+          }
+          echo json_encode(array('data'=>$data));
+        }
+        exit();
+      }
+
       if ($this->input->post()) {
         // code...
+
+        $postdata = $this->input->post();
+        $insertdata = array();
+        $insertdata['height'] = $postdata['height'];
+        $insertdata['su_weight'] = $postdata['suw'];
+        $insertdata['u_weight'] = $postdata['uw'];
+        $insertdata['n_weight'] = $postdata['nw'];
+        $insertdata['ov_weight'] = $postdata['ovw'];
+        $insertdata['ob_weight'] = $postdata['obw'];
+        $insertdata['gender'] = $postdata['gender'];
+        $insertdata['age'] = $postdata['age_limit'];
+
+        $this->settings_model->addWFH($insertdata);
         
         exit();
       }
       $data = new stdClass();
 
       $data->title = 'Z Score Table';
-      $data->content = 'settings/zscore';
+      $data->content = 'settings/wfh';
       $this->template->dashboard($data);
       
     }
+
+    public function zscorewfa($form='')
+    {
+      // code...
+      if (!empty($_GET['form'])) {
+        // code...
+        $form = $_GET['form'];
+        $listdata = $this->settings_model->getWFH();
+        if (!empty($listdata)) {
+          // code...
+          $data = array();
+          foreach ($listdata as $key => $value) {
+            // code...
+            $data[] = array(
+              $value->height,
+              $value->su_weight,
+              $value->u_weight,
+              $value->n_weight,
+              $value->ov_weight,
+              $value->ob_weight,
+              ''
+
+            );
+
+          }
+          echo json_encode(array('data'=>$data));
+        }
+        exit();
+      }
+
+      if ($this->input->post()) {
+        // code...
+
+        $postdata = $this->input->post();
+        $insertdata = array();
+        $insertdata['height'] = $postdata['height'];
+        $insertdata['su_weight'] = $postdata['suw'];
+        $insertdata['u_weight'] = $postdata['uw'];
+        $insertdata['n_weight'] = $postdata['nw'];
+        $insertdata['ov_weight'] = $postdata['ovw'];
+        $insertdata['ob_weight'] = $postdata['obw'];
+        $insertdata['gender'] = $postdata['gender'];
+        $insertdata['age'] = $postdata['age_limit'];
+
+        $this->settings_model->addWFH($insertdata);
+        
+        exit();
+      }
+      $data = new stdClass();
+
+      $data->title = 'Z Score Table';
+      $data->content = 'settings/wfa';
+      $this->template->dashboard($data);
+      
+    }
+
  } ?>
 

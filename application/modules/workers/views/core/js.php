@@ -1,5 +1,49 @@
 <script type="text/javascript">
 $(function(){
+		var	w_type = 0;
+		var table = $('#worker-table');
+
+	    table.DataTable({
+        ajax:site_url+'/workers/listall?type='+w_type
+      })
+
+	function refreshTable(table,url){
+	    table.DataTable({
+	    	destroy: true,
+        ajax:url
+      	})
+	}
+	$('#workertype').on('change',function(){
+		w_type = $(this).val();
+		$('.table-title').text($('#workertype option:selected').text())
+		console.log(w_type)
+		refreshTable(table,site_url+'/workers/listall?type='+w_type);
+
+	});
+	$(document).on('click','.btn-trash',function() {
+		// body...
+		if (confirm('This worker and his pupils records will be permanently deleted. Make sure you have a backup.')) {
+
+		
+		var workersId = $(this).data('id');
+		$.ajax({
+			url:current_url,
+			data:{form:'remove',id:workersId},
+			dataType:'text',
+			method:'post',
+			success:function(response){
+				console.log(response)
+			}
+
+		})
+		refreshTable(table,site_url+'/workers/listall?type='+w_type)
+		$(this).parent().parent().remove()
+
+	
+		}	
+	})
+
+
 var sidebarcollapse = true;
 if (sidebarcollapse) {
 	$('.sidebar-mini').removeClass('sidebar-open').addClass('sidebar-collapse')

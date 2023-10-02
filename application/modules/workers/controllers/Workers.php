@@ -28,7 +28,28 @@
   }
   public function index()
   {
+    if ($this->input->post()) {
+      // code...
+      $form = $this->input->post('form');
+      switch ($form) {
+        case 'remove':
+          // code...
+        if($result = $this->workers_model->remove($this->input->post('id'))){
+          echo json_encode(array('status'=>true,'msg'=>'Successfully remove.'));
+        }else{
+          echo json_encode(array('status'=>true,'msg'=>'Nothing to remove.'));
 
+        }
+        
+          break;
+        
+        default:
+          // code...
+        echo json_encode(noinput());
+          break;
+      }
+      exit();
+    }
     $data = new stdClass();
 
     $data->centers = $this->centers_model->getCenters();
@@ -135,6 +156,69 @@
       }else{
           echo json_encode(array('status'=>false,'data'=>array('text'=>'No data','value'=>0)));
         }
+
+    }
+    public function listall($type=0,$center=0)
+    {
+      if (isset($_GET['type'])) {
+        // code...
+        $type = $_GET['type'];
+      }
+      if ($type == 1) {
+        // code...
+
+            if ($all_workers = $this->workers_model->list_active_Workers()) {
+              // code...
+              foreach ($all_workers as $key => $value) {
+                // code...
+               $data[] = array(
+                  $value->worker_id,
+                  $value->worker_name,
+                  $value->worker_address,
+                  $value->center_name,
+                  $value->job_status,
+                  tomdy($value->class_start),
+                  tomdy($value->class_end),
+                  $value->class_status,
+                  $value->total_students,
+                  '<button class="btn btn-default bt-sm btn-trash" data-id="'.$value->worker_id.'" type="button"><i class="fas fa-trash"></i></button>'
+                ); 
+
+              }
+              echo json_encode(array('data'=>$data));
+            }else{
+              echo json_encode(array('data'=>array()));
+
+            }
+
+      }else{
+
+
+    if ($all_workers = $this->workers_model->list_all_Workers()) {
+      // code...
+      foreach ($all_workers as $key => $value) {
+        // code...
+       $data[] = array(
+          $value->worker_id,
+          $value->worker_name,
+          $value->worker_address,
+          $value->center_name,
+          $value->job_status,
+          '',
+          '',
+          '',
+          '',
+          '<button class="btn btn-default bt-sm btn-trash" data-id="'.$value->worker_id.'" type="button"><i class="fas fa-trash"></i></button>'
+        ); 
+
+      }
+      echo json_encode(array('data'=>$data));
+    }else{
+      echo json_encode(array('data'=>array()));
+
+    }
+
+      }
 
     }
  } ?>

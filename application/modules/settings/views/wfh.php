@@ -11,7 +11,7 @@
 			<div class="card-body">
 				<div class="tab-content">
 					<div class="tab-pane active" id="home">
-				<h2 class="text-title">ZSCORE WEIGHT FOR HEIGHT (WHZ) 0-59 MONTHS</h2>
+				<h2 class="text-title">WEIGHT FOR HEIGHT (WFH) CHARTS 0-59 MONTHS</h2>
 <hr>
 <div class="row">	
 	<div class="col-md-2">
@@ -58,7 +58,7 @@
 
 					</div>
 					<div class="tab-pane" id="addrawscore">
-				<h2 class="text-title">ZSCORE WEIGHT FOR HEIGHT (WHZ) 0-59 MONTHS</h2>
+				<h2 class="text-title">ADD WEIGHT FOR HEIGHT</h2>
 
 						<div class="form-responsive">
 							<div class="row">
@@ -69,7 +69,7 @@
               			<div class="col-md-3"></div>
               			<div class="col-md-9"><div class="error-area"></div></div>
               		</div>
-              		<form class="form-horizontal" id="form-add-zscore" action="" method="POST">
+              		<form class="form-horizontal" id="form-add-wfh" action="" method="POST">
               			<input type="hidden" name="form" value="add">
               			<div class="form-group">
               				<div class="row">

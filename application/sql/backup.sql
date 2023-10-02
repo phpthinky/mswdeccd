@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 30, 2023 at 11:47 AM
+-- Generation Time: Oct 02, 2023 at 03:27 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -146,12 +146,9 @@ CREATE TABLE `aauth_users` (
 --
 
 INSERT INTO `aauth_users` (`id`, `email`, `pass`, `username`, `banned`, `last_login`, `last_activity`, `date_created`, `forgot_exp`, `remember_time`, `remember_exp`, `verification_code`, `totp_secret`, `ip_address`) VALUES
-(1, 'admin@gmail.com', 'ec225039f1cb0c48ad528709e8e0184991e637d96db175f094b6b2037ec1a3c2', 'Admin', 0, '2023-09-30 11:17:53', '2023-09-30 11:17:53', NULL, NULL, NULL, NULL, NULL, NULL, '::1'),
-(2, 'teach@mail.com', '85331630fca2b67c234b6b57e7affc9403d62cf186989c71675956e3ccc2a20d', '', 0, '2023-09-30 09:10:01', '2023-09-30 09:10:01', '2023-09-15 14:20:02', NULL, NULL, NULL, NULL, NULL, '::1'),
-(3, 'yor@mail.com', '4e4cdff9436d4b9797eeb35d6965e73bd0bd9d5dc939ab2c190a179cf8df960d', '', 0, '2023-09-23 19:08:21', '2023-09-23 19:08:21', '2023-09-23 19:07:20', NULL, NULL, NULL, NULL, NULL, '::1'),
-(4, 'boss@mail.com', '26099512199546597858cebb4cc8d90e21f48e9be747c98d45d8a57a0f0a6e44', '', 0, NULL, NULL, '2023-09-24 09:44:30', NULL, NULL, NULL, NULL, NULL, NULL),
-(5, 'hh@gmail.com', '28a9d1ac311fc87b88b094cd50b05abf517134b03d636bbc7ee94401f9952a21', '', 0, '2023-09-25 17:33:11', '2023-09-25 17:33:12', '2023-09-25 16:47:39', NULL, NULL, NULL, NULL, NULL, '::1'),
-(6, 'yor5@mail.com', '3913228818759cd846b475d3106a4ecc9bf9bd91746cab4e88a8750c11d15914', '', 0, NULL, NULL, '2023-09-25 16:49:45', NULL, NULL, NULL, NULL, NULL, NULL);
+(1, 'admin@gmail.com', 'ec225039f1cb0c48ad528709e8e0184991e637d96db175f094b6b2037ec1a3c2', 'Admin', 0, '2023-10-02 14:03:28', '2023-10-02 14:03:28', NULL, NULL, NULL, NULL, NULL, NULL, '::1'),
+(7, 'yor5@mail.com', '3e1340c771fff1153aa60137dc8c0265d5914e5de769b59183085b78d950b31b', '', 0, NULL, NULL, '2023-10-02 14:49:27', NULL, NULL, NULL, NULL, NULL, NULL),
+(8, 'yor@mail.com', '8e7d10c7c802e6cc70ddc57bcb1477eb8f3083b0f088f9427e4d56600b065bbe', '', 0, NULL, NULL, '2023-10-02 15:21:43', NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -171,30 +168,8 @@ CREATE TABLE `aauth_user_to_group` (
 INSERT INTO `aauth_user_to_group` (`user_id`, `group_id`) VALUES
 (1, 1),
 (1, 3),
-(1, 4),
-(1, 5),
-(2, 3),
-(3, 3),
-(4, 3),
-(5, 3),
-(6, 3),
 (7, 3),
-(7, 4),
-(7, 5),
-(8, 3),
-(9, 3),
-(10, 3),
-(11, 3),
-(12, 3),
-(13, 3),
-(14, 3),
-(15, 3),
-(16, 3),
-(17, 3),
-(18, 3),
-(19, 3),
-(20, 3),
-(21, 3);
+(8, 3);
 
 -- --------------------------------------------------------
 
@@ -365,9 +340,7 @@ CREATE TABLE `ecenter` (
 --
 
 INSERT INTO `ecenter` (`centerId`, `centerName`, `centerAddress`, `addedBy`) VALUES
-(2, 'Ligaya', 'Ligaya Sablayan Occidental Mindoro', 0),
-(3, 'Burgos CDC', 'Burgos, Sablayan, Occidental Mindoro', 0),
-(4, 'Malisbong CDC', 'Malisbong, Sablayan, Occidental Mindoro', 0);
+(3, 'Malisbong CDC', 'Malisbong, Sablayan, Occidental Mindoro', 0);
 
 -- --------------------------------------------------------
 
@@ -412,15 +385,6 @@ CREATE TABLE `epupils` (
   `status` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- Dumping data for table `epupils`
---
-
-INSERT INTO `epupils` (`pupilsId`, `fName`, `mName`, `lName`, `ext`, `age`, `birthDate`, `gender`, `sector`, `address`, `barangay`, `weight`, `height`, `dateAdded`, `dateUpdated`, `pupilsCode`, `app`, `status`) VALUES
-(1, 'Tey', 'Cher', 'Koh', '', 0, '2021-10-12', 1, '3', 'Ligaya, Sablayan Occidental Mindoro', '', 0, 0, '', '', '', 1, 0),
-(5, 'Ha', 'roy', 'Yor', '', 0, '2023-09-06', 2, '', 'Ligaya', '', 0, 0, '', '', '', 1, 0),
-(6, 'trtert', 'erte', 'erter', '', 0, '2019-01-01', 1, '', 'gagag', '', 0, 0, '', '', '', 1, 0);
-
 -- --------------------------------------------------------
 
 --
@@ -435,18 +399,6 @@ CREATE TABLE `epupils_feeding` (
   `pupils_id` int(11) NOT NULL,
   `status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `epupils_feeding`
---
-
-INSERT INTO `epupils_feeding` (`feeding_id`, `feeding_date`, `foods`, `drinks`, `pupils_id`, `status`) VALUES
-(1, '2023-09-06', 'ergert', 'ertert', 1, 0),
-(2, '2023-09-07', 'sarew', 'werwer', 1, 0),
-(3, '2023-09-14', 'sarew', 'werwer', 1, 0),
-(4, '2023-09-27', 'hhiuiu', 'fg', 1, 0),
-(5, '2023-09-05', '7676t', '676', 1, 0),
-(6, '2023-09-22', '7676t', '676', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -497,16 +449,6 @@ CREATE TABLE `eschoolyear_by_worker` (
   `workersId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- Dumping data for table `eschoolyear_by_worker`
---
-
-INSERT INTO `eschoolyear_by_worker` (`YearId`, `workersId`) VALUES
-(1, 1),
-(1, 2),
-(1, 3),
-(2, 4);
-
 -- --------------------------------------------------------
 
 --
@@ -520,15 +462,6 @@ CREATE TABLE `eschoolyear_by_worker_students` (
   `StudentType` int(11) NOT NULL,
   `Status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `eschoolyear_by_worker_students`
---
-
-INSERT INTO `eschoolyear_by_worker_students` (`YearId`, `StudentId`, `workersId`, `StudentType`, `Status`) VALUES
-(1, 1, 1, 1, 1),
-(1, 5, 2, 1, 1),
-(2, 6, 4, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -578,17 +511,6 @@ CREATE TABLE `eworkers` (
   `app` int(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- Dumping data for table `eworkers`
---
-
-INSERT INTO `eworkers` (`workersId`, `userId`, `centerId`, `fName`, `mName`, `lName`, `ext`, `birthDate`, `gender`, `sector`, `address`, `barangay`, `municipality`, `province`, `dateHired`, `jobStatus`, `profile`, `dateAdded`, `app`) VALUES
-(1, 2, 2, 'Roy', 'Van', 'Lang', '', NULL, 0, '', 'Ligaya, Sablayan Occidental Mindoro', '', '', '', '0000-00-00', 0, '', '', 1),
-(2, 3, 2, 'Harold', 'R', 'Yor', '', NULL, 0, '', 'Ligaya', '', '', '', '0000-00-00', 0, '', '', 1),
-(3, 4, 4, 'Boss', 'Lang', 'Malakas', '', NULL, 0, '', 'malisbong lang', '', '', '', '0000-00-00', 0, '', '', 1),
-(4, 5, 3, 'esr', 'e', 'eryers', 'y', NULL, 0, '', 'Ligaya', '', '', '', '0000-00-00', 0, '', '', 1),
-(5, 6, 3, 't3w', 'er', 'ery', '', NULL, 0, '', 'malisbong lang', '', '', '', '0000-00-00', 0, '', '', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -600,6 +522,34 @@ CREATE TABLE `eworkers_inactive` (
 ,`center_id` int(3)
 ,`worker_name` varchar(67)
 );
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `e_zscore_wfh`
+--
+
+CREATE TABLE `e_zscore_wfh` (
+  `id` int(11) NOT NULL,
+  `height` varchar(10) NOT NULL,
+  `su_weight` varchar(10) NOT NULL,
+  `u_weight` varchar(10) NOT NULL,
+  `n_weight` varchar(10) NOT NULL,
+  `ov_weight` varchar(10) NOT NULL,
+  `ob_weight` varchar(10) NOT NULL,
+  `gender` int(1) NOT NULL DEFAULT 1,
+  `age` int(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `e_zscore_wfh`
+--
+
+INSERT INTO `e_zscore_wfh` (`id`, `height`, `su_weight`, `u_weight`, `n_weight`, `ov_weight`, `ob_weight`, `gender`, `age`) VALUES
+(2, '65', '12', '13', '15', '16', '18', 1, 3),
+(3, '66', 'gdfg', 'erg', 'erg', 'erg', 'ert', 0, 0),
+(4, '67', 'erw', 'ewt', 'ret', 't3', 'rt', 1, 1),
+(5, '68', 'ert', 'ery', 'ey', 'ery', 'eryy', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -830,6 +780,12 @@ ALTER TABLE `eworkers`
   ADD PRIMARY KEY (`workersId`);
 
 --
+-- Indexes for table `e_zscore_wfh`
+--
+ALTER TABLE `e_zscore_wfh`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `weighing`
 --
 ALTER TABLE `weighing`
@@ -855,7 +811,7 @@ ALTER TABLE `aauth_groups`
 -- AUTO_INCREMENT for table `aauth_login_attempts`
 --
 ALTER TABLE `aauth_login_attempts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=139;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
 
 --
 -- AUTO_INCREMENT for table `aauth_perms`
@@ -873,7 +829,7 @@ ALTER TABLE `aauth_pms`
 -- AUTO_INCREMENT for table `aauth_users`
 --
 ALTER TABLE `aauth_users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `aauth_user_variables`
@@ -903,7 +859,7 @@ ALTER TABLE `assessment_sum_scaled_score`
 -- AUTO_INCREMENT for table `ecenter`
 --
 ALTER TABLE `ecenter`
-  MODIFY `centerId` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `centerId` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `eparent`
@@ -915,13 +871,13 @@ ALTER TABLE `eparent`
 -- AUTO_INCREMENT for table `epupils`
 --
 ALTER TABLE `epupils`
-  MODIFY `pupilsId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `pupilsId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `epupils_feeding`
 --
 ALTER TABLE `epupils_feeding`
-  MODIFY `feeding_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `feeding_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `eschoolyear`
@@ -933,7 +889,13 @@ ALTER TABLE `eschoolyear`
 -- AUTO_INCREMENT for table `eworkers`
 --
 ALTER TABLE `eworkers`
-  MODIFY `workersId` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `workersId` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `e_zscore_wfh`
+--
+ALTER TABLE `e_zscore_wfh`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `weighing`

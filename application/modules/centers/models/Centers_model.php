@@ -71,6 +71,27 @@ class Centers_model extends CI_model
 	public function remove($id)
 	{
 		// code...
+		$this->db->select('workersId');
+		$this->db->from('eworkers');
+		$this->db->where('centerId',$id);
+		$query = $this->db->get();
+
+			$workersIds = array();
+		if($result = $query->result()){
+			foreach ($result as $key => $value) {
+				// code...
+				$workersIds[] = $value->workersId;
+			}
+			$this->db->delete('eworkers',array('centerId'=>$id));
+		}
+		if (!empty($workersIds)) {
+			// code...
+			for ($i=0; $i < count($workersIds) ; $i++) { 
+				// code...
+				$this->db->delete('eschoolyear_by_worker',array('workersId',$workersIds[$i]));
+				$this->db->delete('eschoolyear_by_worker_students',array('workersId',$workersIds[$i]));
+			}
+		}
 		$this->db->delete('ecenter',array('centerId'=>$id));
 		
 	}
