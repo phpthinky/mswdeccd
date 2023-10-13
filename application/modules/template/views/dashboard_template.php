@@ -248,20 +248,20 @@
               </li>
 
               <li class="nav-item">
-                <a href="<?=site_url('settings/zscorewfh')?>" class="nav-link">
+                <a href="<?=site_url('nutritions/wfh')?>" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Weight for Height</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?=site_url('settings/zscorewfa')?>" class="nav-link">
+                <a href="<?=site_url('nutritions/wfa')?>" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Weight for Age</p>
                 </a>
               </li>
 
               <li class="nav-item">
-                <a href="<?=site_url('settings/zscorehhfa')?>" class="nav-link">
+                <a href="<?=site_url('nutritions/hfA')?>" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Height for Age</p>
                 </a>
@@ -298,7 +298,7 @@
 
           <?php if ($this->aauth->is_admin()): ?>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="<?=site_url('settings/backup')?>" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Backup Data</p>
                 </a>
@@ -357,7 +357,7 @@
     var site_url  ='<?=site_url()?>';
     var base_url  ='<?=base_url()?>';
 </script>
-<script src="<?=base_url('assets/main-script.js')?>"></script>
+<script src="<?=base_url('assets/main-script-1.0.0.js')?>"></script>
 
 <?php $this->load->view('core/js'); ?>
 </body>

@@ -38,6 +38,35 @@ class Students extends MY_Controller
     $this->template->dashboard($data);
 
   }
+  public function add_from_list()
+  {
+    // code...
+      if ($this->input->post()) {
+        // code...
+          $data3 = new stdClass();
+          $data3->workersId = $this->input->post('workersId');
+          $data3->YearId = $this->input->post('class_schedule');
+          $this->workers_model->addtomyschoolyear($data3);
+
+            $data2 = new stdClass();
+            $data2->YearId =  $this->input->post('class_schedule');
+            $data2->StudentId = $this->input->post('pupilsId');
+            $data2->StudentType = $this->input->post('StudentType');
+            $data2->workersId = $this->input->post('workersId');
+            $data2->Status = 1;
+
+            if($this->workers_model->addtomystudent($data2)){
+                echo json_encode(savesuccess());
+
+            }else{
+                echo json_encode(array('status'=>false,'msg'=>'Student was not added into my list. Database error occcured.'));
+
+            } 
+          
+        }
+              exit();
+
+  }
   public function add()
   {
     // code...
@@ -47,10 +76,13 @@ class Students extends MY_Controller
     }
     if ($this->input->post()) {
       // code...
-
-
-    $this->form_validation->set_rules('firstName','First Name','required');
-    $this->form_validation->set_rules('lastName','Last Name','required');
+      if ($this->input->post('student_id') !== 0) {
+        // code...
+        $this->add_from_list();
+        exit();
+      }
+    $this->form_validation->set_rules('fName','First Name','required');
+    $this->form_validation->set_rules('lName','Last Name','required');
     $this->form_validation->set_rules('birthDate','Birthday','required');
     $this->form_validation->set_rules('address','Residential Address','required');
     $this->form_validation->set_rules('gender','Gender','required');
@@ -62,13 +94,21 @@ class Students extends MY_Controller
     }else{
 
     $data = new stdClass();
-    $data->fName = $this->input->post('firstName');
-    $data->mName = $this->input->post('middleName');
-    $data->lName = $this->input->post('lastName');
+    $data->fName = $this->input->post('fName');
+    $data->mName = $this->input->post('mName');
+    $data->lName = $this->input->post('lName');
     $data->ext = $this->input->post('ext');
     $data->birthDate = $this->input->post('birthDate');
     $data->gender = $this->input->post('gender');
     $data->address = $this->input->post('address');
+    $data->sector = $this->input->post('sector');
+    $data->barangay = $this->input->post('barangay');
+    $data->municipality = $this->input->post('municipality');
+    $data->province = $this->input->post('province');
+    $age = getAge($data->birthDate);
+    $months = ($age->y * 12) + $age->m;
+    $data->age = $months;
+    $data->keywords = metaphone($data->fName.' '.$data->lName);
     
 //    $data->centerId = $this->input->post('centerId');
   //  $data->workersId = $this->input->post('workersId');
@@ -79,20 +119,26 @@ class Students extends MY_Controller
        }else{
 
         if($StudentId = $this->students_model->save($data)){
+          $data3 = new stdClass();
+          $data3->workersId = $this->input->post('workersId');
+          $data3->YearId = $this->input->post('class_schedule');
+          
+          $this->workers_model->addtomyschoolyear($data3);
+              // code...
+            $data2 = new stdClass();
+            $data2->YearId =  $this->input->post('class_schedule');
+            $data2->StudentId = $StudentId;
+            $data2->StudentType = $this->input->post('StudentType');
+            $data2->workersId = $this->input->post('workersId');
+            $data2->Status = 1;
+            if($this->workers_model->addtomystudent($data2)){
+                echo json_encode(savesuccess());
 
-          $data2 = new stdClass();
-          $data2->YearId =  $this->input->post('YearId');
-          $data2->StudentId = $StudentId;
-          $data2->StudentType = $this->input->post('StudentType');
-          $data2->workersId = $this->input->post('workersId');
-          $data2->Status = 1;
-          if($this->workers_model->addtomystudent($data2)){
-              echo json_encode(savesuccess());
+            }else{
+                echo json_encode(array('status'=>false,'msg'=>'Student was not added into my list. Database error occcured.'));
 
-          }else{
-              echo json_encode(array('status'=>false,'msg'=>'Student was not added into my list. Database error occcured.'));
-
-          }
+            } 
+          
               exit();
         }else{
               echo json_encode(unknownerror());
@@ -106,6 +152,79 @@ class Students extends MY_Controller
       exit();
     }
     echo json_encode(noinput());
+  }
+  public function update($value='')
+  {
+    // code...
+    if ($this->input->post()) {
+      // code...
+
+    $data = new stdClass();
+    $data->fName = $this->input->post('fName');
+    $data->mName = $this->input->post('mName');
+    $data->lName = $this->input->post('lName');
+    $data->ext = $this->input->post('ext');
+    $data->birthDate = $this->input->post('birthDate');
+    $data->gender = $this->input->post('gender');
+    $data->address = $this->input->post('address');
+    $data->sector = $this->input->post('sector');
+    $data->barangay = $this->input->post('barangay');
+    $data->municipality = $this->input->post('municipality');
+    $data->province = $this->input->post('province');
+    $age = getAge($data->birthDate);
+    $months = ($age->y * 12) + $age->m;
+    $data->age = $months;
+    $data->keywords = metaphone($data->fName.' '.$data->lName);
+    $data->pupilsId = $this->input->post('pupilsId');
+
+    echo json_encode(array('status'=>false,'msg'=>$data));
+
+      exit();
+    $result = $this->students_model->save($data);
+    }
+  }
+  public function find()
+  {
+    // code...
+
+            if($result = $this->students_model->find($this->input->post('keys'))){
+
+              $data = '<div class="row"><div class="col-md-4"><label class="bold">Name</label></div><div class="col-md-2"><label class="bold">Age (months)</label></div></div>';
+              foreach ($result as $key => $value) {
+                // code...
+                $data .= '<div class="row"><div class="col-md-6">'.$value->student_name.'</div><div class="col-md-3">'.$value->age.'</div><div class="col-md-3"><button type="button" data-id="'.$value->id.'" class="btn btn-default btn-xs btn-select">Select this</button></div></div>';
+              }
+              echo json_encode(array('status'=>true,'data'=>$data));
+
+            }else{
+            echo json_encode(array('status'=>false,'msg'=>'No data.'));
+
+            }
+
+  }
+  public function info()
+  {
+    // code...
+    if ($this->input->post()) {
+      // code...
+
+      if ($value = $this->students_model->info($this->input->post('student_id'))) {
+        // code...
+       // $class_info = $this->workers_model->get_student_info($this->input->post('student_id'),$this->workersId);
+        //$value->class_schedule = $class_info->YearId;
+        echo json_encode(array('status'=>true,'data'=>$value));
+                /*$data = '<div class="row">
+                <div class="col-md-4">Name: '.$value->student_name.'</div>
+                <div class="col-md-4">Address:'.$value->address.'</div>
+                </div>';
+                  echo $data;
+                  */
+      }
+    }else{
+      echo json_encode(noinput());
+
+    }
+
   }
     public function profile($id) {
    
@@ -163,6 +282,7 @@ class Students extends MY_Controller
       $postdata = $this->input->post();
 
         $centerId = $this->workers_model->getMyCenterId($this->workersId);
+
         $scheduleId = $this->settings_model->getweighingid($postdata['dateOfWeighing'],$centerId);
 
       if(!$this->weighing_model->check($postdata['pupilsId'],$scheduleId)){
@@ -172,6 +292,11 @@ class Students extends MY_Controller
         $data->weight = $postdata['weight'];
         $data->height = $postdata['height'];
         $data->scheduleId = $scheduleId;
+        $this->load->library('bmi');
+        $wfh = $this->bmi->get($data->weight,$data->height);
+        $data->wfh = $wfh;
+
+
         /*
         $data->wfa = $postdata['wfa'];
         $data->hfa = $postdata['hfa'];

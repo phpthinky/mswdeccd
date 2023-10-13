@@ -14,7 +14,7 @@
     $this->load->model('students/students_model');
     $this->load->model('workers/workers_model');
  	}
- 	public function index($listall="")
+ 	public function index()
  	{
  		// code...
     if ($this->input->post()) {
@@ -25,7 +25,11 @@
       switch ($form) {
         case 'add':
           // code...
-        echo json_encode($this->add());
+        $this->add();
+          break;
+
+          case 'edit':
+          $this->edit();
           break;
         
         case 'remove':
@@ -61,6 +65,7 @@
 
       $data->centerName = $this->input->post('centerName');
       $data->centerAddress = $this->input->post('centerAddress');
+      $data->barangay = $this->input->post('barangay');
 
 
     $this->form_validation->set_rules('centerName','Name of Center','required');
@@ -86,6 +91,46 @@
       redirect('centers');
     }
   }
+
+  public function edit()
+  {
+    // code...
+  
+    // code...
+    if ($this->input->post()) {
+      // code...
+      $data = new stdClass();
+      $data->centerId = $this->input->post('centerId');
+      $data->centerName = $this->input->post('centerName');
+      $data->centerAddress = $this->input->post('address');
+      $data->barangay = $this->input->post('barangay');
+
+
+    $this->form_validation->set_rules('centerName','Name of Center','required');
+    $this->form_validation->set_rules('address','Address','required');
+
+      // code...
+
+    if ($this->form_validation->run() === false) {
+        echo json_encode(array('status'=>false,'msg'=>"Please complete all required form."));
+    }else{
+
+
+      $result = $this->centers_model->save($data);
+      if ($result['status'] == true) {
+          // code...
+        
+        echo json_encode(update());
+
+
+      }else{
+        echo json_encode($result);
+      }
+
+    }
+    }
+
+  }
   public function remove($id)
   {
     // code...
@@ -107,10 +152,11 @@
         $data[] = array(
           $value->center_id,
           $value->center_name,
+          $value->barangay,
           $value->center_address,
           $value->total_workers,
           $value->total_students,
-          '<button class="btn btn-default bt-sm btn-trash" data-id="'.$value->center_id.'" type="button"><i class="fas fa-trash"></i></button>'
+          '<button class="btn btn-default bt-sm btn-edit-centers" data-id="'.$value->center_id.'" type="button"><i class="fas fa-edit"></i></button> <button class="btn btn-default bt-sm btn-trash" data-id="'.$value->center_id.'" type="button"><i class="fas fa-trash"></i></button>'
         ); 
       }
       echo json_encode(array('data'=>$data));

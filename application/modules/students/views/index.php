@@ -135,7 +135,7 @@
 							<div class="col-md-3"></div>
 							<div class="col-md-9"><span class="errors"></span></div>
 						</div>
-						<div class="row form-group">
+						<div class="row form-group form-repeater d-none">
 							<div class="col-md-3"><label>Select student from list</label></div>
 							<div class="col-md-9">
 								<select class="form-control selectpicker" data-live-search="true" name="StudentId" required>
@@ -154,8 +154,7 @@
                       <div class="form-group row">
                         <label for="age" class="col-md-3 col-form-label">Student type</label>
                         <div class="col-md-9">
-                          <select class="form-control" name="StudentType" required>
-                            <option value="">Select student type</option>
+                          <select class="form-control" name="StudentType" required id="StudentType">
                             <option value="1">New</option>
 
                             <option value="2">Repeater</option>
@@ -163,14 +162,14 @@
                         </div>
                       </div>
 
-						<div class="row form-group">
+						<div class="row form-group form-repeater">
 							<div class="col-md-3"></div>
 							<div class="col-md-9">
 								
 							</div>
 						</div>
 
-						<div class="row form-group">
+						<div class="row form-group  form-repeater">
 							<div class="col-md-3"></div>
 							<div class="col-md-9"><button class="btn btn-primary">Add to my students</button></div>
 						</div>

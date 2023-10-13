@@ -45,7 +45,7 @@
                     <b>Age</b> <a class="float-right"><?=$age->y .' years '.$age->m.' months' ?></a>
                   </li>
                   <li class="list-group-item">
-                    <b>Gender</b> <a class="float-right"><?=($gender == 1) ? 'Boy' : 'Girl'?></a>
+                    <b>Gender</b> <a class="float-right"><?=gender($gender)?></a>
                   </li>
                   <li class="list-group-item">
                     <b>Height</b> <a class="float-right"><?=$height?></a>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 02, 2023 at 03:27 PM
+-- Generation Time: Oct 07, 2023 at 03:32 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -146,9 +146,8 @@ CREATE TABLE `aauth_users` (
 --
 
 INSERT INTO `aauth_users` (`id`, `email`, `pass`, `username`, `banned`, `last_login`, `last_activity`, `date_created`, `forgot_exp`, `remember_time`, `remember_exp`, `verification_code`, `totp_secret`, `ip_address`) VALUES
-(1, 'admin@gmail.com', 'ec225039f1cb0c48ad528709e8e0184991e637d96db175f094b6b2037ec1a3c2', 'Admin', 0, '2023-10-02 14:03:28', '2023-10-02 14:03:28', NULL, NULL, NULL, NULL, NULL, NULL, '::1'),
-(7, 'yor5@mail.com', '3e1340c771fff1153aa60137dc8c0265d5914e5de769b59183085b78d950b31b', '', 0, NULL, NULL, '2023-10-02 14:49:27', NULL, NULL, NULL, NULL, NULL, NULL),
-(8, 'yor@mail.com', '8e7d10c7c802e6cc70ddc57bcb1477eb8f3083b0f088f9427e4d56600b065bbe', '', 0, NULL, NULL, '2023-10-02 15:21:43', NULL, NULL, NULL, NULL, NULL, NULL);
+(1, 'admin@gmail.com', 'ec225039f1cb0c48ad528709e8e0184991e637d96db175f094b6b2037ec1a3c2', 'Admin', 0, '2023-10-07 03:09:18', '2023-10-07 03:09:19', NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1'),
+(2, 'boss@mail.com', '85331630fca2b67c234b6b57e7affc9403d62cf186989c71675956e3ccc2a20d', '', 0, '2023-10-07 02:47:23', '2023-10-07 02:47:23', '2023-10-06 05:25:07', NULL, NULL, NULL, NULL, NULL, '127.0.0.1');
 
 -- --------------------------------------------------------
 
@@ -168,8 +167,7 @@ CREATE TABLE `aauth_user_to_group` (
 INSERT INTO `aauth_user_to_group` (`user_id`, `group_id`) VALUES
 (1, 1),
 (1, 3),
-(7, 3),
-(8, 3);
+(2, 3);
 
 -- --------------------------------------------------------
 
@@ -259,78 +257,13 @@ CREATE TABLE `assessment_sum_scaled_score` (
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `center_schoolyear`
--- (See below for the actual view)
---
-CREATE TABLE `center_schoolyear` (
-`center_id` int(3)
-,`center_name` varchar(100)
-,`center_address` text
-,`total_students` bigint(21)
-,`total_workers` bigint(21)
-);
-
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `center_students_schoolyear`
--- (See below for the actual view)
---
-CREATE TABLE `center_students_schoolyear` (
-`student_id` int(11)
-,`center_id` int(3)
-,`worker_id` int(4)
-,`year_id` int(11)
-,`student_type` int(11)
-,`student_name` varchar(67)
-,`class_start` varchar(16)
-,`class_end` varchar(16)
-);
-
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `center_workers`
--- (See below for the actual view)
---
-CREATE TABLE `center_workers` (
-`worker_id` int(4)
-,`center_id` int(3)
-,`worker_name` varchar(67)
-,`center_name` varchar(100)
-,`worker_address` varchar(200)
-,`job_status` int(1)
-);
-
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `center_workers_schoolyear`
--- (See below for the actual view)
---
-CREATE TABLE `center_workers_schoolyear` (
-`worker_id` int(4)
-,`center_id` int(3)
-,`year_id` int(11)
-,`worker_name` varchar(67)
-,`worker_address` varchar(200)
-,`class_start` varchar(16)
-,`class_end` varchar(16)
-,`center_name` varchar(100)
-,`job_status` int(1)
-,`class_status` int(1)
-,`total_students` bigint(21)
-);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `ecenter`
 --
 
 CREATE TABLE `ecenter` (
   `centerId` int(3) NOT NULL,
   `centerName` varchar(100) NOT NULL,
+  `barangay` varchar(50) NOT NULL,
   `centerAddress` text NOT NULL,
   `addedBy` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -339,8 +272,8 @@ CREATE TABLE `ecenter` (
 -- Dumping data for table `ecenter`
 --
 
-INSERT INTO `ecenter` (`centerId`, `centerName`, `centerAddress`, `addedBy`) VALUES
-(3, 'Malisbong CDC', 'Malisbong, Sablayan, Occidental Mindoro', 0);
+INSERT INTO `ecenter` (`centerId`, `centerName`, `barangay`, `centerAddress`, `addedBy`) VALUES
+(1, 'Malisbong CDC', 'Arellano', 'Malisbong, Sablayan, Occidental Mindoro', 0);
 
 -- --------------------------------------------------------
 
@@ -355,7 +288,9 @@ CREATE TABLE `eparent` (
   `lName` varchar(20) NOT NULL,
   `gender` int(1) NOT NULL,
   `familyPosition` int(1) NOT NULL,
-  `occupation` varchar(30) NOT NULL
+  `occupation` varchar(30) NOT NULL,
+  `weight` varchar(10) NOT NULL,
+  `height` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -403,23 +338,6 @@ CREATE TABLE `epupils_feeding` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `epupils_zscore_wfh`
---
-
-CREATE TABLE `epupils_zscore_wfh` (
-  `id` int(11) NOT NULL,
-  `child_age` varchar(10) NOT NULL,
-  `child_height` varchar(10) DEFAULT NULL,
-  `su_weight` varchar(10) DEFAULT NULL,
-  `u_weight` varchar(10) DEFAULT NULL,
-  `n_weight` varchar(10) NOT NULL,
-  `ov_weight` varchar(10) NOT NULL,
-  `ob_weight` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `eschoolyear`
 --
 
@@ -435,8 +353,7 @@ CREATE TABLE `eschoolyear` (
 --
 
 INSERT INTO `eschoolyear` (`YearId`, `YearStart`, `YearEnd`, `Status`) VALUES
-(1, '2023-09-18', '2023-12-15', 1),
-(2, '2023-09-06', '2024-02-01', 0);
+(1, '2023-06-01', '2024-05-30', 0);
 
 -- --------------------------------------------------------
 
@@ -448,6 +365,13 @@ CREATE TABLE `eschoolyear_by_worker` (
   `YearId` int(11) NOT NULL,
   `workersId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `eschoolyear_by_worker`
+--
+
+INSERT INTO `eschoolyear_by_worker` (`YearId`, `workersId`) VALUES
+(1, 1);
 
 -- --------------------------------------------------------
 
@@ -462,26 +386,6 @@ CREATE TABLE `eschoolyear_by_worker_students` (
   `StudentType` int(11) NOT NULL,
   `Status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `estudents`
--- (See below for the actual view)
---
-CREATE TABLE `estudents` (
-`student_id` int(11)
-,`center_id` int(3)
-,`worker_id` int(4)
-,`year_id` int(11)
-,`student_type` int(11)
-,`student_name` varchar(67)
-,`class_start` varchar(16)
-,`class_end` varchar(16)
-,`birthdate` date
-,`gender` int(1)
-,`barangay` varchar(25)
-);
 
 -- --------------------------------------------------------
 
@@ -511,17 +415,46 @@ CREATE TABLE `eworkers` (
   `app` int(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Dumping data for table `eworkers`
+--
+
+INSERT INTO `eworkers` (`workersId`, `userId`, `centerId`, `fName`, `mName`, `lName`, `ext`, `birthDate`, `gender`, `sector`, `address`, `barangay`, `municipality`, `province`, `dateHired`, `jobStatus`, `profile`, `dateAdded`, `app`) VALUES
+(1, 2, 1, 'Harold', 'Lang', 'Malakas', '', NULL, 0, '', 'malisbong lang', '', '', '', '0000-00-00', 0, '', '', 1);
+
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `eworkers_inactive`
--- (See below for the actual view)
+-- Table structure for table `e_zscore_hfa`
 --
-CREATE TABLE `eworkers_inactive` (
-`worker_id` int(4)
-,`center_id` int(3)
-,`worker_name` varchar(67)
-);
+
+CREATE TABLE `e_zscore_hfa` (
+  `id` int(11) NOT NULL,
+  `gender` int(1) NOT NULL DEFAULT 1,
+  `age` varchar(10) NOT NULL,
+  `severly_stunned` varchar(10) NOT NULL,
+  `stunned` varchar(10) NOT NULL,
+  `normal` varchar(10) NOT NULL,
+  `tall` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `e_zscore_wfa`
+--
+
+CREATE TABLE `e_zscore_wfa` (
+  `id` int(11) NOT NULL,
+  `height` varchar(10) NOT NULL,
+  `su_weight` varchar(10) NOT NULL,
+  `u_weight` varchar(10) NOT NULL,
+  `n_weight` varchar(10) NOT NULL,
+  `ov_weight` varchar(10) NOT NULL,
+  `ob_weight` varchar(10) NOT NULL,
+  `gender` int(1) NOT NULL DEFAULT 1,
+  `age` int(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -541,16 +474,6 @@ CREATE TABLE `e_zscore_wfh` (
   `age` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- Dumping data for table `e_zscore_wfh`
---
-
-INSERT INTO `e_zscore_wfh` (`id`, `height`, `su_weight`, `u_weight`, `n_weight`, `ov_weight`, `ob_weight`, `gender`, `age`) VALUES
-(2, '65', '12', '13', '15', '16', '18', 1, 3),
-(3, '66', 'gdfg', 'erg', 'erg', 'erg', 'ert', 0, 0),
-(4, '67', 'erw', 'ewt', 'ret', 't3', 'rt', 1, 1),
-(5, '68', 'ert', 'ery', 'ey', 'ery', 'eryy', 1, 2);
-
 -- --------------------------------------------------------
 
 --
@@ -569,14 +492,6 @@ CREATE TABLE `weighing` (
   `status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- Dumping data for table `weighing`
---
-
-INSERT INTO `weighing` (`weighingId`, `scheduleId`, `pupilsId`, `weight`, `height`, `wfa`, `hfa`, `wfh`, `status`) VALUES
-(17, 11, 1, '10', '152.1', '', '', '', 0),
-(18, 12, 1, '12', '12', '', '', '', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -589,68 +504,6 @@ CREATE TABLE `weighing_schedule` (
   `status` tinyint(1) NOT NULL DEFAULT 1,
   `centerId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `weighing_schedule`
---
-
-INSERT INTO `weighing_schedule` (`scheduleId`, `weighingSchedule`, `status`, `centerId`) VALUES
-(11, '2023-09-12', 1, 0),
-(12, '2023-09-26', 1, 0);
-
--- --------------------------------------------------------
-
---
--- Structure for view `center_schoolyear`
---
-DROP TABLE IF EXISTS `center_schoolyear`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `center_schoolyear`  AS SELECT `ecenter`.`centerId` AS `center_id`, `ecenter`.`centerName` AS `center_name`, `ecenter`.`centerAddress` AS `center_address`, (select count(0) from `center_students_schoolyear` where `center_students_schoolyear`.`center_id` = `ecenter`.`centerId`) AS `total_students`, (select count(0) from `center_workers` where `center_workers`.`center_id` = `ecenter`.`centerId`) AS `total_workers` FROM `ecenter` ;
-
--- --------------------------------------------------------
-
---
--- Structure for view `center_students_schoolyear`
---
-DROP TABLE IF EXISTS `center_students_schoolyear`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `center_students_schoolyear`  AS SELECT `epupils`.`pupilsId` AS `student_id`, `eworkers`.`centerId` AS `center_id`, `eworkers`.`workersId` AS `worker_id`, `eschoolyear`.`YearId` AS `year_id`, `eschoolyear_by_worker_students`.`StudentType` AS `student_type`, concat(`epupils`.`lName`,', ',`epupils`.`fName`,' ',`epupils`.`mName`,' ',`epupils`.`ext`) AS `student_name`, `eschoolyear`.`YearStart` AS `class_start`, `eschoolyear`.`YearEnd` AS `class_end` FROM ((((`epupils` join `eschoolyear_by_worker_students` on(`eschoolyear_by_worker_students`.`StudentId` = `epupils`.`pupilsId`)) join `eschoolyear_by_worker` on(`eschoolyear_by_worker`.`workersId` = `eschoolyear_by_worker_students`.`workersId`)) join `eworkers` on(`eworkers`.`workersId` = `eschoolyear_by_worker`.`workersId`)) join `eschoolyear` on(`eschoolyear`.`YearId` = `eschoolyear_by_worker_students`.`YearId`)) ;
-
--- --------------------------------------------------------
-
---
--- Structure for view `center_workers`
---
-DROP TABLE IF EXISTS `center_workers`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `center_workers`  AS SELECT DISTINCT `eworkers`.`workersId` AS `worker_id`, `eworkers`.`centerId` AS `center_id`, concat(`eworkers`.`lName`,', ',`eworkers`.`fName`,' ',`eworkers`.`mName`,' ',`eworkers`.`ext`) AS `worker_name`, `ecenter`.`centerName` AS `center_name`, `eworkers`.`address` AS `worker_address`, `eworkers`.`jobStatus` AS `job_status` FROM (`eworkers` left join `ecenter` on(`eworkers`.`centerId` = `ecenter`.`centerId`)) ;
-
--- --------------------------------------------------------
-
---
--- Structure for view `center_workers_schoolyear`
---
-DROP TABLE IF EXISTS `center_workers_schoolyear`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `center_workers_schoolyear`  AS SELECT `eworkers`.`workersId` AS `worker_id`, `eworkers`.`centerId` AS `center_id`, `eschoolyear`.`YearId` AS `year_id`, concat(`eworkers`.`lName`,', ',`eworkers`.`fName`,' ',`eworkers`.`mName`,' ',`eworkers`.`ext`) AS `worker_name`, `eworkers`.`address` AS `worker_address`, `eschoolyear`.`YearStart` AS `class_start`, `eschoolyear`.`YearEnd` AS `class_end`, `ecenter`.`centerName` AS `center_name`, `eworkers`.`jobStatus` AS `job_status`, `eschoolyear`.`Status` AS `class_status`, (select count(0) from `eschoolyear_by_worker_students` where `eschoolyear_by_worker_students`.`workersId` = `eworkers`.`workersId` and `eschoolyear_by_worker_students`.`YearId` = `eschoolyear_by_worker`.`YearId`) AS `total_students` FROM (((`eworkers` join `eschoolyear_by_worker` on(`eschoolyear_by_worker`.`workersId` = `eworkers`.`workersId`)) join `eschoolyear` on(`eschoolyear`.`YearId` = `eschoolyear_by_worker`.`YearId`)) join `ecenter` on(`ecenter`.`centerId` = `eworkers`.`centerId`)) ;
-
--- --------------------------------------------------------
-
---
--- Structure for view `estudents`
---
-DROP TABLE IF EXISTS `estudents`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `estudents`  AS SELECT DISTINCT `cs`.`student_id` AS `student_id`, `cs`.`center_id` AS `center_id`, `cs`.`worker_id` AS `worker_id`, `cs`.`year_id` AS `year_id`, `cs`.`student_type` AS `student_type`, `cs`.`student_name` AS `student_name`, `cs`.`class_start` AS `class_start`, `cs`.`class_end` AS `class_end`, `ep`.`birthDate` AS `birthdate`, `ep`.`gender` AS `gender`, `ep`.`barangay` AS `barangay` FROM (`center_students_schoolyear` `cs` join `epupils` `ep` on(`cs`.`student_id` = `ep`.`pupilsId`)) GROUP BY `cs`.`student_id` ORDER BY `cs`.`year_id` DESC ;
-
--- --------------------------------------------------------
-
---
--- Structure for view `eworkers_inactive`
---
-DROP TABLE IF EXISTS `eworkers_inactive`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `eworkers_inactive`  AS SELECT `eworkers`.`workersId` AS `worker_id`, `eworkers`.`centerId` AS `center_id`, concat(`eworkers`.`lName`,', ',`eworkers`.`fName`,' ',`eworkers`.`mName`,' ',`eworkers`.`ext`) AS `worker_name` FROM `eworkers` WHERE !(`eworkers`.`workersId` in (select `eschoolyear_by_worker`.`workersId` from `eschoolyear_by_worker`)) ;
 
 --
 -- Indexes for dumped tables
@@ -780,6 +633,18 @@ ALTER TABLE `eworkers`
   ADD PRIMARY KEY (`workersId`);
 
 --
+-- Indexes for table `e_zscore_hfa`
+--
+ALTER TABLE `e_zscore_hfa`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `e_zscore_wfa`
+--
+ALTER TABLE `e_zscore_wfa`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `e_zscore_wfh`
 --
 ALTER TABLE `e_zscore_wfh`
@@ -811,7 +676,7 @@ ALTER TABLE `aauth_groups`
 -- AUTO_INCREMENT for table `aauth_login_attempts`
 --
 ALTER TABLE `aauth_login_attempts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=160;
 
 --
 -- AUTO_INCREMENT for table `aauth_perms`
@@ -829,7 +694,7 @@ ALTER TABLE `aauth_pms`
 -- AUTO_INCREMENT for table `aauth_users`
 --
 ALTER TABLE `aauth_users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `aauth_user_variables`
@@ -859,7 +724,7 @@ ALTER TABLE `assessment_sum_scaled_score`
 -- AUTO_INCREMENT for table `ecenter`
 --
 ALTER TABLE `ecenter`
-  MODIFY `centerId` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `centerId` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `eparent`
@@ -883,31 +748,43 @@ ALTER TABLE `epupils_feeding`
 -- AUTO_INCREMENT for table `eschoolyear`
 --
 ALTER TABLE `eschoolyear`
-  MODIFY `YearId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `YearId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `eworkers`
 --
 ALTER TABLE `eworkers`
-  MODIFY `workersId` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `workersId` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `e_zscore_hfa`
+--
+ALTER TABLE `e_zscore_hfa`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `e_zscore_wfa`
+--
+ALTER TABLE `e_zscore_wfa`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `e_zscore_wfh`
 --
 ALTER TABLE `e_zscore_wfh`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `weighing`
 --
 ALTER TABLE `weighing`
-  MODIFY `weighingId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `weighingId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `weighing_schedule`
 --
 ALTER TABLE `weighing_schedule`
-  MODIFY `scheduleId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `scheduleId` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

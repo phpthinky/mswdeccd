@@ -224,5 +224,16 @@ $('#btn-calculate').on('click',function(){
     })
 })
 
+$('#StudentType').on('change',function(){
+  var selected = $(this).val();
+  if (selected == 1) {
+    $('.form-repeater').addClass('d-none');
+
+  }else{
+    $('.form-repeater').removeClass('d-none');
+  }
+
+})
+
 })
 </script>	

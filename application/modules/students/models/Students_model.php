@@ -125,7 +125,7 @@
   public function save($data)
   {
     // code...
-    if (!empty($data->id)) {
+    if (!empty($data->pupilsId)) {
       // code...
       return $this->update($data);
     }else{
@@ -141,6 +141,17 @@
 
     
   }
+
+  public function update($data)
+  {
+    // code...
+    $this->db->where('pupilsId',$data->pupilsId);
+    return $this->db->update('epupils',$data);
+    //return $this->db->insert_id();
+
+    
+  }
+  
   public function if_nameexist($data){
     $this->db
         ->select('*')
@@ -152,6 +163,25 @@
         return $result;
 
 
+  }
+  public function find($keys='')
+  {
+    // code...
+    $query =  $this->db->select("pupilsId as id, CONCAT(fName,' ', mName,' ', lName,' ', ext) as student_name,age,gender,address")
+    ->from('epupils')
+    ->like('keywords',metaphone($keys))
+    ->get();
+    return $query->result();
+  }
+  public function info($id=0)
+  {
+    // code...
+
+    $this->db->select("*");
+    $this->db->from('epupils');
+    $this->db->where('pupilsId',$id);
+    $query = $this->db->get();
+    return $query->row(0);
   }
 
   

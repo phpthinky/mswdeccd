@@ -20,12 +20,20 @@ class Workers_model extends CI_model
 		$result = $this->db->get('eworkers')->row(0);
 		return $result->workersId;
 	}
+	public function getWorkerUserId($id)
+	{
+		// code...
+		$this->db->where('workersId',$id);
+		$result = $this->db->get('eworkers')->row(0);
+		return $result->userId;
+	}
 	public function getWorker($id)
 	{
 		// code...
-		//return $this->db->get_where('eworkers', array('userId'=>$id))->row(0);
-		$query = $this->db->select('*')
-							->from('eworkers')
+		//return $this->db->get_where('eworkers', array('workersId'=>$id))->row(0);
+		$query = $this->db->select('w.*,u.email')
+							->from('eworkers w')
+							->join('aauth_users u','u.id = w.userId')
 							->where('workersId',$id)
 							->get();
 							if($result = $query->result()){
@@ -34,6 +42,17 @@ class Workers_model extends CI_model
 							return false;
 
 	}
+	public function get_center($id)
+	{
+		// code...
+		$row = $this->db->get_where('center_workers',array('worker_id'=>$id))->row(0);
+			return $row->center_id;
+	}
+	public function get_student_info($id,$worker,$center)
+			{
+				// code...
+				return $this->db->get_where('center_students_schoolyear',array('student_id'=>$id,'center_id'=>$center,'worker_id'=>$worker))->row(0);
+			}		
 	public function list_active_Workers($center_id='')
 	{
 		// code...
@@ -75,7 +94,7 @@ class Workers_model extends CI_model
 		// code...
 		if (!empty($data->workersId)) {
 			// code...
-			return 'updated.';
+			return $this->edit($data);
 		}else{
 			return $this->add($data);
 		}
@@ -91,6 +110,25 @@ class Workers_model extends CI_model
 			}
 
 	}
+
+	public function edit($data)
+	{
+		
+
+			try {
+				$this->db->where('workersId',$data->workersId);	
+				$this->db->update('eworkers',$data);	
+				$result = array('status'=>true,'msg'=>'Successfully updated!');
+
+			} catch (Exception $e) {
+				$result = array('status'=>false,'msg'=>$e->getMessage());
+			}
+				return $result;
+		
+		return $result;
+
+	}
+
 	public function exists($data)
 	{
 		// code...
@@ -149,8 +187,8 @@ class Workers_model extends CI_model
 	public function checkMySchooYear($data)
 	{
 		// code...
-		$query = $this->db->where('workersId',$data->workersId);
-		$query = $this->db->where('YearId',$data->YearId);
+		$this->db->where('workersId',$data->workersId);
+		$this->db->where('YearId',$data->YearId);
 
 		$query = $this->db->get('eschoolyear_by_worker');
 		if($query->num_rows() > 0 ){
@@ -158,7 +196,27 @@ class Workers_model extends CI_model
 		}
 		return false;
 	}
-	public function listmyschoolyear($id)
+	public function listmyschoolyear($stmt)
+	{
+		// code...
+		$data = array();
+		if($result =  $this->db->get_where('center_workers_schoolyear',$stmt)->result()){
+			/* $id = $stmt['worker_id'];
+			foreach ($result as $key => $value) {
+				// code...
+
+				$data[$key] = $value;
+				$data[$key]->totalPupils = $this->getTotalStudents($value->year_id,$id);
+				$data[$key]->totalRepeater = $this->getTotalStudentsByType($value->year_id,$id,2);
+				$data[$key]->totalGraduates = $this->getTotalStudentsByType($value->year_id,$id,3);
+			}
+
+			*/
+			return $result;
+		}
+		return false;
+	}
+	public function listmyschoolyear111($id)
 	{
 		// code...
 		$this->db->select('eschoolyear.YearId,YearStart,YearEnd');
@@ -268,10 +326,35 @@ class Workers_model extends CI_model
 	{
 		// code...
 	// code...
-		$this->db->delete('eschoolyear_by_worker',array('workersId',$id));
-		$this->db->delete('eschoolyear_by_worker_students',array('workersId',$id));
+
+		$this->db->delete('eschoolyear_by_worker',array('workersId'=>$id));
+		$this->db->delete('eschoolyear_by_worker_students',array('workersId'=>$id));
+
+		$user_id = $this->getWorkerUserId($id);
+		$this->db->delete('aauth_users',array('id'=>$user_id));
+		$this->db->delete('aauth_user_to_group',array('user_id'=>$user_id));
+		$this->db->delete('aauth_perm_to_user',array('user_id'=>$user_id));
+		
+
 		$this->db->delete('eworkers',array('workersId'=>$id));
 		return true;
+	}
+
+	public function remove_schoolyear($data)
+	{
+		// code...
+	// code...
+		$result =array();
+		$result[] = $this->db->delete('eschoolyear_by_worker',$data);
+		$result[] = $this->db->delete('eschoolyear_by_worker_students',$data);
+		return $result;
+	}
+
+	public function my_students($worker=0,$center=0)
+	{
+		// code...
+		return $this->db->get_where('center_students_schoolyear',array('center_id'=>$center,'worker_id'=>$worker))->result();
+	
 	}
 }
  ?>

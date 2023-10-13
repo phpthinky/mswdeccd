@@ -37,9 +37,10 @@ class Bmi
 		$weight_to_pound = $weight * 2.2;
 
 		$bmi = round($weight_to_pound/($height_to_inches * $height_to_inches)* 703,2);
-		return $this->result($bmi); 
+		return $bmi;
+		//return $this->result($bmi); 
 	}
-	public function result($bmi)
+	public function remarks($bmi)
 	{
 		// code...
 		$msg = '';

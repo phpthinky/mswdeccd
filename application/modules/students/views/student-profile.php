@@ -45,7 +45,7 @@
                     <b>Age</b> <a class="float-right"><?=$age->y .' years '.$age->m.' months' ?></a>
                   </li>
                   <li class="list-group-item">
-                    <b>Gender</b> <a class="float-right"><?=($gender == 1) ? 'Boy' : 'Girl'?></a>
+                    <b>Gender</b> <a class="float-right"><?=gender($gender)?></a>
                   </li>
                   <li class="list-group-item">
                     <b>Height</b> <a class="float-right"><?=$height?></a>
@@ -95,9 +95,13 @@
                     <span class="text-title">Assessment</span>
                   </div>
                   <div class="tab-pane active" id="tabnutrition">
+
                     <ul class="nav nav-pills" id="nav-tab-2">
                       <li class="nav-item">
                         <a class="nav-link" href="#tab-tab-charts" data-toggle="tab">Charts</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#tab-tab-imunization" data-toggle="tab">Immunization</a>
                       </li>
                       <li class="nav-item">
                         <a class="nav-link" href="#tab-tab-feeding" data-toggle="tab">Feeding</a>
@@ -106,13 +110,69 @@
                         <a class="nav-link" href="#tab-tab-weighing" data-toggle="tab">Weighing</a>
                       </li>
                     </ul>
+
                     <div class="tab-content">
                       <div class="tab-pane" id="tab-tab-charts">
                         <hr>
                         
                       </div>
                       <!--- /tab tab charts -->
-                      <div class="tab-pane" id="tab-tab-feeding">
+                      <div class="tab-pane" id="tab-tab-imunization">
+                        <hr>
+                        <button class="btn btn-outline-primary" type="button" id="btn-add-immunization"><i class="fas fa-plus"></i> Add</button>
+                        <hr>
+                        <div id="content-table-feeding">
+                          
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>ID</th>
+                              <th>Date of immunizations</th>
+                              <th>Description</th>
+
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                        </table>
+
+                        </div>
+
+                         <div class="form-container d-none" id="container-immunization">
+                          <hr>
+                          <form method="post" action="javascript:void(0)" id="form-feeding">
+                            <div class="d-none">
+                              <input type="hidden" name="pupilsId" value="<?=$pupilsId?>">
+                            </div>
+
+                            <div class="row form-group">
+                              <label class="col-md-3"></label>
+                              <div class="col-md-9"><span class="errors"></span></div>
+                            </div>
+                            <div class="row form-group">
+                              <label class="col-md-3">Date of immunization</label>
+                              <div class="col-md-9"><input type="date" name="feeding_date" class="form-control"></div>
+                            </div>
+                            <div class="row form-group">
+                              <label class="col-md-3">Food</label>
+                              <div class="col-md-9"><input type="text" name="foods" class="form-control"></div>
+                            </div>
+                            <div class="row form-group">
+                              <label class="col-md-3">Drink</label>
+                              <div class="col-md-9">
+                                <input class="form-control" type="text" name="drinks"></div>
+                            </div>
+                            <div class="row form-group">
+                              <label class="col-md-3"></label>
+                              <div class="col-md-9"><input type="submit" name="btnSave" value="Save" class="btn btn-outline-primary"></div>
+                            </div>
+                          </form>
+                        </div>
+
+                      </div>
+                      <!-- /tab tab immunization -->
+
+                                            <div class="tab-pane" id="tab-tab-feeding">
                         <hr>
                         <button class="btn btn-outline-primary" type="button" id="btn-add-feeding"><i class="fas fa-plus"></i> Add</button>
                         <hr>
@@ -122,9 +182,9 @@
                           <thead>
                             <tr>
                               <th>ID</th>
-                              <th>Date of Feeding 
-                              <span style="display: block;">(mm/dd/yyyy)</span></th>
-                              <th></th>
+                              <th>Date of Feeding</th>
+                              <th>Description</th>
+                              
 
                             </tr>
                           </thead>

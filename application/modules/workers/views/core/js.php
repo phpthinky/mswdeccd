@@ -1,5 +1,6 @@
 <script type="text/javascript">
 $(function(){
+
 		var	w_type = 0;
 		var table = $('#worker-table');
 
@@ -20,6 +21,7 @@ $(function(){
 		refreshTable(table,site_url+'/workers/listall?type='+w_type);
 
 	});
+
 	$(document).on('click','.btn-trash',function() {
 		// body...
 		if (confirm('This worker and his pupils records will be permanently deleted. Make sure you have a backup.')) {
@@ -36,6 +38,7 @@ $(function(){
 			}
 
 		})
+
 		refreshTable(table,site_url+'/workers/listall?type='+w_type)
 		$(this).parent().parent().remove()
 
@@ -43,6 +46,65 @@ $(function(){
 		}	
 	})
 
+	$(document).on('click','.btn-edit',function() {
+		// body...
+		$('a[href="#edit"]').click()
+		var workersId = $(this).data('id');
+
+		var data = 0;
+		$.ajax({
+			url:current_url,
+			data:{form:'info',id:workersId},
+			dataType:'json',
+			method:'post',
+			success:function(response){
+				console.log(response)
+				var data = response;
+				var form = $('#frmedit');
+
+				$(form).children($('select[name="centerId"]').val(data.centerId))
+				$(form).children($('input[name="workersId"]').val(data.workersId))
+				$(form).children($('input[name="fName"]').val(data.fName))
+				$(form).children($('input[name="fName"]').val(data.fName))
+				$(form).children($('input[name="mName"]').val(data.mName))
+				$(form).children($('input[name="lName"]').val(data.lName))
+				$(form).children($('input[name="ext"]').val(data.ext))
+				$(form).children($('input[name="email"]').val(data.email))
+				$(form).children($('input[name="address"]').val(data.address))
+				$(form).children($('input[name="birthday"]').val(data.birthDate))
+				$(form).children($('input[name="dateHired"]').val(data.dateHired))
+
+			}
+
+		})
+	})
+
+
+	$('#frmedit').on('submit',function(e) {
+		// body...
+		e.preventDefault();
+		var frmdata = $(this).serializeArray();
+		$.ajax({
+			url:current_url,
+			data:frmdata,
+			dataType:'json',
+
+			method:'post',
+			success:function(response){
+				console.log(response)
+
+				if (response.status == true) {
+					$('.error-area').addClass('text-success').text(response.msg)
+
+					refreshTable(table,site_url+'/workers/listall?type='+w_type)
+				}else{
+					$('.error-area').removeClass('text-success').addClass('text-danger').text(response.msg)
+
+				}
+			}
+
+		})
+	})
 
 var sidebarcollapse = true;
 if (sidebarcollapse) {
@@ -85,6 +147,12 @@ if (sidebarcollapse) {
 	$('#frmaddworker').on('submit',function(e){
 		e.preventDefault();
 		var frmdata = $(this).serializeArray();
+		var bday =$(this).children('input[class="birthDate"]').val()
+		var center_id = $('#centerId').val();
+		if(center_id == 0){
+			alert('No center selected');
+			return false;
+		}
 		console.log(frmdata);
 		$.ajax({
 			url:'<?=site_url('workers/add')?>',
@@ -107,6 +175,160 @@ if (sidebarcollapse) {
 			}
 		})
 	});
+
+
+      $('#frmaddstudents').on('submit',function(e){
+        e.preventDefault();
+
+        if ($('#class_schedule').val() == 0) {
+        	alert('School Year is required.')
+        	return false;
+        }
+        var frmdata = $(this).serializeArray();
+        $.ajax({
+          url:'<?=site_url('students/add')?>',
+          data: frmdata,
+          dataType: 'json',
+          method:'POST',
+          success: function(response){
+            console.log(response)
+            if (response.status == true) {
+              $('.errors').removeClass('alert alert-danger').addClass('alert alert-success').text(response.msg);
+              $('#frmStudents')[0].reset();
+            }else{
+              $('.errors').removeClass('alert alert-success').addClass('alert alert-danger').text(response.msg);
+
+            }
+          },complete:function(){
+            refreshTable($('input[name="YearId"]').val(),$('#workersId').val());
+          }
+        })
+      });
+      $('#StudentType').on('change',function(){
+      	/* var i =$(this).val();
+      	$(this).val(1)
+      	if (i === '2') {
+      		$('a[href="#repeater"]').click()
+      		console.log(i)
+      	}
+      	*/
+      	
+      });
+      $('#btn-find-oldstudent').on('click',function(){
+      	$('#add-student').addClass('d-none')
+      				$('#student_id').val(0)
+      	var frmdata = {};
+      		frmdata.keys = $('#searcholdstudent').val()
+
+      	$.ajax({
+      		url:site_url+'/students/find',
+      		data:frmdata,
+      		dataType:'json',
+      		method:'POST',
+      		success:function(response){
+      			console.log(response)
+      			if (response.status == true) {
+      				$('#repeater-result').html(response.data);
+      				 $('#repeater-result').append($('<hr>'));
+      				 $('#repeater-result').append($('<span/>').text('If student not in a database.'));
+      				 $('#repeater-result').append($('<div/>').html($('<button/>').attr('type','button').addClass('btn btn-primary btn-sm btn-input').text('Click here to add as new')))
+      			
+      			}else{
+      				$('#repeater-result').html($('<span/>').text('No found in database.'));
+      				$('#repeater-result').append($('<div/>').html($('<button/>').attr('type','button').addClass('btn btn-primary btn-sm btn-input').text('Click here to add as new')))
+      			}
+      		},
+      		error:function (i,e) {
+      			// body...
+      			console.log(i.responseText)
+      		}
+      	})
+      })
+      $(document).on('click','.btn-input',function(){
+      	$('#add-student').removeClass('d-none')
+      				$('#repeater-result').html('');
+
+      })
+      $(document).on('click','.btn-select',function () {
+      	// body...
+      	//alert('Hello')
+      	var formdata = {}
+      		formdata.student_id = $(this).data('id')
+      		formdata.year_id = $('input[name="class_schedule"]').val();
+      		formdata.type = $('input[name="StudentType"]').val()
+      		formdata.action = 'select';
+
+      	$.ajax({
+      		url:site_url+'/students/info',
+      		data:formdata,
+      		dataType:'json',
+      		method:'post',
+      		success:function(response){
+      			console.log(response)
+      				$('#repeater-result').html('');
+      			if (response.status == true) {
+      				
+      				$('#add-student').removeClass('d-none')
+      				$.each(response.data,function(i,e){
+      					//console.log(e)
+      					$('#frmaddstudents').children($('[name="'+i+'"]').val(e));
+      				})
+
+      			}
+
+
+      		}
+      	});
+      })
+
+	$(document).on('click','.btn-edit-student',function() {
+		// body...
+		$('a[href="#editStudents"]').click()
+		var formdata = {}
+      	formdata.student_id = $(this).data('id')
+      	
+
+		var data = 0;
+		$.ajax({
+			url:site_url+'/students/info',
+			data:formdata,
+			dataType:'json',
+			method:'post',
+			success:function(response){
+				console.log(response)
+				var data = response.data;
+				console.log(data)
+				var form = $('#frmeditstudents');
+				$.each(data,function(i,v){
+					$(form).children($('[name="'+i+'"]').val(v));
+				})
+
+			}
+
+		})
+	})
+	$('#frmeditstudents').on('submit',function (e) {
+		// body...
+		e.preventDefault()
+		var formdata =$(this).serializeArray();
+//		alert('Not yet available.')
+		
+		var data = 0;
+		$.ajax({
+			url:site_url+'/students/update',
+			data:formdata,
+			dataType:'json',
+			method:'post',
+			success:function(response){
+				console.log(response)
+
+
+			}
+
+		})
+
+	})
+
     $('#schoolyears').on('change',function (){
 		
 		var frmdata = {};
@@ -164,7 +386,7 @@ if (sidebarcollapse) {
 				},
 				error: function(i,e){
 					console.log(i.responseText)
-					alert('No data was save. Please try again.')
+					alert('No input data. Please try again.')
 				},
 				complete:function(){
 					return result;
@@ -172,7 +394,50 @@ if (sidebarcollapse) {
 			})
 
 	}
+	var table_schoolyear = $('#table-list-schoolyear');
+		table_schoolyear.DataTable({
+			ajax:site_url+'/workers/listmyschoolyear/0'
+		});
+
+	$(document).on('click','.btn-trash-schoolyear',function(){
+
+		var id = $(this).data('id');
+		var tr = $(this).parent().parent()
+
+		if (confirm('This will delete your assigned school year including your pupils data.')) {
+		
+		var formdata = {};
+			formdata.id = id;
+			formdata.form = 'remove_schoolyear';
+		//submit_basicform(current_url,formdata)
+			$.ajax({
+				url: current_url,
+				data:formdata,
+				dataType:'json',
+				method:'POST',
+				success:function(i){
+					//console.log(i)
+					$(tr).remove()
+				},
+				error:function(i,e){
+					console.log(i.responseText)
+				}
+			})
+
+			//return false;
+		}
+	})
+
+
+  var tblmystudents = $('#tblmystudents')
+
+      tblmystudents.DataTable({
+        ajax:site_url+'/workers/students/'+worker_id
+      })
+
+      
 
 })
+var worker_id = '<?=isset($info->workersId)? $info->workersId : 0 ?>';
 
 </script>

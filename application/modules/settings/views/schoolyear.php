@@ -9,6 +9,7 @@
 
 
                   <li class="nav-item"><a class="nav-link <?php if(!empty($active)){if($active == 'schoolyear'){ echo " active";}}?>" href="#schoolyear" data-toggle="tab">Add School Year</a></li>
+                  <li class="nav-item d-none"><a href="#edit" data-toggle="tab"></a></li>
                 </ul>
 
       </div>
@@ -43,6 +44,8 @@
                       <div class="col-md-9"><div id="error-area"></div></div>
 
                       </div>
+                        <input type="hidden" name="form" value="Add">
+
                         <div class="row form-group">
                           <div class="col-md-3"><label>Start Date</label></div>
                           <div class="col-md-9"><input type="date" name="startdate" class="form-control" placeholder="Start of school year"></div>
@@ -60,6 +63,37 @@
                         </form>
 
 
+          </div>
+          <div class="tab-pane" id="edit">
+            <h4 class="text-title">Edit school year</h4>
+
+                  <hr>
+                        <form id="e_frmschoolyear" method="post" action="javascript:void(0)">
+                      <div class="row">
+                        
+                      <div class="col-md-3"></div>
+                      <div class="col-md-9"><div id="error-area"></div></div>
+
+                      </div>
+                      <div class="d-none">
+                        <input type="hidden" name="YearId" id="e_YearId" value="0">
+                        <input type="hidden" name="form" value="Update">
+                      </div> 
+                        <div class="row form-group">
+                          <div class="col-md-3"><label>Start Date</label></div>
+                          <div class="col-md-9"><input type="date" name="startdate" id="e_startdate" class="form-control" placeholder="Start of school year"></div>
+                        </div>
+
+                        <div class="row form-group">
+                          <div class="col-md-3"><label>End Date</label></div>
+                          <div class="col-md-9"><input type="date" name="enddate" id="e_enddate" class="form-control" placeholder="End of school year"></div>
+                        </div>
+
+                        <div class="row form-group">
+                          <div class="col-md-3"><label>&nbsp;</label></div>
+                          <div class="col-md-9"><button type="submit" class="btn btn-danger">Update</button></div>
+                        </div>
+                        </form>
           </div>
         </div>
       </div>

@@ -21,7 +21,7 @@
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-2">
 
             <!-- Profile Image -->
             <div class="card card-primary card-outline">
@@ -61,10 +61,8 @@
             <!-- /.card -->
 
             <!-- About Me Box -->
-            <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title">Job Status</h3>
-              </div>
+            <div class="card card-primary card-outline">
+              
               <!-- /.card-header -->
               <div class="card-body">
                 <strong><i class="fas fa-university mr-1"></i> Assigned Center</strong>
@@ -89,17 +87,19 @@
             <!-- /.card -->
           </div>
           <!-- /.col -->
-          <div class="col-md-9">
+          <div class="col-md-10">
             <div class="card">
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
-                  <li class="nav-item"><a class="nav-link <?php if(empty($active)){echo "active";}?>" href="#activity" data-toggle="tab">Home</a></li>
-                  <li class="nav-item"><a class="nav-link <?php if(!empty($active)){if($active == 'evaluation'){ echo " active";}}?>" href="#timeline" data-toggle="tab">Assessment</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#activity" data-toggle="tab">Home</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Assessment</a></li>
 
-                  <li class="nav-item"><a class="nav-link <?php if(!empty($active)){if($active == 'student'){ echo " active";}}?>" href="#addStudents" data-toggle="tab">Nutrition</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#nutritions" data-toggle="tab">Nutrition</a></li>
                   <?php if (!$this->aauth->is_admin()): ?>
-                  <li class="nav-item"><a class="nav-link <?php if(!empty($active)){if($active == 'schoolyear'){ echo " active";}}?>" href="#addSchoolYear" data-toggle="tab"><i class="fa fa-plus"></i></a></li>
-                    
+                  <li class="nav-item"><a class="nav-link" href="#addStudents" data-toggle="tab">Add student</a></li>
+
+                  <li class="nav-item"><a class="nav-link" href="#addSchoolYear" data-toggle="tab">School Years</a></li>
+                  <li class="nav-item d-none"><a class="nav-link" href="#editStudents" data-toggle="tab">Repeater</a></li>
                   <?php endif ?>
                 </ul>
               </div><!-- /.card-header -->
@@ -111,35 +111,53 @@
                         Enrolled Student by Academic Year
                       </div>
                       <div class="card-body">
-                        <div class="row form-responsive">
-                          
-                        <table class="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>AY</th>
-                              <th>Total Student</th>
-                              <th>Repeater</th>
-                              <th>Graduated</th>
-                              <th style="min-width:130px !important">Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <?php if (!empty($myschoolyear)): ?>
-                              <?php foreach ($myschoolyear as $key => $val): ?>
-                                <tr>
-                                  <td><?=$val->YearId?></td>
-                                  <td><?=$val->YearStart?> to <?=$val->YearEnd?></td>
-                                  <td><?=$val->totalPupils?></td>
-                                  <td><?=$val->totalRepeater?></td>
-                                  <td><?=$val->totalGraduates?></td>
-                                  <td><a href="<?=site_url('students?year='.$val->YearId.'&worker='.$info->workersId)?>" title="View students" class="btn btn-default btn-sm"><i class="fa fa-list"></i></a> <button title="Delete from my list" class="btn btn-default btn-sm"><i class="fa fa-trash"></i></button></td>
-                                </tr>
-                              <?php endforeach ?>
-                            <?php endif ?>
+                        <div class="row">
+                          <div class="col-md-4 col-sm-12 col-xs-12">
+                          <select class="form-control" name="class_schedule">
+                            <option value="0">Select classes</option>
+                              <?php if (!empty($schoolyears)): ?>
+                                <?php foreach ($schoolyears as $key => $value): ?>
+                                  <option value="<?=$value->YearId?>"><?=tomdy($value->YearStart)?> to <?=tomdy($value->YearEnd)?></option>
+                                <?php endforeach ?>
+                              <?php endif ?>
                             
-                          </tbody>
-                        </table>
+
+                          </select>
+                        </div>
+                        <div class="col-md-8 col-sm-12 col-xs-12">
+                          
+                  <div class="input-group input-group">
+                  <input type="text" class="form-control" name="searchstring" id="searchstring" placeholder="Search here...">
+                  <span class="input-group-append">
+                    <button type="button" class="btn btn-info btn-flat" id="btn-go">Go!</button>
+                  </span>
+                </div>
+
+                        </div>
+                        
+                        </div>
+
+                    <br/>
+                        <div class="row form-responsive">
+                        
+        
+                <table id="tblmystudents" class="table table-bordered w-100">
+                  <thead>
+                  <tr>
+                    <th  style="width:50px !important">ID#</th>
+                    <th>Name</th>
+                    <th>Age (months)</th>
+                    <th>Gender</th>
+
+                              <th>Address</th>
+                              <th>Student Type</th>
+                    <th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+
 
                         </div>
                       </div>
@@ -148,7 +166,7 @@
                     
                   </div>
                   <!-- /.tab-pane -->
-                  <div class="tab-pane <?php if(!empty($active)){if($active == 'evaluation'){ echo " active";}}?>" id="timeline">
+                  <div class="tab-pane" id="timeline">
                     <!-- The timeline -->
                     <div class="card">  
                       <div class="card-header">Student Assessment</div>
@@ -156,7 +174,7 @@
                         <table class="table table-bordered">
                           <thead>
                             <tr>
-                              <th>#</th>
+                              <th>Student ID#</th>
                               <th>AY</th>
                               <th>Date of Assessment</th>
                               <th>Scaled Score</th>
@@ -173,8 +191,11 @@
                     <!-- /.timeline -->
                   </div>
                   <!-- /.tab-pane -->
-
-                  <div class="tab-pane <?php if(!empty($active)){if($active == 'schoolyear'){ echo " active";}}?>" id="addSchoolYear">
+                  <div class="tab-pane" id="nutritions">
+                    <?php $this->load->view('workers/nutritions'); ?>
+                    
+                  </div>
+                  <div class="tab-pane" id="addSchoolYear">
                     Add School Year
 
                     <div class="card d-none">
@@ -216,7 +237,7 @@
                               <option value="">Select here..</option>
                               <?php if (!empty($schoolyears)): ?>
                                 <?php foreach ($schoolyears as $key => $value): ?>
-                                  <option value="<?=$value->YearId?>"><?=$value->YearStart?> to <?=$value->YearEnd?></option>
+                                  <option value="<?=$value->YearId?>"><?=tomdy($value->YearStart)?> to <?=tomdy($value->YearEnd)?></option>
                                 <?php endforeach ?>
                               <?php endif ?>
                             </select>
@@ -230,11 +251,26 @@
                     </form>
                     <!-- / select school year -->
                   </div>
-                  <div class="tab-pane <?php if(!empty($active)){if($active == 'student'){ echo " active";}}?>" id="addStudents">
+
+                  <!-- /.tab-pane -->
+                  
+                  
+                  <div class="tab-pane" id="addStudents">
+                    <?php $this->load->view('workers/students_add'); ?>
                    
-                    <?php $this->load->view('workers/nutritions'); ?>
                   </div>
                   <!-- /.tab-pane -->
+
+
+                  <!-- /.tab-pane -->
+                  
+                  
+                  <div class="tab-pane" id="editStudents">
+                    <?php $this->load->view('workers/students_edit'); ?>
+                   
+                  </div>
+                  <!-- /.tab-pane -->
+
                 </div>
                 <!-- /.tab-content -->
               </div><!-- /.card-body -->

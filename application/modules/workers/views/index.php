@@ -28,6 +28,7 @@
                   <li class="nav-item"><a class="nav-link <?=(!empty($action) ? '' : 'active')?>" href="#home" data-toggle="tab">Daycare Workers</a></li>
                   <li class="nav-item"><a class="nav-link <?=(!empty($action) ? 'active' : '')?>" href="#addWorker" data-toggle="tab">Add Worker</a></li>
                   <li class="nav-item"><a class="nav-link <?=(!empty($action) ? 'active' : '')?>" href="#addschedule" data-toggle="tab">Assign worker class schedule</a></li>
+                  <li class="nav-item d-none"><a class="nav-link <?=(!empty($action) ? 'active' : '')?>" href="#edit" data-toggle="tab">Edit</a></li>
                 </ul>
 
 
@@ -41,7 +42,7 @@
                                   
                                   <label for="workertype">Select Worker Type</label>
                                   <select id="workertype" name="workertype" class="form-control">
-                                    <option value="0">List all workers</option>
+                                    <option value="0" selected>List all workers</option>
                                     <option value="1">List all workers with assigned classess</option>
                                   </select>
                                 </div>
@@ -65,7 +66,7 @@
                     <th>Class End</th>
                     <th>Class status</th>
                     <th>Total Students</th>
-                    <th></th>
+                    <th style="min-width:60px !important"></th>
                   </tr>
                   </thead>
                   <tbody>
@@ -79,16 +80,18 @@
                             </div>
             <div class="tab-pane <?=(!empty($action) ? 'active' : '')?>" id="addWorker">
               <div id="error-area"></div>
-              <form class="form-horizontal" id="frmaddworker" method="POST" action="<?=site_url('workers/add')?>">
+              <form class="form-horizontal" id="frmaddworker" method="POST" action="<?=current_url()?>">
 
-                
+                <div class="d-none">
+                  <input type="hidden" name="form" value="add"/>
+                </div>
                           <?php echo validation_errors(); ?>
                           <?php if(!empty($hasErrors)) echo $hasErrors; ?>
 
                 <div class="form-group row">
                   <label class="col-sm-2">Select center</label>
                   <div class="col-sm-10">
-                    <select name="centerId" id="centerId" class="form-control">
+                    <select name="centerId" id="centerId" class="form-control" required>
                       <option value="0">Select assigned center here</option>
                       <?php foreach ($centers as $key => $value): ?>
                         <option value="<?=$value->centerId?>"><?=$value->centerName?></option>
@@ -168,6 +171,108 @@
               </form>
             </div>
             <!-- /tab-add-worker -->
+
+            <div class="tab-pane <?=(!empty($action) ? 'active' : '')?>" id="edit">
+              
+              <form class="form-horizontal" id="frmedit" method="POST"  action="<?=current_url()?>">
+
+<div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-10">
+                  <span class="error-area"></span>
+    
+  </div>
+</div>                <div class="d-none">
+                  <input type="hidden" name="form" value="edit">
+                  <input type="hidden" name="workersId" value="0">
+                </div>
+                
+                          <?php echo validation_errors(); ?>
+                          <?php if(!empty($hasErrors)) echo $hasErrors; ?>
+
+                <div class="form-group row">
+                  <label class="col-sm-2">Select center</label>
+                  <div class="col-sm-10">
+                    <select name="centerId" id="centerId" class="form-control" required>
+                      <option value="0">Select assigned center here</option>
+                      <?php foreach ($centers as $key => $value): ?>
+                        <option value="<?=$value->centerId?>"><?=$value->centerName?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>                  
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-2">Name of worker</label>
+                  <div class="col-sm-10">
+                    <div class="input-group mb-3">
+                      <input type="text" class="form-control" name="fName" placeholder="First Name">
+                      <input type="text" class="form-control" name="mName" placeholder="Middle Name">
+                      <input type="text" class="form-control" name="lName" placeholder="Last Name">
+                        <div class="input-group-append">
+                          <input type="text" name="ext" class="form-control" placeholder="Extension: Jr." width="50px">
+                        </div>
+
+                    </div>
+                    <?=form_error('firstName')?>
+                    <?=form_error('lastName')?>
+
+                  </div>                  
+                </div>
+
+
+                <div class="form-group row">
+                  <label class="col-sm-2">Email</label>
+                  <div class="col-sm-10">
+                    <input type="email" name="email" id="email" class="form-control" placeholder="user@email.com">
+                    <?=form_error('email')?>
+                  </div>                  
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-2">Address</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="address" id="address" class="form-control" placeholder="Address">
+                    <?=form_error('address')?>
+                  </div>                  
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-2">Birthday</label>
+                  <div class="col-sm-10">
+                    <input type="date" name="birthday" id="birthday" class="form-control" placeholder="Birthday">
+                    <?=form_error('birthday')?>
+                  </div>                  
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-2">Date Hired</label>
+                  <div class="col-sm-10">
+                    <input type="date" name="dateHired" id="dateHired" class="form-control" placeholder="Date Hired">
+                    <?=form_error('dateHired')?>
+                  </div>                  
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-2">Job Status</label>
+                  <div class="col-sm-10">
+                    <select name="jobStatus" id="jobStatus" class="form-control" >
+                      <option value="1">Job Order</option>
+                      <option value="2">Contractual</option>
+                      <option value="3">Permanent</option>
+                      <option value="4">Resigned</option>
+                      <option value="5">Retired</option>
+                    </select>
+                    <?=form_error('jobStatus')?>
+                  </div>                  
+                </div>
+                <div class="form-group row">
+                  <div class="col-sm-2">&nbsp;</div>
+                  <div class="col-sm-10"><button class="btn btn-danger">Update</button></div>
+                </div>
+              </form>
+            </div>
+            <!-- /tab-edit-worker -->
 
             <!-- tab-assign-schedule -->
             <div class="tab-pane" id="addschedule">

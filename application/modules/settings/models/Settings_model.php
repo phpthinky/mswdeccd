@@ -11,6 +11,16 @@
  		// code...
  		parent::__construct();
  	}
+  public function class_schedule_save($data)
+  {
+    // code...
+    if (!empty($data->YearId)) {
+      // code...
+      return $this->updateschoolyear($data);
+    }else{
+      return $this->addschoolyear($data);
+    }
+  }
  	public function addschoolyear($data)
  	{
  		// code...
@@ -20,6 +30,18 @@
  		}
  		return false;
  	}
+
+  public function updateschoolyear($data)
+  {
+      $this->db->where('YearId',$data->YearId);
+      return $this->db->update('eschoolyear',$data);
+   
+  }
+  public function class_schedule_remove($data)
+  {
+    // code...
+    $this->db->delete('eschoolyear',$data);
+  }
  	public function isExist($data)
  	{
  		// code...
@@ -37,6 +59,7 @@
  	public function listschoolyears()
  	{
  		// code...
+    $this->db->order_by('YearStart','DESC');
  		return $this->db->get('eschoolyear')->result();
  	}
 
@@ -132,27 +155,29 @@
     }
     return false;
   }
-  public function getWFH($data='')
-  {
-    // code...
-    if (!empty($data)) {
-      // code...
-      return $this->db->get_where('e_zscore_wfh',$data)->result();
 
-    }else{
-      return $this->db->get('e_zscore_wfh')->result();
-    }
-  }
-  public function addWFH($data='')
+  public function reset_all($value='')
   {
-    // code...
-    if($this->db->get_where('e_zscore_wfh',array('height'=>$data['height'],'gender'=>$data['gender']))->result()){
-      $this->db->where(array('height'=>$data['height'],'gender'=>$data['gender']));
-      return $this->db->update('e_zscore_wfh',$data);
-    }else{
-      return $this->db->insert('e_zscore_wfh',$data);
-
-    }
+      $this->db->truncate('ecenter');
+    $this->db->truncate('eparent');
+    $this->db->truncate('epupils');
+    $this->db->truncate('epupils_feeding');
+    $this->db->truncate('eschoolyear');
+    $this->db->truncate('eschoolyear_by_worker');
+    $this->db->truncate('eschoolyear_by_worker_students');
+    $this->db->truncate('eworkers');
+    $this->db->truncate('e_zscore_wfh');
+    $this->db->truncate('e_zscore_wfa');
+    $this->db->truncate('e_zscore_hfa');
+    $this->db->truncate('weighing');
+    $this->db->truncate('weighing_schedule');
+    $this->db->delete('aauth_users',array('id <>'=>1));
+    $this->db->delete('aauth_user_to_group',array('user_id <>'=>1));
+    $sql = "ALTER TABLE `aauth_users` AUTO_INCREMENT = 2";
+    $this->db->query($sql);
+    
+    $sql2 = "ALTER TABLE `eworkers` AUTO_INCREMENT = 2";
+    $this->db->query($sql2);
   }
 
  } ?>

@@ -17,7 +17,7 @@ class Centers_model extends CI_model
 		// code...
 		if (!empty($data->centerId)) {
 			// code...
-			return 'updated.';
+			return $this->edit($data);
 		}else{
 			return $this->add($data);
 		}
@@ -28,14 +28,35 @@ class Centers_model extends CI_model
 		if($this->exists($data->centerName)){
 			return array('status'=>false,'msg'=>'Records already exist!');
 		}else{
-			if($this->db->insert('ecenter',$data)){
-			return array('status'=>true,'msg'=>'Successfully added!');
 
-			}else{
-				return array('status'=>false,'msg'=>'Database error: Unknown error occured.');
+			try {
+				$this->db->insert('ecenter',$data);	
+				$result = array('status'=>true,'msg'=>'Successfully added!');
+
+			} catch (Exception $e) {
+				$result = array('status'=>false,'msg'=>$e->getMessage());
 			}
-
+				return $result;
+		
 		}
+
+	}
+
+	public function edit($data)
+	{
+		
+
+			try {
+				$this->db->where('centerId',$data->centerId);	
+				$this->db->update('ecenter',$data);	
+				$result = array('status'=>true,'msg'=>'Successfully added!');
+
+			} catch (Exception $e) {
+				$result = array('status'=>false,'msg'=>$e->getMessage());
+			}
+				return $result;
+		
+		return $result;
 
 	}
 	public function exists($str)

@@ -9,26 +9,14 @@ $(function(){
 		var frmdata =  $(this).serializeArray();
 		//console.log(frmdata);
 		$.ajax({
-			url:"<?=site_url('settings/schoolyear')?>",
+			url:current_url,
 			method: 'post',
 			dataType:'json',
 			data: frmdata,
-			beforeSend: function(){
-				console.log('processing')
-			$('#error-area').removeClass('alert alert-success').text('');
-			$('#error-area').removeClass('alert alert-danger').text('');
-
-			},
-			statusCode: {
-				404: function(){
-					alert('Url not found')
-				}
-			},
 			success: function(result){
 				console.log(result)
 				if(result.status == true){
 				$('#error-area').addClass('alert alert-success').text(result.msg);
-				$('#frmschoolyear')[0].reset()
 
 				}else{
 
@@ -39,13 +27,59 @@ $(function(){
 			error: function (i,e) {
 				// body...
 				console.log(i.responseText)
+			}
+		})
+	})
+
+
+	$('#e_frmschoolyear').on('submit',function(e){
+		e.preventDefault();
+
+		var frmdata =  $(this).serializeArray();
+		$.ajax({
+			url:current_url,
+			method: 'post',
+			dataType:'json',
+			data: frmdata,
+			success: function(result){
+				console.log(result)
+				if(result.status == true){
+				$('#error-area').addClass('alert alert-success').text(result.msg);
+				$('#e_frmschoolyear')[0].reset()
+
+				}else{
+
+				$('#error-area').addClass('alert alert-danger').text(result.msg);
+
+				}
 			},
-			complete:function(){
-				setInterval(function(){
-				$('#error-area').removeClass('alert alert-success').text('');
-				$('#error-area').removeClass('alert alert-danger').text('');
-				$('#frmschoolyear')[0].reset()
-				},15000)
+			error: function (i,e) {
+				// body...
+				console.log(i.responseText)
+			}
+		})
+	})
+
+
+	$(document).on('click','.btn-remove-class',function(e){
+		e.preventDefault();
+		var parent  = $(this).parent().parent()
+				$(parent).remove()
+		
+		var formdata =  {};
+				formdata.form='Remove';
+				formdata.id = $(this).data('id')
+		$.ajax({
+			url:current_url,
+			method: 'post',
+			dataType:'json',
+			data: formdata,
+			success: function(result){
+				console.log(result)
+			},
+			error: function (i,e) {
+				// body...
+				console.log(i.responseText)
 			}
 		})
 	})
@@ -53,7 +87,17 @@ $(function(){
       table.DataTable({
         ajax:"<?=site_url('settings/listschoolyears')?>"
       })
+   $(document).on('click','.btn-edit-schoolYear',function(){
 
+   	var tr = $(this).parents('tr'); 		
+   		var td = $(tr).children()
+   				var td1 = $(td[1]).find('input').val()
+   				var td2 = $(td[2]).find('input').val()
+   							$('#e_YearId').val($(td[0]).text())
+	   						$('#e_startdate').val(td1)
+	   						$('#e_enddate').val(td2)
+	   						$('a[href="#edit"]').click()
+   })
 	function refreshTable(table){
 		table.DataTable().clear().destroy();
 	}

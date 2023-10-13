@@ -112,6 +112,20 @@ if (!function_exists('savesuccess')) {
 		}
 }
 
+if (!function_exists('update')) {
+			function update($error=false){
+				if ($error) {
+					// code...
+
+		return array('status'=>false,'msg'=>'No changes.');
+				}else{
+
+		return array('status'=>true,'msg'=>'Successfully updated.');
+				}
+
+
+		}
+}
 if (!function_exists('showresponse')) {
 			function showresponse($e){
 		

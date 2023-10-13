@@ -38,6 +38,14 @@
                 </div>
 
                       <div class="form-group row">
+                        <label for="age" class="col-sm-2 col-form-label">Student type</label>
+                        <div class="col-sm-10">
+                          <select class="form-control" name="StudentType" id="sector" required>
+                            <option value="1">New</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group row">
                         <label for="age" class="col-sm-2 col-form-label">Name</label>
                         <div class="col-sm-10">
                                 
@@ -81,16 +89,16 @@
                       </div>
 
 
-                      <div class="form-group row d-none">
+                      <div class="form-group row">
                         <label for="age" class="col-sm-2 col-form-label">Sector</label>
                         <div class="col-sm-10">
                           <?php $sector = set_value('sector'); ?>
                           <select class="form-control" name="sector" id="sector">
-                            <option value="">Select sector</option>
-                            <option value="1" <?=($sector == '1')?'selected' : ''?>>Regular</option>
-
+                            <option value="0">Default</option>
                             <option value="2" <?=($sector == '2')?'selected' : ''?>>Single parent</option>
                             <option value="3" <?=($sector == '3')?'selected' : ''?>>IPs</option>
+                            <option value="3" <?=($sector == '4')?'selected' : ''?>>4Ps</option>
+                            <option value="1" <?=($sector == '1')?'selected' : ''?>>WD</option>
                           </select>
                           <div class="error"><?php echo form_error('sector') ?></div>
                         
@@ -111,32 +119,41 @@
                       <hr>
                       <input type="hidden" name="YearId" value="<?=$YearId?>">
 
-                      <div class="form-group row">
-                        <label for="age" class="col-sm-2 col-form-label">Student type</label>
-                        <div class="col-sm-10">
-                          <select class="form-control" name="StudentType" id="sector" required>
-                            <option value="">Select student type</option>
-                            <option value="1">New</option>
 
-                            <option value="2">Repeater</option>
-                          </select>
-                        </div>
-                      </div>
-
-                      <!--
                       <div class="form-group row">
                         <label for="barangay" class="col-sm-2 col-form-label">Barangay</label>
                         <div class="col-sm-10">
                          <select class="form-control" name="barangay" id="barangay">
-                          <option>Name of barangay</option>
+                          
+                          <option>Arellano</option>
+                      <option>Batong Buhay</option>
+                      <option>Buenavista</option>
+                      <option>Burgos</option>
+                      <option>Claudio Salgado</option>
+                      <option>Gen. Emillio Aguinaldo</option>
+                      <option>Ibud</option>
+                      <option>Ilvita</option>
+                      <option>Lagnas</option>
+                      <option>Ligaya</option>
+                      <option>Malisbong</option>
+                      <option>Pag-asa</option>
+                      <option>Poblacion</option>
+                      <option>San Agustin</option>
+                      <option>Santa Lucia</option>
+                      <option>San Vicente</option>
+                      <option>Sato Nino</option>
+                      <option>Tagumpay</option>
+                      <option>Tuban</option>
+                      <option>Victoria</option>
                          </select>
                         </div>
                       </div>
+
                       <div class="form-group row">
                         <label for="municipality" class="col-sm-2 col-form-label">Municipality</label>
                         <div class="col-sm-10">
                           <select class="form-control" name="municipality" id="municipality">
-                            <option>Name of municipality</option>
+                            <option value="1">Sablayan</option>
                           </select>
                         </div>
                       </div>
@@ -144,11 +161,10 @@
                         <label for="province" class="col-sm-2 col-form-label">Province</label>
                         <div class="col-sm-10">
                           <select class="form-control" name="province" id="province">
-                            <option>Name of province</option>
+                            <option class="1">Occidental Mindoro</option>
                           </select>
                         </div>
                       </div>
-                      -->
                       <div class="row">
                     <span class="col-sm-2"></span><div class="col-sm-10">
                       <button class="btn btn-primary" type="submit">Add</button>

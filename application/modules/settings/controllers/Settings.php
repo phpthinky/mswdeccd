@@ -41,14 +41,43 @@
     {
       // code...
       if ( $this->input->post()) {
+        $form= $this->input->post('form');
+        switch ($form) {
+          case 'Add':
+            // code...
+
         $postdata = new stdClass();
         $postdata->YearStart = $this->input->post('startdate');
         $postdata->YearEnd = $this->input->post('enddate');
 
-        if($result = $this->settings_model->addschoolyear($postdata)){
+        if($result = $this->settings_model->class_schedule_save($postdata)){
           echo json_encode(savesuccess());
         }else{
           echo json_encode(showresponse(2));
+        }
+            break;
+          case 'Update':
+
+        $postdata = new stdClass();
+        $postdata->YearId = $this->input->post('YearId');
+        $postdata->YearStart = $this->input->post('startdate');
+        $postdata->YearEnd = $this->input->post('enddate');
+
+        if($result = $this->settings_model->class_schedule_save($postdata)){
+          echo json_encode(update());
+        }else{
+          echo json_encode(update(1));
+        }
+          break;
+          case 'Remove':
+            $postdata = array();
+            $postdata['YearId'] = $this->input->post('id');
+            $result = $this->settings_model->class_schedule_remove($postdata);
+          break;
+          default:
+            // code...
+          echo json_encode(noinput());
+            break;
         }
       exit();
       }
@@ -66,10 +95,10 @@
           // code...
           $data[] = array(
             $value->YearId,
-            tomdy($value->YearStart),
-            tomdy($value->YearEnd),
+            tomdy($value->YearStart).'<input type="hidden" name="td_startdate" value="'.$value->YearStart.'" >',
+            tomdy($value->YearEnd).'<input type="hidden" name="td_enddate" value="'.$value->YearEnd.'" >',
             $value->Status,
-            '<button class="btn btn-sm btn-default"><i class="fas fa-edit"></i></button> | <button class="btn btn-sm btn-default"><i class="fas fa-trash"></i></button>'
+            '<button class="btn btn-sm btn-default btn-edit-schoolYear" data-id="'.$value->YearId.'"><i class="fas fa-edit"></i></button> | <button class="btn btn-sm btn-default btn-remove-class"  data-id="'.$value->YearId.'"><i class="fas fa-trash"></i></button>'
 
           );
         }
@@ -232,51 +261,6 @@
     }
     public function zscorewfh($form='')
     {
-      // code...
-      if (!empty($_GET['form'])) {
-        // code...
-        $form = $_GET['form'];
-        $listdata = $this->settings_model->getWFH();
-        if (!empty($listdata)) {
-          // code...
-          $data = array();
-          foreach ($listdata as $key => $value) {
-            // code...
-            $data[] = array(
-              $value->height,
-              $value->su_weight,
-              $value->u_weight,
-              $value->n_weight,
-              $value->ov_weight,
-              $value->ob_weight,
-              ''
-
-            );
-
-          }
-          echo json_encode(array('data'=>$data));
-        }
-        exit();
-      }
-
-      if ($this->input->post()) {
-        // code...
-
-        $postdata = $this->input->post();
-        $insertdata = array();
-        $insertdata['height'] = $postdata['height'];
-        $insertdata['su_weight'] = $postdata['suw'];
-        $insertdata['u_weight'] = $postdata['uw'];
-        $insertdata['n_weight'] = $postdata['nw'];
-        $insertdata['ov_weight'] = $postdata['ovw'];
-        $insertdata['ob_weight'] = $postdata['obw'];
-        $insertdata['gender'] = $postdata['gender'];
-        $insertdata['age'] = $postdata['age_limit'];
-
-        $this->settings_model->addWFH($insertdata);
-        
-        exit();
-      }
       $data = new stdClass();
 
       $data->title = 'Z Score Table';
@@ -339,6 +323,35 @@
       $this->template->dashboard($data);
       
     }
+    public function backup($value='')
+    {
+      // code...
+      $result = false;
+      if ($this->input->post()) {
+        // code...
+        $form = $this->input->post('form');
+        switch ($form) {
+          case 'Reset':
+            // code...
+          $result = "Tables successfully emptied".
+          $this->settings_model->reset_all();
+            break;
+          
+          default:
+            // code...
+          $result = "No input received.";
 
- } ?>
+            break;
+        }
+      }
+      $data = new stdClass();
+      $data->action = $result;
+      $data->content = 'settings/backup';
+      $this->template->dashboard($data);    
+
+    }
+  }
+
+
+?>
 
