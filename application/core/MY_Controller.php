@@ -20,6 +20,8 @@ class MY_Controller extends MX_Controller
       $this->load->model('weighing/weighing_model');
       $this->load->model('centers/centers_model');
       $this->load->model('workers/workers_model');
+      
+
 
 	}
 	

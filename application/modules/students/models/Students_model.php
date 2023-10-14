@@ -1,10 +1,11 @@
 <?php 
 
+
 /**
-  * 
-  */
- class Students_model extends CI_model
- {
+ * 
+ */
+class Students_model extends CI_model
+{
   
   function __construct()
   {
@@ -170,6 +171,9 @@
     $query =  $this->db->select("pupilsId as id, CONCAT(fName,' ', mName,' ', lName,' ', ext) as student_name,age,gender,address")
     ->from('epupils')
     ->like('keywords',metaphone($keys))
+    ->or_like('keywords_2',metaphone($keys))
+    ->or_like('fName',$keys)
+    ->or_like('lName',$keys)
     ->get();
     return $query->result();
   }
@@ -182,6 +186,18 @@
     $this->db->where('pupilsId',$id);
     $query = $this->db->get();
     return $query->row(0);
+  }
+  public function resetall($value='')
+  {
+    // code...
+    $result = $this->db->get('epupils')->result();
+    foreach ($result as $key => $value) {
+      // code...
+      $keywords = metaphone($value->fName.' '.$value->lName);
+      $this->db->set('keywords_2',$keywords);
+      $this->db->where('pupilsId',$value->pupilsId);
+      $this->db->update('epupils');
+    }
   }
 
   

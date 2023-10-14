@@ -100,31 +100,38 @@
                   </div>                  
                 </div>
 
-                <div class="form-group row">
-                  <label class="col-sm-2">Name of worker</label>
-                  <div class="col-sm-10">
-                    <div class="input-group mb-3">
-                      <input type="text" class="form-control" name="firstName" placeholder="First Name">
-                      <input type="text" class="form-control" name="middleName" placeholder="Middle Name">
-                      <input type="text" class="form-control" name="lastName" placeholder="Last Name">
-                        <div class="input-group-append">
-                          <input type="text" name="ext" class="form-control" placeholder="Extension: Jr." width="50px">
+
+                      <div class="form-group row">
+                        <label for="name" class="col-sm-12 col-md-2 col-form-label">Name</label>
+                        <div class="col-sm-12 col-md-10">
+                           <div class="row">
+                            <div class="col-xs-12 col-md-4"><input type="text" class="form-control" required name="fName" placeholder="First Name" value="" required /></div>
+                            <div class="col-xs-12 col-md-1"><input type="text" class="form-control" name="mName" placeholder="Mi." value=""/></div>
+                            <div class="col-xs-12 col-md-4"><input type="text" class="form-control" name="lName" required placeholder="Last Name" value="" required /></div>
+                            
+                            <div class="col-xs-12 col-md-3"><input type="text" name="ext" value="" class="form-control" placeholder="Extension: Jr." width="50px"></div>
+                            </div>
+                            
+
                         </div>
-
-                    </div>
-                    <?=form_error('firstName')?>
-                    <?=form_error('lastName')?>
-
-                  </div>                  
-                </div>
+                      </div>
 
 
                 <div class="form-group row">
+
+                  <label class="col-sm-2">Gender</label>
+                  <div class="col-sm-4">
+                    <select class="form-control" name="gender">
+                      <option value="1">Male</option>
+                      <option value="2">Female</option>
+                    </select>
+                  </div> 
                   <label class="col-sm-2">Email</label>
-                  <div class="col-sm-10">
+                  <div class="col-sm-4">
                     <input type="email" name="email" id="email" class="form-control" placeholder="user@email.com">
                     <?=form_error('email')?>
-                  </div>                  
+                  </div> 
+                
                 </div>
 
                 <div class="form-group row">
@@ -202,31 +209,39 @@
                   </div>                  
                 </div>
 
-                <div class="form-group row">
-                  <label class="col-sm-2">Name of worker</label>
-                  <div class="col-sm-10">
-                    <div class="input-group mb-3">
-                      <input type="text" class="form-control" name="fName" placeholder="First Name">
-                      <input type="text" class="form-control" name="mName" placeholder="Middle Name">
-                      <input type="text" class="form-control" name="lName" placeholder="Last Name">
-                        <div class="input-group-append">
-                          <input type="text" name="ext" class="form-control" placeholder="Extension: Jr." width="50px">
+
+                      <div class="form-group row">
+                        <label for="name" class="col-sm-12 col-md-2 col-form-label">Name</label>
+                        <div class="col-sm-12 col-md-10">
+                           <div class="row">
+                            <div class="col-xs-12 col-md-4"><input type="text" class="form-control" required name="fName" placeholder="First Name" value="" required /></div>
+                            <div class="col-xs-12 col-md-1"><input type="text" class="form-control" name="mName" placeholder="Mi." value=""/></div>
+                            <div class="col-xs-12 col-md-4"><input type="text" class="form-control" name="lName" required placeholder="Last Name" value="" required /></div>
+                            
+                            <div class="col-xs-12 col-md-3"><input type="text" name="ext" value="" class="form-control" placeholder="Extension: Jr." width="50px"></div>
+                            </div>
+                            
+
                         </div>
-
-                    </div>
-                    <?=form_error('firstName')?>
-                    <?=form_error('lastName')?>
-
-                  </div>                  
-                </div>
+                      </div>
 
 
                 <div class="form-group row">
+                
+
+                  <label class="col-sm-2">Gender</label>
+                  <div class="col-sm-4">
+                    <select class="form-control" name="gender">
+                      <option value="1">Male</option>
+                      <option value="2">Female</option>
+                    </select>
+                  </div> 
                   <label class="col-sm-2">Email</label>
-                  <div class="col-sm-10">
+                  <div class="col-sm-4">
                     <input type="email" name="email" id="email" class="form-control" placeholder="user@email.com">
                     <?=form_error('email')?>
-                  </div>                  
+                  </div> 
+                  
                 </div>
 
                 <div class="form-group row">

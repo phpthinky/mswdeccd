@@ -88,6 +88,7 @@
       $data2->birthDate = $this->input->post('birthday');
       $data2->jobStatus = $this->input->post('jobStatus');
       $data2->dateHired = $this->input->post('dateHired');
+      $data2->gender = $this->input->post('gender');
       $data2->userId = $this->aauth->create_user($this->input->post('email'),'123456');
       
         if($result = $this->workers_model->save($data2)){
@@ -121,6 +122,8 @@
       $data2->birthDate = $this->input->post('birthday');
       $data2->jobStatus = $this->input->post('jobStatus');
       $data2->dateHired = $this->input->post('dateHired');
+      $data2->gender = $this->input->post('gender');
+
      //  $data2->userId = $this->aauth->create_user($this->input->post('email'),'123456');
       //$this->aauth->update_user($data2->userId);
         if($result = $this->workers_model->save($data2)){
@@ -180,9 +183,23 @@
     // code...
     if ($this->input->post()) {
       // code...
-      $this->load->models('students/students_model');
       $form = $this->input->post('form');
         switch ($form) {
+          case "add_schoolyear":
+            $postdata = new stdClass();
+            $postdata->YearStart = $this->input->post('startdate');
+            $postdata->YearEnd = $this->input->post('enddate');
+
+            $year_id = $this->settings_model->class_schedule_save($postdata);
+
+            $postdata_1 = new stdClass();
+            $postdata_1->YearId = $year_id;
+            $postdata_1->workersId = $this->workersId;
+
+            $result = $this->workers_model->addtomyschoolyear($postdata_1);
+            $result['year_id'] = $year_id;
+            echo json_encode($result);
+          break;
           case 'remove_schoolyear':
             // code...
           
@@ -191,6 +208,9 @@
                 'workersId'=>$this->workersId
                 );
           $result = $this->workers_model->remove_schoolyear($postdata); 
+            break;
+            case 'remove_student':
+            $result = $this->workers_model->remove_student($this->input->post('student_id'),$this->workersId,$this->input->post('year_id'));
             break;
           break;
           default:
@@ -212,6 +232,7 @@
     }
 
     $data->schoolyears = $this->settings_model->listschoolyears();
+
     $data->myschoolyear = $this->workers_model->listmyschoolyear($workersId);
     //$data->YearId = $_GET['year'];
 
@@ -234,6 +255,34 @@
       $center = $this->workers_model->get_center($worker);
     }
 
+    if ($this->input->post()) {
+      // code...
+
+    if($result = $this->workers_model->my_students($worker,$center,$this->input->post('class_schedule'))){
+        $data = array();
+      foreach ($result as $key => $value) {
+        // code...
+        $data[] = array( 
+          $value->student_id,
+        $value->student_name,
+        $value->age,
+        gender($value->gender),
+        $value->address,
+        studtype($value->student_type),
+        '<a href="'.site_url('students/profile/'.$value->student_id).'" class="btn btn-sm btn-info" title="Edit user information"><i class="fas fa-user"></i></a> <button type="button" class="btn btn-sm btn-default btn-edit-student" data-id="'.$value->student_id.'"><i class="fas fa-edit"></i></button> <button type="button" title="Remove this student"class="btn btn-sm btn-danger btn-remove-student" data-id="'.$value->student_id.'"  data-id="'.$value->student_id.'" data-year_id="'.$value->year_id.'"><i class="fas fa-trash"></i></button>');
+      }
+    echo json_encode(array('data'=>$data));
+
+
+    }else{
+
+    echo json_encode(array('data'=>false));
+    }
+
+      exit();
+    }
+
+
     if($result = $this->workers_model->my_students($worker,$center)){
         $data = array();
       foreach ($result as $key => $value) {
@@ -245,7 +294,7 @@
         gender($value->gender),
         $value->address,
         studtype($value->student_type),
-        '<a href="'.site_url('students/profile/'.$value->student_id).'" class="btn btn-sm btn-info" title="Edit user information"><i class="fas fa-user"></i></a> <button type="button" class="btn btn-sm btn-default btn-edit-student" data-id="'.$value->student_id.'"><i class="fas fa-edit"></i></button> <a title="Remove this student" href="'.site_url('students/remove/'.$value->student_id).'" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>');
+        '<a href="'.site_url('students/profile/'.$value->student_id).'" class="btn btn-sm btn-info" title="Edit user information"><i class="fas fa-user"></i></a> <button type="button" class="btn btn-sm btn-default btn-edit-student" data-id="'.$value->student_id.'"><i class="fas fa-edit"></i></button> <button type="button" title="Remove this student"class="btn btn-sm btn-danger btn-remove-student" data-id="'.$value->student_id.'"  data-id="'.$value->student_id.'" data-year_id="'.$value->year_id.'"><i class="fas fa-trash"></i></button>');
       }
     echo json_encode(array('data'=>$data));
 
@@ -314,7 +363,7 @@
                   $value->worker_name,
                   $value->worker_address,
                   $value->center_name,
-                  $value->job_status,
+                  job_status($value->job_status),
                   tomdy($value->class_start),
                   tomdy($value->class_end),
                   $value->class_status,
@@ -341,7 +390,8 @@
           $value->worker_name,
           $value->worker_address,
           $value->center_name,
-          $value->job_status,
+          job_status($value->job_status),
+
           '',
           '',
           '',

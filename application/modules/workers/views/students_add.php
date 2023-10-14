@@ -53,7 +53,7 @@
                         </div>
                       </div>
 
-                      <div class="row">
+                      <div class="row d-none" id="search-student">
                          <div class="col-md-2"><label>Search</label></div>
                       <div class="col-md-10">
                         
@@ -65,10 +65,9 @@
                 </div>
 
                       </div>
-                    </div>
-                    <div class="row">
+
                       <div class="col-md-2"></div>
-                      <div class="col-md-8">
+                      <div class="col-md-10">
                         
                     <hr>
                     <div id="repeater-result">
@@ -103,24 +102,20 @@
                       
                   </div>                  
                 </div>
-                <div class="d-none" id="add-student">
+                <div class="" id="add-student">
                       <div class="form-group row">
                         <label for="name" class="col-sm-12 col-md-2 col-form-label">Name</label>
                         <div class="col-sm-12 col-md-10">
-                                
-                          <div class="input-group mb-3">
-                            <input type="text" class="form-control" required name="fName" placeholder="First Name" value="" required />
-                            <input type="text" class="form-control" name="mName" placeholder="Middle Name" value=""/>
-                            <input type="text" class="form-control" name="lName" required placeholder="Last Name" value="" required />
-                              <div class="input-group-append">
-                                <input type="text" name="ext" value="" class="form-control" placeholder="Extension: Jr." width="50px">
-                              </div>
+                           <div class="row">
+                            <div class="col-xs-12 col-md-4"><input type="text" class="form-control" required name="fName" placeholder="First Name" value="" required /></div>
+                            <div class="col-xs-12 col-md-1"><input type="text" class="form-control" name="mName" placeholder="Mi." value=""/></div>
+                            <div class="col-xs-12 col-md-4"><input type="text" class="form-control" name="lName" required placeholder="Last Name" value="" required /></div>
+                            
+                            <div class="col-xs-12 col-md-3"><input type="text" name="ext" value="" class="form-control" placeholder="Extension: Jr." width="50px"></div>
+                            </div>
+                            
 
-                          </div>
-                          <div class="error"></div>
-
-
-                              </div>
+                        </div>
                       </div>
                       <div class="row">
                         

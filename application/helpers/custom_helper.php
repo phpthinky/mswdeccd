@@ -5,12 +5,21 @@ if (!function_exists('gender')) {
 	function gender($num)
 	{
 		// code...
-		if ($num == 1) {
-			// code...
-			return 'Female';
-		}else{
-			return 'Male';
+		$gender = '';
+		switch ($num) {
+			case 1:
+				// code...
+			$gender = 'Male';
+				break;
+			case 2:
+			$gender = 'Female';
+			break;
+			default:
+				// code...
+			$gender ="Unknown";
+				break;
 		}
+		return $gender;
 	}
 }
 
@@ -204,5 +213,42 @@ if (!function_exists('to_batch_array')) {
           }
           return $data;
 	}
+}
+
+if (!function_exists('job_status')) {
+	// code...
+	function job_status($num){
+		$job ='Unknown';
+		switch ($num) {
+			case 1:
+				// code...
+			$job = 'Job Order';
+				break;
+			
+			case 1:
+				// code...
+			$job = 'Contractual';
+				break;
+			case 1:
+				// code...
+			$job = 'Permanent';
+				break;
+			case 1:
+				// code...
+			$job = 'Resigned';
+				break;
+			case 1:
+				// code...
+			$job = 'Retired';
+				break;
+
+			default:
+				// code...
+			$job = 'Not Specified';
+				break;
+		}
+		return $job;
+	}
+
 }
  ?>

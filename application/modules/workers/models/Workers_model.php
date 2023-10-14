@@ -196,11 +196,11 @@ class Workers_model extends CI_model
 		}
 		return false;
 	}
-	public function listmyschoolyear($stmt)
+	public function listmyschoolyear($worker)
 	{
 		// code...
 		$data = array();
-		if($result =  $this->db->get_where('center_workers_schoolyear',$stmt)->result()){
+		if($result =  $this->db->get_where('center_workers_schoolyear',array('worker_id'=>$worker))->result()){
 			/* $id = $stmt['worker_id'];
 			foreach ($result as $key => $value) {
 				// code...
@@ -350,11 +350,24 @@ class Workers_model extends CI_model
 		return $result;
 	}
 
-	public function my_students($worker=0,$center=0)
+	public function my_students($worker=0,$center=0,$class_schedule=false)
 	{
 		// code...
+		if ($class_schedule) {
+			// code...
+		return $this->db->get_where('center_students_schoolyear',array('center_id'=>$center,'worker_id'=>$worker,'year_id'=>$class_schedule))->result();
+
+		}
 		return $this->db->get_where('center_students_schoolyear',array('center_id'=>$center,'worker_id'=>$worker))->result();
 	
+	}
+	public function remove_student($student_id,$worker_id,$year_id)
+	{
+		// code...
+		$this->db->where('YearId',$year_id);
+		$this->db->where('studentId',$student_id);
+		$this->db->where('workersId',$worker_id);
+		return $this->db->delete('eschoolyear_by_worker_students');
 	}
 }
  ?>

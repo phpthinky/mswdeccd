@@ -41,7 +41,7 @@
 
                 <ul class="list-group list-group-unbordered mb-3">
                   <li class="list-group-item">
-                    <b>Contact No.</b> <a class="float-right"><?=$info->birthDate?></a>
+                    <b>Email</b> <a class="float-right"><?=$info->email?></a>
                   </li>
 
                   <li class="list-group-item">
@@ -111,13 +111,14 @@
                         Enrolled Student by Academic Year
                       </div>
                       <div class="card-body">
+                          <form id="frmfindmystudent" method="post" action="javascript:void(0)">
                         <div class="row">
                           <div class="col-md-4 col-sm-12 col-xs-12">
                           <select class="form-control" name="class_schedule">
                             <option value="0">Select classes</option>
-                              <?php if (!empty($schoolyears)): ?>
-                                <?php foreach ($schoolyears as $key => $value): ?>
-                                  <option value="<?=$value->YearId?>"><?=tomdy($value->YearStart)?> to <?=tomdy($value->YearEnd)?></option>
+                              <?php if (!empty($myschoolyear)): ?>
+                                <?php foreach ($myschoolyear as $key => $value): ?>
+                                  <option value="<?=$value->year_id?>"><?=tomdy($value->class_start)?> to <?=tomdy($value->class_end)?></option>
                                 <?php endforeach ?>
                               <?php endif ?>
                             
@@ -136,6 +137,7 @@
                         </div>
                         
                         </div>
+                        </form>
 
                     <br/>
                         <div class="row form-responsive">
@@ -198,12 +200,18 @@
                   <div class="tab-pane" id="addSchoolYear">
                     Add School Year
 
-                    <div class="card d-none">
+                    <div class="card">
                       <div class="card-header">
                         
                       </div>
                       <div class="card-body">
                         <form id="frmschoolyear" method="post" action="javascript:void(0)">
+                          
+
+                        <div class="row form-group">
+                          <div class="col-md-3"><label>&nbbsp;</label></div>
+                          <div class="col-md-9"><span id="error-area"></span></div>
+                        </div>
                         <div class="row form-group">
                           <div class="col-md-3"><label>Start Date</label></div>
                           <div class="col-md-9"><input type="date" name="startdate" class="form-control" placeholder="Start of school year"></div>
@@ -218,13 +226,17 @@
                           <div class="col-md-3"><label>&nbsp;</label></div>
                           <div class="col-md-9"><button type="submit" class="btn btn-danger">Add</button></div>
                         </div>
+
+                        <div class="d-none">
+                          <input type="hidden" name="form" value="add_schoolyear">
+                        </div>
                         </form>
                       </div>
                     </div>
 
                     <!-- select school year / -->
                     <hr>
-                    <form class="form-responsive" id="frmselectschoolyear" method="post" action="<?=site_url('workers/addtomyschoolyear')?>">
+                    <form class="form-responsive d-none" id="frmselectschoolyear" method="post" action="<?=site_url('workers/addtomyschoolyear')?>">
                       <div class="row">
                         <div class="col-md-3">&nbsp;</div>
                         <div class="col-md-9"><div class="pull-right"><span id="error-area"></span></div></div>

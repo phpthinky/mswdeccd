@@ -55,6 +55,7 @@ class Students extends MY_Controller
             $data2->workersId = $this->input->post('workersId');
             $data2->Status = 1;
 
+
             if($this->workers_model->addtomystudent($data2)){
                 echo json_encode(savesuccess());
 
@@ -76,7 +77,8 @@ class Students extends MY_Controller
     }
     if ($this->input->post()) {
       // code...
-      if ($this->input->post('student_id') !== 0) {
+    
+      if ($this->input->post('pupilsId') > 0) {
         // code...
         $this->add_from_list();
         exit();
@@ -108,8 +110,9 @@ class Students extends MY_Controller
     $age = getAge($data->birthDate);
     $months = ($age->y * 12) + $age->m;
     $data->age = $months;
-    $data->keywords = metaphone($data->fName.' '.$data->lName);
-    
+    $data->keywords = metaphone($data->fName).' '.metaphone($data->lName);
+    $data->keywords_2 = metaphone($data->fName.' '.$data->lName);
+
 //    $data->centerId = $this->input->post('centerId');
   //  $data->workersId = $this->input->post('workersId');
 
@@ -119,6 +122,8 @@ class Students extends MY_Controller
        }else{
 
         if($StudentId = $this->students_model->save($data)){
+
+//          exit();
           $data3 = new stdClass();
           $data3->workersId = $this->input->post('workersId');
           $data3->YearId = $this->input->post('class_schedule');
@@ -186,6 +191,8 @@ class Students extends MY_Controller
   public function find()
   {
     // code...
+  //          echo json_encode(array('status'=>false,'msg'=>metaphone($this->input->post('keys'))));
+//exit();
 
             if($result = $this->students_model->find($this->input->post('keys'))){
 
@@ -478,6 +485,11 @@ public function listbyclassess($yearId='',$worker='')
    // $bmi = new Bmi();
     // $bmi::weight = $w;  
 
+  }
+  public function reset($value='')
+  {
+    // code...
+    $this->students_model->resetall();
   }
 
 }

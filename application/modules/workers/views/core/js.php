@@ -110,6 +110,36 @@ var sidebarcollapse = true;
 if (sidebarcollapse) {
 	$('.sidebar-mini').removeClass('sidebar-open').addClass('sidebar-collapse')
 }
+
+	$('#frmschoolyear').on('submit',function(e){
+		e.preventDefault();
+
+		var frmdata =  $(this).serializeArray();
+
+		$.ajax({
+			url:current_url,
+			method: 'post',
+			dataType:'json',
+			data: frmdata,
+			success: function(result){
+				console.log(result)
+				if(result.status == true){
+				$('#error-area').addClass('alert alert-success').text(result.msg);
+
+				}else{
+
+				$('#error-area').addClass('alert alert-danger').text(result.msg);
+
+				}
+			},
+			error: function (i,e) {
+				// body...
+				console.log(i.responseText)
+			}
+		})
+	})
+
+
 	$('#frmselectschoolyear').on('submit',function(e){
 		e.preventDefault();
 		var frmdata = $(this).serializeArray();
@@ -212,7 +242,17 @@ if (sidebarcollapse) {
       		console.log(i)
       	}
       	*/
-      	
+      	var i = $(this).val()
+      	if (i === '1') {
+      				$('#add-student').removeClass('d-none')
+      				$('#search-student').addClass('d-none')
+
+      			}
+      	else if (i = '2') {
+      				$('#add-student').addClass('d-none')
+      				$('#search-student').removeClass('d-none')
+
+      		}     	
       });
       $('#btn-find-oldstudent').on('click',function(){
       	$('#add-student').addClass('d-none')
@@ -329,6 +369,37 @@ if (sidebarcollapse) {
 
 	})
 
+	$(document).on('click','.btn-remove-student',function(){
+
+		var id = $(this).data('id');
+		var tr = $(this).parent().parent()
+		var year_id = $(this).data('year_id')
+		if (confirm('This will delete your pupils data. Click OK to continue.')) {
+					$(tr).remove()
+		
+		var formdata = {};
+			formdata.student_id = id;
+			formdata.year_id = year_id;
+			formdata.form = 'remove_student';
+			
+		//submit_basicform(current_url,formdata)
+			$.ajax({
+				url: current_url,
+				data:formdata,
+				dataType:'json',
+				method:'POST',
+				success:function(i){
+					//console.log(i)
+				},
+				error:function(i,e){
+					console.log(i.responseText)
+				}
+			})
+
+			//return false;
+		}
+	})
+	
     $('#schoolyears').on('change',function (){
 		
 		var frmdata = {};
@@ -428,16 +499,37 @@ if (sidebarcollapse) {
 		}
 	})
 
+var worker_id = '<?=isset($info->workersId)? $info->workersId : 0 ?>';
 
-  var tblmystudents = $('#tblmystudents')
+  var tblmystudents = $('#tblmystudents');
 
       tblmystudents.DataTable({
         ajax:site_url+'/workers/students/'+worker_id
       })
 
-      
+  
+    $('#searchstring').on('keyup',function(){
+      tblmystudents.DataTable().search($(this).val()).draw() ;
+    })    
+
+		$('#frmfindmystudent select[name="class_schedule"]').on('change',function(e){
+			//alert($(this).val())
+			var class_schedule = $(this).val()
+			var	formdata = {};
+				formdata.class_schedule = class_schedule;
+
+				tblmystudents.DataTable({
+        	ajax:{
+	        	url:site_url+'/workers/students/'+worker_id,
+	        	type:'POST',
+	        	data:formdata
+	        },
+	        destroy:true
+				})
+
+		})
+
+
 
 })
-var worker_id = '<?=isset($info->workersId)? $info->workersId : 0 ?>';
-
 </script>
