@@ -79,9 +79,14 @@
 
                             </div>
             <div class="tab-pane <?=(!empty($action) ? 'active' : '')?>" id="addWorker">
-              <div id="error-area"></div>
-              <form class="form-horizontal" id="frmaddworker" method="POST" action="<?=current_url()?>">
-
+              <form class="form-horizontal" id="frmaddworker" method="POST" action="<?=site_url('workers/add')?>">
+                <div class="row">
+                  <div class="col-md-2"></div>
+                  <div class="col-md-10">
+                    <div class="loader d-none"><img src="<?=base_url('assets/img/loader.gif')?>"></div>
+                    <div id="error-area"></div>
+                  </div>
+                </div>
                 <div class="d-none">
                   <input type="hidden" name="form" value="add"/>
                 </div>
@@ -105,7 +110,7 @@
                         <label for="name" class="col-sm-12 col-md-2 col-form-label">Name</label>
                         <div class="col-sm-12 col-md-10">
                            <div class="row">
-                            <div class="col-xs-12 col-md-4"><input type="text" class="form-control" required name="fName" placeholder="First Name" value="" required /></div>
+                            <div class="col-xs-12 col-md-4"><input type="text" class="form-control" name="fName" placeholder="First Name" value="" required /></div>
                             <div class="col-xs-12 col-md-1"><input type="text" class="form-control" name="mName" placeholder="Mi." value=""/></div>
                             <div class="col-xs-12 col-md-4"><input type="text" class="form-control" name="lName" required placeholder="Last Name" value="" required /></div>
                             
@@ -128,8 +133,7 @@
                   </div> 
                   <label class="col-sm-2">Email</label>
                   <div class="col-sm-4">
-                    <input type="email" name="email" id="email" class="form-control" placeholder="user@email.com">
-                    <?=form_error('email')?>
+                    <input type="email" name="email" id="email" class="form-control" placeholder="user@email.com" required>
                   </div> 
                 
                 </div>
@@ -214,7 +218,7 @@
                         <label for="name" class="col-sm-12 col-md-2 col-form-label">Name</label>
                         <div class="col-sm-12 col-md-10">
                            <div class="row">
-                            <div class="col-xs-12 col-md-4"><input type="text" class="form-control" required name="fName" placeholder="First Name" value="" required /></div>
+                            <div class="col-xs-12 col-md-4"><input type="text" class="form-control" name="fName" placeholder="First Name" value="" required /></div>
                             <div class="col-xs-12 col-md-1"><input type="text" class="form-control" name="mName" placeholder="Mi." value=""/></div>
                             <div class="col-xs-12 col-md-4"><input type="text" class="form-control" name="lName" required placeholder="Last Name" value="" required /></div>
                             
@@ -238,8 +242,7 @@
                   </div> 
                   <label class="col-sm-2">Email</label>
                   <div class="col-sm-4">
-                    <input type="email" name="email" id="email" class="form-control" placeholder="user@email.com">
-                    <?=form_error('email')?>
+                    <input type="email" name="email" id="email" class="form-control" placeholder="user@email.com" required>
                   </div> 
                   
                 </div>

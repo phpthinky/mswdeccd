@@ -191,6 +191,7 @@ if (sidebarcollapse) {
 			data: frmdata,
 			beforeSend:function(){
 				console.log('Processing...');
+          	$('.loader').removeClass('d-none');
 				$('#error-area').text('Processing').addClass('text-success');
 			},
 			success: function(result){
@@ -202,6 +203,10 @@ if (sidebarcollapse) {
 				$('#error-area').text(result.msg).addClass('text-danger');
 
 				}
+			},
+			complete:function(){
+          	$('.loader').addClass('d-none');
+
 			}
 		})
 	});
@@ -220,17 +225,23 @@ if (sidebarcollapse) {
           data: frmdata,
           dataType: 'json',
           method:'POST',
+          beforeSend:function(){
+          	$('.loader').removeClass('d-none');
+
+          },
           success: function(response){
             console.log(response)
             if (response.status == true) {
-              $('.errors').removeClass('alert alert-danger').addClass('alert alert-success').text(response.msg);
+              $('#error-area').removeClass('alert alert-danger').addClass('alert alert-success').text(response.msg);
               $('#frmStudents')[0].reset();
             }else{
-              $('.errors').removeClass('alert alert-success').addClass('alert alert-danger').text(response.msg);
+              $('#error-area').removeClass('alert alert-success').addClass('alert alert-danger').text(response.msg);
 
             }
           },complete:function(){
             refreshTable($('input[name="YearId"]').val(),$('#workersId').val());
+          	$('.loader').addClass('d-none');
+
           }
         })
       });
@@ -324,8 +335,10 @@ if (sidebarcollapse) {
 	$(document).on('click','.btn-edit-student',function() {
 		// body...
 		$('a[href="#editStudents"]').click()
+		
 		var formdata = {}
       	formdata.student_id = $(this).data('id')
+        $('select#e_class_schedule').val($(this).data('year_id'))
       	
 
 		var data = 0;
@@ -334,8 +347,12 @@ if (sidebarcollapse) {
 			data:formdata,
 			dataType:'json',
 			method:'post',
+			beforeSend:function(){
+          	$('.loader').removeClass('d-none');
+
+			},
 			success:function(response){
-				console.log(response)
+        $('.loader').addClass('d-none');
 				var data = response.data;
 				console.log(data)
 				var form = $('#frmeditstudents');
@@ -359,9 +376,14 @@ if (sidebarcollapse) {
 			data:formdata,
 			dataType:'json',
 			method:'post',
+			beforeSend:function () {
+				// body...
+          	$('.loader').removeClass('d-none');
+
+			},
 			success:function(response){
 				console.log(response)
-
+          	$('.loader').addClass('d-none');
 
 			}
 

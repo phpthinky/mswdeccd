@@ -30,7 +30,7 @@
                 <?php if (!empty($info)): ?>
 
                   <img class="profile-user-img img-fluid img-circle"
-                       src="<?=$info->profile?>"
+                       src="<?=base_url('assets/img/user.png')?>"
                        alt="User profile picture">
                 <?php endif ?>
                 </div>
@@ -146,13 +146,14 @@
                 <table id="tblmystudents" class="table table-bordered w-100">
                   <thead>
                   <tr>
-                    <th  style="width:50px !important">ID#</th>
+                    <th  style="width:50px !important">#</th>
                     <th>Name</th>
                     <th>Age (months)</th>
                     <th>Gender</th>
 
                               <th>Address</th>
                               <th>Student Type</th>
+                    <th>Class Schedule</th>
                     <th>Action</th>
                   </tr>
                   </thead>

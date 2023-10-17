@@ -9,15 +9,14 @@
 
         <form class="form-horizontal" id="frmeditstudents" action="<?=site_url('students/add')?>" method="POST">
           <div class="container-fluid">
-                      <div class="row">
-                        <div class="col-sm-12 col-md-2">&nbsp;</div>
-                        <div class="col-sm-12 col-md-10">
-                          <div class="errors <?php if(!empty($hasErrors)) echo 'alert alert-danger'; ?>" >
-
-                          <?php if(!empty($hasErrors)) echo $hasErrors; ?>
-                          </div>
-                        </div>
-                      </div>
+                      
+                <div class="row">
+                  <div class="col-md-2"></div>
+                  <div class="col-md-10">
+                    <div class="loader d-none"><img src="<?=base_url('assets/img/loader.gif')?>"></div>
+                    <div id="error-area"></div>
+                  </div>
+                </div>
 
                      
                       <div class="row">
@@ -25,7 +24,7 @@
                            <div class="form-group row">
                         <label for="age" class="col-sm-12 col-md-4 col-xs-12 col-form-label">Student type</label>
                         <div class="col-sm-12 col-md-8">
-                          <select class="form-control" name="StudentType" id="StudentType" required>
+                          <select class="form-control" name="StudentType" id="e_StudentType" required>
 
                             <option value="1">New</option>
                             <option value="2">Repeater</option>
@@ -39,7 +38,7 @@
                       <div class="form-group row">
                         <label for="age" class="col-sm-12 col-md-4 col-xs-12  col-form-label">School Year</label>
                         <div class="col-sm-12 col-md-8">
-                          <select class="form-control" name="class_schedule" id="class_schedule" required>
+                          <select class="form-control" name="class_schedule" id="e_class_schedule" required>
                             <option value="0">Select class schedule</option>
                             <?php if (!empty($schoolyears)): ?>
                                 <?php foreach ($schoolyears as $key => $value): ?>
@@ -55,7 +54,7 @@
                 <div class="form-group row d-none">
                   <label class="col-sm-12 col-md-2">Center</label>
                   <div class="col-sm-12 col-md-10">
-                    <input name="centerId" id="centerId" class="form-control" value="<?=$info->centerId?>">
+                    <input name="centerId" id="e_centerId" class="form-control" value="<?=$info->centerId?>">
                       
                   </div>                  
                 </div>
@@ -63,7 +62,7 @@
                 <div class="form-group row d-none">
                   <label class="col-sm-12 col-md-2">Worker</label>
                   <div class="col-sm-12 col-md-10">
-                    <input name="workersId" id="workersId" value="<?=$info->workersId?>" class="form-control">
+                    <input name="workersId" id="e_workersId" value="<?=$info->workersId?>" class="form-control">
                       
                   </div>                  
                 </div>
@@ -71,7 +70,7 @@
                 <div class="form-group row d-none">
                   <label class="col-sm-12 col-md-2">Student ID#</label>
                   <div class="col-sm-12 col-md-10">
-                    <input name="pupilsId" id="student_id" value="0" class="form-control">
+                    <input name="pupilsId" id="e_student_id" value="0" class="form-control">
                       
                   </div>                  
                 </div>
@@ -101,7 +100,7 @@
                       <div class="form-group row">
                         <label for="age" class="col-sm-12 col-md-4 col-form-label">Birthday</label>
                         <div class="col-sm-12 col-md-8">
-                          <input type="date" class="form-control birthday" id="birthDate" name="birthDate" placeholder="0" value="" required>
+                          <input type="date" class="form-control birthday" id="e_birthDate" name="birthDate" placeholder="0" value="" required>
                           <div class="error"></div>
                         
                         </div>
@@ -113,7 +112,7 @@
                       <div class="form-group row">
                         <label for="age" class="col-sm-12 col-md-4 col-form-label">Gender</label>
                         <div class="col-sm-12 col-md-8">
-                          <select class="form-control" name="gender" id="gender" required>
+                          <select class="form-control" name="gender" id="e_gender" required>
                             <option value="">Select gender</option>
                             <option value="1" >Female</option>
 
@@ -130,7 +129,7 @@
                       <div class="form-group row">
                         <label for="age" class="col-sm-12 col-md-2 col-form-label">Sector</label>
                         <div class="col-sm-12 col-md-10">
-                          <select class="form-control" name="sector" id="sector">
+                          <select class="form-control" name="sector" id="e_sector">
                             <option value="0">Default</option>
                             <option value="2">Single parent</option>
                             <option value="3">IPs</option>
@@ -147,7 +146,7 @@
                       <div class="form-group row">
                         <label for="barangay" class="col-sm-12 col-md-2 col-form-label">Residential address</label>
                         <div class="col-sm-12 col-md-10">
-                         <input class="form-control" placeholder="Residential address" name="address" id="address">
+                         <input class="form-control" placeholder="Residential address" name="address" id="e_address">
                           <div class="error"></div>
                         
                         </div>
@@ -157,7 +156,7 @@
                       <div class="form-group row">
                         <label for="barangay" class="col-sm-12 col-md-2 col-form-label">Barangay</label>
                         <div class="col-sm-12 col-md-10">
-                         <select class="form-control" name="barangay" id="barangay">
+                         <select class="form-control" name="barangay" id="e_barangay">
                           
                       <option>Arellano</option>
                       <option>Batong Buhay</option>
@@ -186,7 +185,7 @@
                       <div class="form-group row">
                         <label for="municipality" class="col-sm-12 col-md-2 col-form-label">Municipality</label>
                         <div class="col-sm-12 col-md-10">
-                          <select class="form-control" name="municipality" id="municipality">
+                          <select class="form-control" name="municipality" id="e_municipality">
                             <option>Sablayan</option>
                           </select>
                         </div>
@@ -194,7 +193,7 @@
                       <div class="form-group row">
                         <label for="province" class="col-sm-12 col-md-2 col-form-label">Province</label>
                         <div class="col-sm-12 col-md-10">
-                          <select class="form-control" name="province" id="province">
+                          <select class="form-control" name="province" id="e_province">
                             <option>Occidental Mindoro</option>
                           </select>
                         </div>

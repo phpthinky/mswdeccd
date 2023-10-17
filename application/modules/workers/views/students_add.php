@@ -10,15 +10,13 @@
 
         <form class="form-horizontal" id="frmaddstudents" action="<?=site_url('students/add')?>" method="POST">
           <div class="container-fluid">
-                      <div class="row">
-                        <div class="col-sm-12 col-md-2">&nbsp;</div>
-                        <div class="col-sm-12 col-md-10">
-                          <div class="errors <?php if(!empty($hasErrors)) echo 'alert alert-danger'; ?>" >
-
-                          <?php if(!empty($hasErrors)) echo $hasErrors; ?>
-                          </div>
-                        </div>
-                      </div>
+                <div class="row">
+                  <div class="col-md-2"></div>
+                  <div class="col-md-10">
+                    <div class="loader d-none"><img src="<?=base_url('assets/img/loader.gif')?>"></div>
+                    <div id="error-area"></div>
+                  </div>
+                </div>
 
                      
                       <div class="row">

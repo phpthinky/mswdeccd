@@ -16,7 +16,15 @@
   <link rel="stylesheet" href="<?=base_url('assets')?>/dist/css/adminlte.min.css">
   <link rel="stylesheet" href="<?=base_url('assets')?>/main-style.v-0.0.0.css">
   <style type="text/css">
-    
+    .loader{
+      height: 50px;
+      display: block;
+    }
+    .loader > img{
+      height: 50px;
+      width: 50px;
+      z-index: 999;
+    }
   </style>
 </head>
 <body class="hold-transition sidebar-mini">
@@ -88,28 +96,16 @@
 
 
           <?php $id = $this->session->userdata('workersId');
-                $profile = base_url('assets/dist/img/user2-160x160.jpg');
+          
                 $activeuser = 'Administrator';
                 if($info = $this->workers_model->getWorker($id)){
 
                 $activeuser = $info->fName;
-                $profile = $info->profile;
-                if(empty($profile)){
-                  switch ($info->gender) {
-                    case '2':
-                      // code...
-                      break;
-                      $profile = base_url('assets/dist/img/user4-128x128');
-                    default:
-                      // code...
-                      $profile = base_url('assets/dist/img/user2-160x160.jpg');
-                      break;
-                  }
-                }
+
                 }
            ?>
                    <div class="image">
-          <img src="<?=$profile?>" class="img-circle elevation-2" alt="User Image">
+          <img src="<?=base_url('assets/img/user.png')?>" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
 

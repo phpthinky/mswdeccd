@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 13, 2023 at 08:20 PM
+-- Generation Time: Oct 14, 2023 at 02:43 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -146,8 +146,8 @@ CREATE TABLE `aauth_users` (
 --
 
 INSERT INTO `aauth_users` (`id`, `email`, `pass`, `username`, `banned`, `last_login`, `last_activity`, `date_created`, `forgot_exp`, `remember_time`, `remember_exp`, `verification_code`, `totp_secret`, `ip_address`) VALUES
-(1, 'admin@gmail.com', 'ec225039f1cb0c48ad528709e8e0184991e637d96db175f094b6b2037ec1a3c2', 'Admin', 0, '2023-10-13 15:15:14', '2023-10-13 15:15:14', NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1'),
-(4, 'zenaida@gmail.com', '26099512199546597858cebb4cc8d90e21f48e9be747c98d45d8a57a0f0a6e44', '', 0, '2023-10-13 18:29:34', '2023-10-13 18:29:34', '2023-10-07 15:09:51', NULL, NULL, NULL, NULL, NULL, '127.0.0.1'),
+(1, 'admin@gmail.com', 'ec225039f1cb0c48ad528709e8e0184991e637d96db175f094b6b2037ec1a3c2', 'Admin', 0, '2023-10-14 13:27:16', '2023-10-14 13:27:17', NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1'),
+(4, 'zenaida@gmail.com', '26099512199546597858cebb4cc8d90e21f48e9be747c98d45d8a57a0f0a6e44', '', 0, '2023-10-14 14:40:23', '2023-10-14 14:40:23', '2023-10-07 15:09:51', NULL, NULL, NULL, NULL, NULL, '127.0.0.1'),
 (5, 'helen@gmail.com', '28a9d1ac311fc87b88b094cd50b05abf517134b03d636bbc7ee94401f9952a21', '', 0, '2023-10-10 09:20:02', '2023-10-10 09:20:02', '2023-10-09 09:52:01', NULL, NULL, NULL, NULL, NULL, '127.0.0.1'),
 (6, 'josephine@gmail.com', '3913228818759cd846b475d3106a4ecc9bf9bd91746cab4e88a8750c11d15914', '', 0, '2023-10-10 10:03:54', '2023-10-10 10:03:54', '2023-10-10 10:03:22', NULL, NULL, NULL, NULL, NULL, '127.0.0.1'),
 (7, 'eda@gmail.com', '3e1340c771fff1153aa60137dc8c0265d5914e5de769b59183085b78d950b31b', '', 0, '2023-10-10 10:33:27', '2023-10-10 10:33:27', '2023-10-10 10:32:52', NULL, NULL, NULL, NULL, NULL, '127.0.0.1'),
@@ -786,7 +786,11 @@ INSERT INTO `eschoolyear` (`YearId`, `YearStart`, `YearEnd`, `Status`) VALUES
 (30, '2023-01-02', '2023-07-01', 0),
 (31, '2023-01-01', '2023-05-02', 0),
 (32, '2022-03-05', '2023-02-05', 0),
-(33, '2022-02-04', '2023-05-06', 0);
+(33, '2022-02-04', '2023-05-06', 0),
+(34, '2023-10-01', '2023-10-31', 0),
+(35, '2023-10-01', '2023-10-28', 0),
+(36, '2023-10-04', '2023-10-28', 0),
+(37, '2023-10-11', '2023-10-28', 0);
 
 -- --------------------------------------------------------
 
@@ -835,7 +839,11 @@ INSERT INTO `eschoolyear_by_worker` (`YearId`, `workersId`) VALUES
 (31, 36),
 (33, 37),
 (1, 36),
-(30, 4);
+(30, 4),
+(0, 4),
+(35, 4),
+(36, 4),
+(37, 4);
 
 -- --------------------------------------------------------
 
@@ -1182,7 +1190,7 @@ CREATE TABLE `eworkers` (
 --
 
 INSERT INTO `eworkers` (`workersId`, `userId`, `centerId`, `fName`, `mName`, `lName`, `ext`, `birthDate`, `gender`, `sector`, `address`, `barangay`, `municipality`, `province`, `dateHired`, `jobStatus`, `profile`, `dateAdded`, `app`) VALUES
-(4, 4, 1, 'ZENAIDA', 'T.', 'ADVINCULA', '', NULL, 0, '', 'Victoria,Sablayan, Occidental Mindoro', '', '', '', '0000-00-00', 0, '', '', 1),
+(4, 4, 1, 'ZENAIDA', 'T.', 'ADVINCULA', '', '2008-01-01', 2, '', 'Victoria,Sablayan, Occidental Mindoro', '', '', '', '0000-00-00', 1, '', '', 1),
 (5, 5, 2, 'HELEN', 'G.', 'BAUTISTA', '', NULL, 0, '', 'LIGAYA, SABLAYAN, OCCIDENTAL MINDORO', '', '', '', '0000-00-00', 0, '', '', 1),
 (6, 6, 3, 'JOSEPHINE', 'J.', 'BEDONA', '', NULL, 0, '', 'Sitio San Miguel, Claudio Salgado, Sablayan, Occidental Mindoro', '', '', '', '0000-00-00', 0, '', '', 1),
 (7, 7, 4, 'EDA ', 'P.', 'BERGONIA', '', NULL, 0, '', 'Sitio Aplaya, Burgos, Sablayan Occidental Mindoro', '', '', '', '0000-00-00', 0, '', '', 1),
@@ -1474,7 +1482,7 @@ ALTER TABLE `aauth_groups`
 -- AUTO_INCREMENT for table `aauth_login_attempts`
 --
 ALTER TABLE `aauth_login_attempts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=268;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=271;
 
 --
 -- AUTO_INCREMENT for table `aauth_perms`
@@ -1546,7 +1554,7 @@ ALTER TABLE `epupils_feeding`
 -- AUTO_INCREMENT for table `eschoolyear`
 --
 ALTER TABLE `eschoolyear`
-  MODIFY `YearId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `YearId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `eworkers`
