@@ -251,8 +251,8 @@
                             <?php if (!empty($weighing)): ?>
                               <?php foreach ($weighing as $key => $value): ?>
                               <tr>
-                                <td><?=$value->weighingId?></td>
-                                <td><?=tomdy($value->weighingSchedule)?></td>
+                                <td><?=$value->id?></td>
+                                <td><?=tomdy($value->date_weighing)?></td>
                                 <td><?=$value->weight?></td>
                                 <td><?=$value->height?></td>
                                 <td><?=$value->wfa?></td>
@@ -284,7 +284,7 @@
                             </div>
                             <div class="row form-group">
                               <label class="col-md-3">Weigh kg</label>
-                              <div class="col-md-9"><input type="number" name="weight" id="weight"  class="form-control"></div>
+                              <div class="col-md-9"><input type="number" value="0.00" step=".01" name="weight" id="weight"  class="form-control"></div>
                             </div>
                             <div class="row form-group">
                               <label class="col-md-3">Height cm</label>
@@ -295,7 +295,7 @@
                             </div>
                             <div class="row form-group">
                               <label class="col-md-3"></label>
-                              <div class="col-md-9"><input type="submit" name="btnSave" value="Save" class="btn btn-outline-primary"> <button id="btn-calculate" type="button">calculate</button></div>
+                              <div class="col-md-9"><input type="submit" name="btnSave" value="Save" class="btn btn-outline-primary"></div>
                             </div>
                           </form>
                         </div>

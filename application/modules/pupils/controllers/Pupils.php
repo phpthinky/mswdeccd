@@ -56,15 +56,19 @@ class Pupils extends MY_Controller
     // code...
    if($result = $this->pupils_model->getAll_v($centerId,$workersId)){
     $data = array();
+    $i=1;
     foreach ($result as $key => $value) {
       // code...
       $age = getAge($value->birthdate);
-      $data[] = array($value->student_id,
+      $data[] = array(
+        $i,
+        /*$value->student_id, */
         $value->student_name,
         $age->y.' year '.$age->m.' month',
         gender($value->gender),
         $value->barangay,
         '<a href="'.site_url('students/profile/').$value->student_id.'" class="btn btn-default btn-xs" title="View pupil info."><i class="fas fa-list"></i></a>');
+      $i++;
       }
 
         echo json_encode(array("data"=>$data));

@@ -214,14 +214,14 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-
+<!-- /*
               <li class="nav-item">
                 <a href="<?=site_url('settings/schoolyear')?>" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>School Year</p>
                 </a>
               </li>
-
+*/ -->
               <li class="nav-item">
                 <a href="<?=site_url('settings/rawscoretable')?>" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
@@ -235,7 +235,7 @@
                   <p>Sum of Scaled Score</p>
                 </a>
               </li>
-              
+  <!-- /*            
               <li class="nav-item">
                 <a href="<?=site_url('weighing')?>" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
@@ -275,7 +275,7 @@
                   <p>Assessment Schedule</p>
                 </a>
               </li>
-
+*/ -->
           <?php if ($this->aauth->is_admin()): ?>
               <li class="nav-item">
                 <a href="#" class="nav-link">

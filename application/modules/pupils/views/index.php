@@ -72,7 +72,7 @@
                 <table id="tblPupils" class="table table-bordered table-stripedw-100">
                   <thead>
                   <tr>
-                    <th>ID</th>
+                    <th>#</th>
                     <th>Name</th>
                     <th>Age</th>
                     <th>Gender</th>

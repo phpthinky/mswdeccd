@@ -15,21 +15,22 @@
     // code...
 
  
-    if($this->check($data->pupilsId,$data->scheduleId)){
-      return 3;
+    if($this->check($data->student_id,$data->date_weighing)){
+      return array('status'=>false,'msg'=>'Already exist!');
     }else{
-      if($this->db->insert('weighing',$data)){
-      return 1;
+      if($this->db->insert('e_weighing',$data)){
+      return array('status'=>true,'msg'=>'Successfully added.');
 
       }
-      return 2;
+      return array('status'=>false,'msg'=>'Something went wrong.');
+
     }
 
   }
-  public function check($pupilsId,$scheduleId)
+  public function check($student_id,$date)
   {
     // code...
-   if($result =  $this->db->get_where('weighing',array('pupilsId'=>$pupilsId,'scheduleId'=>$scheduleId))->result()){
+   if($result =  $this->db->get_where('e_weighing',array('student_id'=>$student_id,'date_weighing'=>$date))->result()){
 
     return true;
    }else{
@@ -41,11 +42,10 @@
   public function get($id)
   {
     // code...
-    $this->db->select('a.*,b.weighingSchedule');
-    $this->db->from('weighing a');
-    $this->db->where('pupilsId',$id);
-    $this->db->join('weighing_schedule b','b.scheduleId = a.scheduleId','left');
-    $this->db->order_by('weighingSchedule','DESC');
+    $this->db->select('*');
+    $this->db->from('e_weighing');
+    $this->db->where('student_id',$id);
+    $this->db->order_by('date_weighing','DESC');
     $query = $this->db->get();
     return $query->result();
   }

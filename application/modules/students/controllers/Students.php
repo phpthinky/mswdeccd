@@ -239,6 +239,7 @@ class Students extends MY_Controller
     $data = new stdClass();
 
       $centerId = $this->workers_model->getMyCenterId($this->workersId);
+      /*
       $result = $this->weighing_model->listschedules($centerId);
       if (!empty($result)) {
         //$data->listschedules =
@@ -258,7 +259,9 @@ class Students extends MY_Controller
          $data->listschedules = $arr;
 
       }
+      */
 
+    $data->listschedules = null;
   
     $data->id = $id;
     if($result = $this->pupils_model->get($id)){
@@ -267,8 +270,6 @@ class Students extends MY_Controller
         $data->$key = $value;
       }
       $data->age = getAge($data->birthDate);
-         $data->height = $this->weighing_model->getHeight($id);
-         $data->weight = $this->weighing_model->getWeight($id);
     }
     $data->weighing = $this->weighing_model->get($id);
 
@@ -290,19 +291,31 @@ class Students extends MY_Controller
 
         $centerId = $this->workers_model->getMyCenterId($this->workersId);
 
-        $scheduleId = $this->settings_model->getweighingid($postdata['dateOfWeighing'],$centerId);
+      //  $scheduleId = $this->settings_model->getweighingid($postdata['dateOfWeighing'],$centerId);
 
-      if(!$this->weighing_model->check($postdata['pupilsId'],$scheduleId)){
+      if(!$this->weighing_model->check($postdata['pupilsId'],$postdata['dateOfWeighing'])){
         
         $data =  new stdClass();
-        $data->pupilsId = $postdata['pupilsId'];
+        $data->student_id = $postdata['pupilsId'];
         $data->weight = $postdata['weight'];
         $data->height = $postdata['height'];
-        $data->scheduleId = $scheduleId;
-        $this->load->library('bmi');
-        $wfh = $this->bmi->get($data->weight,$data->height);
-        $data->wfh = $wfh;
+        $data->date_weighing = $postdata['dateOfWeighing'];
 
+        $students = $this->students_model->info($postdata['pupilsId']);
+        $birthday = $students->birthDate;
+        $age = getAge($birthday);
+        $years = $age->y;
+        $months = $age->m;
+        $this->load->helper('bmi_helper');
+        $ideal_weight = ideal_weight($years,$months);
+        $data->wfa = get_wfa($postdata['weight'],$ideal_weight);
+
+
+        $ideal_height = ideal_height($years,$students->gender);
+        $data->hfa = get_hfa($postdata['height'],$ideal_height);
+
+        $data->wfh = get_wfh($data->weight,$data->height);
+      
 
         /*
         $data->wfa = $postdata['wfa'];
@@ -311,7 +324,7 @@ class Students extends MY_Controller
           */
         //$data->scheduleId = $postdata['scheduleId'];
         $result = $this->weighing_model->add($data);
-        echo json_encode(showresponse($result));
+        echo json_encode($result);
       }else{
         echo json_encode(showresponse(3));
       }

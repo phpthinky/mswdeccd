@@ -155,6 +155,18 @@
     }
     return false;
   }
+  public function update_table($value='')
+  {
+    // code...
+    $sql = "DROP TABLE IF EXISTS weighing_schedule;";
+    $this->db->query($sql);
+
+    $sql2 = "RENAME TABLE weighing to e_weighing;";
+    $this->db->query($sql2);
+
+    $sql3 = "ALTER TABLE `e_weighing` CHANGE `weighingId` `id` INT(11) NOT NULL AUTO_INCREMENT, CHANGE `scheduleId` `date_weighing` DATE NOT NULL, CHANGE `pupilsId` `student_id` INT(11) NOT NULL;";
+    $this->db->query($sql3);
+  }
 
   public function reset_all($value='')
   {

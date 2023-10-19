@@ -57,7 +57,7 @@
                 <table id="worker-table" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>ID</th>
+                    <th>#</th>
                     <th>Name</th>
                     <th>Address</th>
                     <th>Center</th>

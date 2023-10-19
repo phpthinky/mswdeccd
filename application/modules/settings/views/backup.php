@@ -20,7 +20,18 @@
 			</div>
 
 		</form>
+<hr>
 
+		<form method="post" action="">
+			
+
+			<div class="row">
+				<div class="col-sm-4">This action will update tables.</div>
+				<div class="col-sm-4">
+			<input type="submit" name="form" value="Update" class="btn btn-default btn-sm"></div>
+			</div>
+
+		</form>
 		<div class="results"><?php if (!empty($action)): ?>
 			<div class="alert alert-success"><?php echo $action; ?></div>
 		<?php endif ?></div>

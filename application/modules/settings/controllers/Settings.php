@@ -336,6 +336,9 @@
           $result = "Tables successfully emptied".
           $this->settings_model->reset_all();
             break;
+            case 'Update':
+            $result = $this->settings_model->update_table();
+            break;
           
           default:
             // code...

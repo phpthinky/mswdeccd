@@ -97,12 +97,14 @@ function reset_errors(form=false) {
 
       $('#form-weighing').on('submit',function(e){
         e.preventDefault();
+        console.clear()
         var frmdata =$(this).serializeArray(); 
         $.ajax({
           url:'<?=site_url('students/addstudentweighing')?>',
           data: frmdata,
           dataType:'json',
           method: 'POST',
+
           success: function(response){
             console.log(response);
 
