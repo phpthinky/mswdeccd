@@ -1,0 +1,18 @@
+.main-sidebar{
+	background-color: forestgreen !important;
+}
+.dataTables_wrapper .dataTables_length, .dataTables_filter{
+		display: 	none;
+}
+.dataTables_wrapper .dt-buttons{
+	visibility: hidden;
+}
+select.form-control{
+	display: inline-block;
+	width: 100%;
+}
+.form-control{
+
+	border-bottom: 	1px solid forestgreen; !important;
+	background-color: lightgray;
+}

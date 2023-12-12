@@ -77,7 +77,11 @@ class Students_model extends CI_model
     return $data3;
     
   }
-
+  public function listallmystudent($worker_id=0)
+  {
+    // code...
+    return $this->db->get_where('center_students_schoolyear',array('worker_id'=>$worker_id))->result();
+  }
   
     public function listmystudents($YearId,$workersId)
   {
@@ -177,6 +181,40 @@ class Students_model extends CI_model
     ->get();
     return $query->result();
   }
+  private function get_weight($id)
+  {
+    # code...
+    $sql = $this->db->select('weight')
+            ->from('e_weighing')
+            ->where('student_id',$id)
+            ->order_by('date_weighing','desc')
+            ->limit(1);
+            $query = $this->db->get();
+            if ($row = $query->row(0)) {
+              # code...
+              return $row->weight;
+            }
+            return 0;
+
+  }
+  private function get_height($id)
+  {
+    # code...
+
+    # code...
+    $sql = $this->db->select('height')
+            ->from('e_weighing')
+            ->where('student_id',$id)
+            ->order_by('date_weighing','desc')
+            ->limit(1);
+            $query = $this->db->get();
+            if ($row = $query->row(0)) {
+              # code...
+              return $row->height;
+            }
+            return 0;
+
+  }
   public function info($id=0)
   {
     // code...
@@ -185,7 +223,51 @@ class Students_model extends CI_model
     $this->db->from('epupils');
     $this->db->where('pupilsId',$id);
     $query = $this->db->get();
-    return $query->row(0);
+    $result = $query->row(0);
+
+        $result->weight = $this->get_weight($id);
+        $result->height = $this->get_height($id);
+          # code...
+          $result->f_fName = '';
+          $result->f_mName = '';
+          $result->f_lName = '';
+          $result->f_ext = '';
+          # code...
+          $result->m_fName = '';
+          $result->m_mName = '';
+          $result->m_lName = '';
+          $result->m_ext = '';
+        
+    $parents = $this->db->get_where('eparent',array('child_id'=>$id))->result();
+    if (!empty($parents)) {
+      # code...
+      foreach ($parents as $key => $value) {
+        # code...
+        if ($value->familyPosition == 'father') {
+          # code...
+          $result->f_fName = $value->fName;
+          $result->f_mName = $value->mName;
+          $result->f_lName = $value->lName;
+          $result->f_ext = $value->ext;
+        }
+
+        if ($value->familyPosition == 'mother') {
+          # code...
+          $result->m_fName = $value->fName;
+          $result->m_mName = $value->mName;
+          $result->m_lName = $value->lName;
+          $result->m_ext = $value->ext;
+        }
+      }
+    }
+    return $result;
+  }
+
+  public function get_name($id=0)
+  {
+    // code...
+    $row= $this->db->get_where('estudents',array('student_id'=>$id))->row(0);
+    return $row->student_name;
   }
   
   
@@ -202,5 +284,71 @@ class Students_model extends CI_model
     }
   }
 
+
+
+
+  ///immunizations
+
+
+  public function getimmunizations($id){
+    return $this->db->get_where('e_immunization',array('student_id'=>$id))->result();
+  }
+  public function checkimmunizations($data){
+    return $this->db->get_where('e_immunization',$data)->result();
+  }
+  public function addimmunizations($data)
+  {
+    // code...
+  return $this->db->insert('e_immunization',$data);
+  }
+
+  public function updateimmunizations($data)
+  {
+    // code...
+        $this->db->where('id',$data->id);
+  return $this->db->update('e_immunization',$data);
+  }
+  ////feeding
+
+  public function getfeeding($id){
+    return $this->db->get_where('e_feeding',array('student_id'=>$id))->result();
+  }
+  public function checkfeeding($data){
+    return $this->db->get_where('e_feeding',$data)->result();
+  }
+  public function addfeeding($data)
+  {
+    // code...
+  return $this->db->insert('e_feeding',$data);
+  }
   
- } ?>
+  public function updatefeeding($data)
+  {
+    // code...
+        $this->db->where('id',$data->id);
+  return $this->db->update('e_feeding',$data);
+  }
+
+ public function get_checklist($value='')
+ {
+   // code...
+
+  
+ }
+ public function parents($data,$update=false)
+ {
+   // code...
+  if ($this->db->get_where('eparent',array('child_id'=>$data->child_id,'familyPosition'=>$data->familyPosition))->result()) {
+    # code...
+    $this->db->where('familyPosition',$data->familyPosition);
+    $this->db->where('child_id',$data->child_id);
+   return $this->db->update('eparent',$data);
+  }
+  return $this->db->insert('eparent',$data);
+ 
+ }
+
+
+ } 
+
+?>

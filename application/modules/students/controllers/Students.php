@@ -1,4 +1,6 @@
-<?php   /**
+<?php 
+defined('BASEPATH') or exit('No direct script access allowed');
+  /**
  * 
  */
 class Students extends MY_Controller
@@ -94,6 +96,8 @@ class Students extends MY_Controller
       echo json_encode(array('status'=>false,'msg'=>htmlentities(validation_errors())));
       exit();
     }else{
+      //echo json_encode($this->input->post());
+      //exit;
 
     $data = new stdClass();
     $data->fName = $this->input->post('fName');
@@ -123,6 +127,24 @@ class Students extends MY_Controller
 
         if($StudentId = $this->students_model->save($data)){
 
+            $father_data =  array();
+            $father_data['fName'] = $this->input->post('f_fName');          
+            $father_data['mName'] = $this->input->post('f_mName');          
+            $father_data['lName'] = $this->input->post('f_lName');          
+            $father_data['ext'] = $this->input->post('f_ext');          
+            $father_data['familyPosition'] = 'father';
+            $father_data['child_id ']= $StudentId;
+            $this->students_model->parents($father_data);
+            
+            $mother_data =  array();
+            $mother_data['fName'] = $this->input->post('m_fName');          
+            $mother_data['mName'] = $this->input->post('m_mName');          
+            $mother_data['lName']= $this->input->post('m_lName');          
+            $mother_data['ext ']= $this->input->post('m_ext');          
+            $mother_data['familyPosition']= 'mother';
+            $mother_data['child_id']= $StudentId;
+
+            $this->students_model->parents($mother_data);
 //          exit();
           $data3 = new stdClass();
           $data3->workersId = $this->input->post('workersId');
@@ -182,10 +204,37 @@ class Students extends MY_Controller
     $data->keywords = metaphone($data->fName.' '.$data->lName);
     $data->pupilsId = $this->input->post('pupilsId');
 
-    echo json_encode(array('status'=>false,'msg'=>$data));
+   // echo json_encode(array('status'=>false,'msg'=>$data));
 
-      exit();
-    $result = $this->students_model->save($data);
+    //  exit();
+    if($result = $this->students_model->save($data)){
+
+            $father_data =  new stdClass();
+            $father_data->fName = $this->input->post('f_fName');          
+            $father_data->mName = $this->input->post('f_mName');          
+            $father_data->lName = $this->input->post('f_lName');          
+            $father_data->ext = $this->input->post('f_ext');          
+            $father_data->familyPosition = 'father';
+            $father_data->child_id = $data->pupilsId;
+            $this->students_model->parents($father_data,true);
+            
+            $mother_data =   new stdClass();
+            $mother_data->fName = $this->input->post('m_fName');          
+            $mother_data->mName = $this->input->post('m_mName');          
+            $mother_data->lName= $this->input->post('m_lName');          
+            $mother_data->ext = $this->input->post('m_ext');          
+            $mother_data->familyPosition= 'mother';
+            $mother_data->child_id= $data->pupilsId;
+
+            $this->students_model->parents($mother_data,true);
+
+    echo json_encode(array('status'=>true,'msg'=>'Successfully updated.'));
+
+    }else{
+    echo json_encode(array('status'=>false,'msg'=>'No changes.'));
+
+    }
+
     }
   }
   public function find()
@@ -233,33 +282,139 @@ class Students extends MY_Controller
     }
 
   }
-    public function profile($id) {
-   
+    public function assessments($id) {
+    if ($this->input->post()) {
+      // code...
+      $action = $this->input->post('form');
+      switch ($action) {
+        case 'remove_nut':
+          // code...
+            $result = $this->weighing_model->remove($this->input->post('id'));
+          echo json_encode($result);
+          break;
+        
+        default:
+          // code...
+          break;
+      }
+      exit();
+    }
 
     $data = new stdClass();
 
-      $centerId = $this->workers_model->getMyCenterId($this->workersId);
-      /*
-      $result = $this->weighing_model->listschedules($centerId);
-      if (!empty($result)) {
-        //$data->listschedules =
-        $arr = array();
-        foreach ($result as $key => $value) {
-          // code...
-          if (!$this->weighing_model->check($id,$value->weighingSchedule)) {
-            // code...
+    $centerId = $this->workers_model->getMyCenterId($this->workersId);
+    $this->load->model('assessment/assessment_model','massessment');
+    $data->assessment_data = $this->massessment->get_raw_score($id);
+      
 
-            $arr[] = (object)array(
-              'id'=>$value->scheduleId,
-              'date'=>tomdy($value->weighingSchedule)
-            );
+    $data->listschedules = null;
+  
+    $data->id = $id;
+    if($result = $this->students_model->info($id)){
 
-          }
-         } 
-         $data->listschedules = $arr;
-
+      foreach ($result as $key => $value) {
+        // code...
+        $data->$key = $value;
       }
-      */
+      $data->age = getAge($data->birthDate);
+    }
+
+    
+    $data->liststudents = $this->students_model->listallmystudent($this->workersId);
+    $data->content = 'students/profile-assessment';
+    $this->template->dashboard($data);
+  }
+
+    public function nutritions($id) {
+    if ($this->input->post()) {
+      // code...
+      $action = $this->input->post('form');
+      switch ($action) {
+        case 'remove_nut':
+          // code...
+            $result = $this->weighing_model->remove($this->input->post('id'));
+          echo json_encode($result);
+          break;
+        
+        default:
+          // code...
+          break;
+      }
+      exit();
+    }
+
+    $data = new stdClass();
+
+    $centerId = $this->workers_model->getMyCenterId($this->workersId);
+    $this->load->model('assessment/assessment_model','massessment');
+    $data->assessment_data = $this->massessment->get_raw_score($id);
+      
+
+    $data->listschedules = null;
+  
+    $data->id = $id;
+    if($result = $this->students_model->info($id)){
+      foreach ($result as $key => $value) {
+        // code...
+        $data->$key = $value;
+      }
+      $data->age = getAge($data->birthDate);
+    }
+
+  if($result = $this->weighing_model->get($id)){
+    $a = array('upon_entry'=>'','20_days'=>'','40_days'=>'','terminal'=>'');
+    foreach ($result as $key => $value) {
+      // code...
+      if ($value->weighing_type == 1) {
+        // code...
+        $a['upon_entry'] = array('date_weighing'=>$value->date_weighing,'height'=>$value->height,'weight'=>$value->weight,'wfa'=>$value->wfa,'hfa'=>$value->hfa,'wfh'=>$value->wfh);
+      }
+
+      if ($value->weighing_type == 2) {
+        // code...
+        $a['20_days'] = array('date_weighing'=>$value->date_weighing,'height'=>$value->height,'weight'=>$value->weight,'wfa'=>$value->wfa,'hfa'=>$value->hfa,'wfh'=>$value->wfh);
+      }
+      if ($value->weighing_type == 3) {
+        // code...
+        $a['40_days'] = array('date_weighing'=>$value->date_weighing,'height'=>$value->height,'weight'=>$value->weight,'wfa'=>$value->wfa,'hfa'=>$value->hfa,'wfh'=>$value->wfh);
+      }
+      if ($value->weighing_type == 4) {
+        // code...
+        $a['terminal'] = array('date_weighing'=>$value->date_weighing,'height'=>$value->height,'weight'=>$value->weight,'wfa'=>$value->wfa,'hfa'=>$value->hfa,'wfh'=>$value->wfh);
+      }
+    }
+    $data->weighing = $a;
+  }
+
+
+    $data->liststudents = $this->students_model->listallmystudent($this->workersId);
+    $data->content = 'students/profile-nutrition';
+    $this->template->dashboard($data);
+  }
+    public function profile($id) {
+    if ($this->input->post()) {
+      // code...
+      $action = $this->input->post('form');
+      switch ($action) {
+        case 'remove_nut':
+          // code...
+            $result = $this->weighing_model->remove($this->input->post('id'));
+          echo json_encode($result);
+          break;
+        
+        default:
+          // code...
+          break;
+      }
+      exit();
+    }
+
+    $data = new stdClass();
+
+    $centerId = $this->workers_model->getMyCenterId($this->workersId);
+    $this->load->model('assessment/assessment_model','massessment');
+    $data->assessment_data = $this->massessment->get_raw_score($id);
+      
 
     $data->listschedules = null;
   
@@ -271,16 +426,38 @@ class Students extends MY_Controller
       }
       $data->age = getAge($data->birthDate);
     }
-    $data->weighing = $this->weighing_model->get($id);
 
-    //$data->has_charts = true;
+  if($result = $this->weighing_model->get($id)){
+    $a = array('upon_entry'=>'','20_days'=>'','40_days'=>'','terminal'=>'');
+    foreach ($result as $key => $value) {
+      // code...
+      if ($value->weighing_type == 1) {
+        // code...
+        $a['upon_entry'] = array('date_weighing'=>$value->date_weighing,'height'=>$value->height,'weight'=>$value->weight,'wfa'=>$value->wfa,'hfa'=>$value->hfa,'wfh'=>$value->wfh);
+      }
 
+      if ($value->weighing_type == 2) {
+        // code...
+        $a['20_days'] = array('date_weighing'=>$value->date_weighing,'height'=>$value->height,'weight'=>$value->weight,'wfa'=>$value->wfa,'hfa'=>$value->hfa,'wfh'=>$value->wfh);
+      }
+      if ($value->weighing_type == 3) {
+        // code...
+        $a['40_days'] = array('date_weighing'=>$value->date_weighing,'height'=>$value->height,'weight'=>$value->weight,'wfa'=>$value->wfa,'hfa'=>$value->hfa,'wfh'=>$value->wfh);
+      }
+      if ($value->weighing_type == 4) {
+        // code...
+        $a['terminal'] = array('date_weighing'=>$value->date_weighing,'height'=>$value->height,'weight'=>$value->weight,'wfa'=>$value->wfa,'hfa'=>$value->hfa,'wfh'=>$value->wfh);
+      }
+    }
+    $data->weighing = $a;
+  }
+
+
+    $data->liststudents = $this->students_model->listallmystudent($this->workersId);
     $data->content = 'students/student-profile';
     $this->template->dashboard($data);
-
-
   }
-  public function addstudentweighing($value='')
+  public function addstudentweighing($student_id=0)
   {
     // code...
     if ($this->input->post()) {
@@ -288,42 +465,72 @@ class Students extends MY_Controller
 
 
       $postdata = $this->input->post();
-
+        if (empty($postdata['weight']) || empty($postdata['height']) || empty($postdata['date_weighing'])) {
+          // code...
+          echo  json_encode(array('status'=>false,'msg'=>'Invalid! No input data.'));
+          exit();
+        }
         $centerId = $this->workers_model->getMyCenterId($this->workersId);
 
-      //  $scheduleId = $this->settings_model->getweighingid($postdata['dateOfWeighing'],$centerId);
 
-      if(!$this->weighing_model->check($postdata['pupilsId'],$postdata['dateOfWeighing'])){
+
+      //  $scheduleId = $this->settings_model->getweighingid($postdata['date_weighing'],$centerId);
+
+      if(!$this->weighing_model->check($student_id,$postdata['date_weighing'],$postdata['type'])){
         
+
+
         $data =  new stdClass();
-        $data->student_id = $postdata['pupilsId'];
+        $data->student_id = $student_id;
         $data->weight = $postdata['weight'];
         $data->height = $postdata['height'];
-        $data->date_weighing = $postdata['dateOfWeighing'];
+        $data->date_weighing = $postdata['date_weighing'];
+        $data->weighing_type = $postdata['type'];
 
-        $students = $this->students_model->info($postdata['pupilsId']);
+        $students = $this->students_model->info($student_id);
         $birthday = $students->birthDate;
-        $age = getAge($birthday);
+        $age = getAge($birthday,$postdata['date_weighing']);
+        $gender = $students->gender;
         $years = $age->y;
         $months = $age->m;
-        $this->load->helper('bmi_helper');
-        $ideal_weight = ideal_weight($years,$months);
-        $data->wfa = get_wfa($postdata['weight'],$ideal_weight);
+        $ageinmonth = ($age->y * 12)+$age->m;
+        if ($ageinmonth < 24) {
+          // code...
+          echo json_encode( array('status'=>false,'msg'=>'Unsupported age of child.'));  
+            exit();
+        }
 
+/*        if ($ageinmonth < 24) {
+          // code...
+          $result = array('status'=>false,'msg'=>'Unsupported age of child.');  
+          
+        }else{
+        
+*/
+        $this->load->helper('bmi_helper');
+
+        $ideal_weight = ideal_weight($years,$months);
+        $data->wfa_percentage = ($postdata['weight']/$ideal_weight) * 100;
+        $data->wfa = get_wfa($data->wfa_percentage);
 
         $ideal_height = ideal_height($years,$students->gender);
-        $data->hfa = get_hfa($postdata['height'],$ideal_height);
+        $data->hfa_percentage =($postdata['height']/$ideal_height) * 100;
+        $data->hfa = get_hfa($data->hfa_percentage);
 
-        $data->wfh = get_wfh($data->weight,$data->height);
-      
 
-        /*
-        $data->wfa = $postdata['wfa'];
-        $data->hfa = $postdata['hfa'];
-        $data->wfh = $postdata['wfh'];
-          */
+          // code...
+
+          $weight_on_child_height = weight_on_child_height($ageinmonth,$data->height); //ideal weight base on child height;
+          $data->wfh_percentage = ($postdata['weight']/$weight_on_child_height) * 100;
+          $data->wfh = get_whz($ageinmonth,$gender,$data->height,$data->weight); 
+        // echo json_encode($data);
+         //exit();
+          $result = $this->weighing_model->add($data);
+
+  //      }
+
+          
         //$data->scheduleId = $postdata['scheduleId'];
-        $result = $this->weighing_model->add($data);
         echo json_encode($result);
       }else{
         echo json_encode(showresponse(3));
@@ -334,25 +541,98 @@ class Students extends MY_Controller
     }
   }
 
-  public function addstudentfeeding($value='')
+  public function feeding($showlist=false,$id=0)
   {
     // code...
+
+    if ($showlist) {
+      // code...
+      if($result = $this->students_model->getfeeding($id)){
+      $data = array();
+      $i=1;
+              foreach ($result as $key => $value) {
+                        // code...
+
+                  $data[] = array($i,tomdy($value->date_feeding),$value->foods,$value->drinks);
+              $i++;
+              }        
+      echo json_encode(array('data'=>$data));
+
+      }else{
+      echo json_encode(array('data'=>false));
+
+      }
+
+      exit();
+    }
     if ($this->input->post()) {
       // code...
 
 
       $postdata = $this->input->post();
-      $feeding_date = $postdata['feeding_date'];
+      $feeding_date = $postdata['date_feeding'];
 
-      if(!$this->settings_model->checkfeeding(array('pupils_id'=>$postdata['pupilsId'],'feeding_date'=>$feeding_date))){
+      if(!$this->students_model->checkfeeding(array('student_id'=>$postdata['student_id'],'date_feeding'=>$feeding_date))){
         
         $data =  new stdClass();
-        $data->pupils_id = $postdata['pupilsId'];
+        $data->student_id = $postdata['student_id'];
         $data->foods = $postdata['foods'];
         $data->drinks = $postdata['drinks'];
-        $data->feeding_date = $feeding_date;
+        $data->date_feeding = $feeding_date;
 
-        $result = $this->settings_model->addstudentfeeding($data);
+        $result = $this->students_model->addfeeding($data);
+        echo json_encode(showresponse($result));
+        
+      }else{
+        echo json_encode(showresponse(3));
+      }
+
+    }else{
+      echo json_encode(noinput());
+    }
+  }
+
+  public function immunizations($showlist=false,$id=0)
+  {
+    // code...
+
+
+    if ($showlist) {
+      // code...
+      if($result = $this->students_model->getimmunizations($id)){
+      $data = array();
+      $i=1;
+              foreach ($result as $key => $value) {
+                        // code...
+
+                  $data[] = array($i,tomdy($value->date_immunization),$value->type_immunization,$value->description);
+              $i++;
+              }        
+      echo json_encode(array('data'=>$data));
+
+      }else{
+      echo json_encode(array('data'=>false));
+
+      }
+
+      exit();
+    }
+    
+    if ($this->input->post()) {
+      // code...
+
+
+      $postdata = $this->input->post();
+      $date = $postdata['date_immunization'];
+
+      if(!$this->students_model->checkimmunizations(array('student_id'=>$postdata['student_id'],'date_immunization'=>$date,'type_immunization'=>$postdata['type_immunization']))){
+        
+        $data =  new stdClass();
+        $data->student_id = $postdata['student_id'];
+        $data->type_immunization = $postdata['type_immunization'];
+        $data->description = $postdata['description'];
+        $data->date_immunization = $date;
+        $result = $this->students_model->addimmunizations($data);
         echo json_encode(showresponse($result));
         
       }else{
@@ -484,25 +764,20 @@ public function listbyclassess($yearId='',$worker='')
     }
 
   }
-
-  public function calculate($value='')
+  public function get_checklist($student_id=0)
   {
     // code...
-    $w = 8;
-    $h = 65;
-    $this->load->library('bmi');
-    $result = $this->bmi->get($w,$h);
-    var_dump($result);
-   // $this->bmi->weight = $w;
-   // $this->bmi->height = $h;
-   // $bmi = new Bmi();
-    // $bmi::weight = $w;  
+    $student_id = $student_id;
+    if($result = $this->students_model->get_checklist($student_id)){
+      echo json_encode(array('status'=>true,'data'=>$response));
+    }
+    echo json_encode(noinputdata());
 
   }
   public function reset($value='')
   {
     // code...
-    $this->students_model->resetall();
+    //$this->students_model->resetall();
   }
 
 }

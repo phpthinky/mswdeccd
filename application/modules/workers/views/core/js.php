@@ -1,19 +1,34 @@
 <script type="text/javascript">
+
+	  var d = new Date();
+	  var current_date = d.getFullYear() +"/"+(d.getMonth()+1)+"/"+d.getDate();
+		var worker_id = '<?=isset($worker_id)? $worker_id : 0 ?>';
+
 $(function(){
 
 		var	w_type = 0;
-		var table = $('#worker-table');
+	//	var table = $('#worker-table');
 
-	    table.DataTable({
-        ajax:site_url+'/workers/listall?type='+w_type
+	  var table = $('#worker-table').DataTable({
+        ajax:{url:site_url+'/workers/listall?type='+w_type},
+        dom:'Bfrtip',
+        buttons:[{
+
+			extend: 'excelHtml5',
+			title:'Export to excel',
+			attr:{id:'btn-export-1'},
+			filename: function(){
+				return 'Center-workers-'+current_date;
+			}
+        }],
+
       })
 
-	function refreshTable(table,url){
-	    table.DataTable({
-	    	destroy: true,
-        ajax:url
-      	})
-	}
+
+	$('#centersOption').on('change',function(){
+		console.log($(this).val())
+		table.columns(3).search($(this).val()).draw()
+	})
 	$('#workertype').on('change',function(){
 		w_type = $(this).val();
 		$('.table-title').text($('#workertype option:selected').text())
@@ -22,12 +37,27 @@ $(function(){
 
 	});
 
-	$(document).on('click','.btn-trash',function() {
+
+    $('#search_worker').on('keyup',function(){
+      table.search($(this).val()).draw() ;
+    })   
+
+	$(document).on('click','#btn-excel-worker',function() {
+
+		$('#btn-export-1').click()
+
+		//alert('Hello');
+	});
+
+
+	$(document).on('click','.btn-trash.worker',function() {
 		// body...
 		if (confirm('This worker and his pupils records will be permanently deleted. Make sure you have a backup.')) {
+		var w_type = $('#workersOption').val();
 
 		
 		var workersId = $(this).data('id');
+		var tr = $(this).parent().parent();
 		$.ajax({
 			url:current_url,
 			data:{form:'remove',id:workersId},
@@ -35,13 +65,14 @@ $(function(){
 			method:'post',
 			success:function(response){
 				console.log(response)
+
+
+		refreshTable(table,site_url+'/workers/listall?type='+w_type)
+		$(tr).remove()
+
 			}
 
 		})
-
-		refreshTable(table,site_url+'/workers/listall?type='+w_type)
-		$(this).parent().parent().remove()
-
 	
 		}	
 	})
@@ -233,13 +264,18 @@ if (sidebarcollapse) {
             console.log(response)
             if (response.status == true) {
               $('#error-area').removeClass('alert alert-danger').addClass('alert alert-success').text(response.msg);
-              $('#frmStudents')[0].reset();
+              //$('#frmStudents')[0].reset();
             }else{
               $('#error-area').removeClass('alert alert-success').addClass('alert alert-danger').text(response.msg);
 
             }
-          },complete:function(){
-            refreshTable($('input[name="YearId"]').val(),$('#workersId').val());
+          },
+          error:function (i,e) {
+          	// body...
+          	console.log(i.responseText)
+          },
+          complete:function(){
+            //refreshTable($('input[name="YearId"]').val(),$('#workersId').val());
           	$('.loader').addClass('d-none');
 
           }
@@ -360,6 +396,9 @@ if (sidebarcollapse) {
 					$(form).children($('[name="'+i+'"]').val(v));
 				})
 
+			},
+			error:function (i,e) {
+				console.log(i.responseText)
 			}
 
 		})
@@ -383,14 +422,46 @@ if (sidebarcollapse) {
 			},
 			success:function(response){
 				console.log(response)
-          	$('.loader').addClass('d-none');
+            if (response.status == true) {
+              $('.ajax-response-edit').removeClass('alert alert-danger').addClass('alert alert-success').text(response.msg);
+            }else{
+              $('.ajax-response-edit').removeClass('alert alert-success').addClass('alert alert-danger').text(response.msg);
 
+            }
+
+			},
+			error:function (i,e) {
+				// body...
+				console.log(i.responseText)
+			},
+			complete:function () {
+				// body...
+
+          	$('.loader').addClass('d-none');
 			}
 
 		})
 
 	})
 
+	$(document).on('click','#btn-add-student',function(){
+		$('#class_schedule').val($('#home-classess').val());
+		$('a[href="#addStudents"]').click()
+
+	})
+
+	$(document).on('click','#btn-export-worker-students',function(){
+		var year_id = $('select#home-classess').val();
+		var form = $('<form/>',{'action':site_url+'/export/worker_student/','method':'POST','target':'excel_export'});
+				$(form).append($('<input/>',{'name':'year_id','value':year_id,'type':'hidden'}))
+				$(form).append($('<input/>',{'name':'worker_id','value':worker_id,'type':'hidden'}))
+				$(form).addClass('d-none')
+				$('body').append($(form))
+				$(form).submit();
+
+	})
+
+//
 	$(document).on('click','.btn-remove-student',function(){
 
 		var id = $(this).data('id');
@@ -521,19 +592,20 @@ if (sidebarcollapse) {
 		}
 	})
 
-var worker_id = '<?=isset($info->workersId)? $info->workersId : 0 ?>';
 
-  var tblmystudents = $('#tblmystudents');
-
+var table_mystudents = $('#tblmystudents');
+/*
       tblmystudents.DataTable({
         ajax:site_url+'/workers/students/'+worker_id
       })
 
+      */
+
   
     $('#searchstring').on('keyup',function(){
-      tblmystudents.DataTable().search($(this).val()).draw() ;
+      table_mystudents.DataTable().search($(this).val()).draw() ;
     })    
-
+/*
 		$('#frmfindmystudent select[name="class_schedule"]').on('change',function(e){
 			//alert($(this).val())
 			var class_schedule = $(this).val()
@@ -550,8 +622,103 @@ var worker_id = '<?=isset($info->workersId)? $info->workersId : 0 ?>';
 				})
 
 		})
+*/
 
+    $('#select-home-classess').on('change',function(){
+    //	alert('Hello')
 
+			var class_schedule = $(this).val()
+			var	formdata = {};
+				formdata.class_schedule = class_schedule;
+		//	const table_mystudents = $('#tblmystudents');
+			table_mystudents.draw_students_table(formdata);
+			table_mystudents.on('click','.btn-remove',function (e) {
+				// body...
+				e.preventDefault()
+				var id = $(this).data('id')
+				$.ajax({
+					url:current_url,
+					data:{student_id:id,year_id:class_schedule,form:'remove_student'},
+					method:'post',
+					error:function(i,e){
+						console.log(i.responseText)
+					}
+				})
+				$(this).parent().parent().remove()
+			//table_mystudents.draw_students_table(formdata);
 
-})
+			})
+
+    });
+    $.fn.draw_students_table = function(formdata){
+    		$(this).DataTable({
+        	ajax:{
+	        	url:site_url+'/workers/students/'+worker_id,
+	        	type:'POST',
+	        	data:formdata
+	        },
+	        columns:[
+	        {data:'no'},
+	        {data:'name'},
+	        {data:'age'},
+	        {data:'gender'},
+	        {data:'address'},
+	        {data:'student_type'},
+	        {data:'class_schedule'},
+	        {data:null,
+	        	render: function(data,type){
+	        		return '<a href="../students/nutritions/'+data.id+'" class="btn btn-sm btn-outline-info">Nutritions</a> <a href="../students/assessments/'+data.id+'" class="btn btn-sm btn-outline-info">Assessments</a>';  
+	        	}
+
+	      	},
+	        {data:null,
+							render: function(data,type){
+	        		return '<a href="#" class="btn btn-sm btn-outline-info btn-edit-student" data-id="'+data.id+'"><i class="fa fa-edit"></i></a>'+
+	        		 ' '+'<a href="#" class="btn btn-sm btn-outline-danger btn-remove" data-id="'+data.id+'"><i class="fa fa-trash"></i></a>';  
+	      			}
+	      	}
+	        ],
+	        destroy:true
+				});
+
+    }
+    $('#btn-refresh-table').on('click',function(){
+    	var class_schedule = $('#select-home-classess').val();
+    	var formdata = {}
+    			formdata.class_schedule = class_schedule
+    			table_mystudents.draw_students_table(formdata);
+    })
+		$('#select-home-classess').trigger('change');
+
+		$('#btn-add-weighing').on('click',function() {
+			// body...
+			$('a[href="#weighing"]').click();
+			$('#select-add-weighing-schoolyear').val($('#nutritions-classess').val())
+			$('#select-add-weighing-schoolyear').trigger('change');
+		})
+
+		$('#select-add-weighing-schoolyear').on('change',function (argument) {
+			// body...
+			var select = $('#select-add-weighing-student');
+			console.log(worker_id)
+			var formdata = {};
+					formdata.form = 'select';
+					formdata.class_schedule = $(this).val();
+
+					$.ajax({
+						url:site_url+'/workers/select_students/'+worker_id,
+						data: formdata,
+						dataType:'json',
+						method:'POST',
+						success:function(response){
+							console.log(response)
+							$(select).replaceOptions(response.data)
+						}
+					})
+		})
+		})
+
+	
 </script>
+<?php include_once('student_js.php'); ?>
+<?php include_once('assess-js.php'); ?>

@@ -16,8 +16,7 @@ CREATE VIEW `center_students_schoolyear`  AS SELECT DISTINCT `epupils`.`pupilsId
 -- Structure for view `center_workers`
 --
 DROP VIEW IF EXISTS `center_workers`;
-
-CREATE VIEW `center_workers`  AS SELECT DISTINCT `eworkers`.`workersId` AS `worker_id`, `eworkers`.`centerId` AS `center_id`, concat(`eworkers`.`lName`,', ',`eworkers`.`fName`,' ',`eworkers`.`mName`,' ',`eworkers`.`ext`) AS `worker_name`, `ecenter`.`centerName` AS `center_name`, `eworkers`.`address` AS `worker_address`, `eworkers`.`jobStatus` AS `job_status` FROM (`eworkers` left join `ecenter` on(`eworkers`.`centerId` = `ecenter`.`centerId`)) ;
+CREATE VIEW `center_workers`  AS SELECT DISTINCT `eworkers`.`workersId` AS `worker_id`, `eworkers`.`centerId` AS `center_id`, concat(`eworkers`.`lName`,', ',`eworkers`.`fName`,' ',`eworkers`.`mName`,' ',`eworkers`.`ext`) AS `worker_name`, `ecenter`.`centerName` AS `center_name`, `eworkers`.`address` AS `worker_address`, `eworkers`.`jobStatus` AS `job_status`,contact_number FROM (`eworkers` left join `ecenter` on(`eworkers`.`centerId` = `ecenter`.`centerId`));
 
 -- --------------------------------------------------------
 
@@ -35,8 +34,8 @@ CREATE VIEW `center_workers_schoolyear`  AS SELECT DISTINCT `eworkers`.`workersI
 --
 DROP VIEW IF EXISTS `center_schoolyear`;
 
-CREATE VIEW `center_schoolyear`  AS SELECT DISTINCT `ecenter`.`centerId` AS `center_id`, `ecenter`.`centerName` AS `center_name`, `ecenter`.`barangay` AS `barangay`, `ecenter`.`centerAddress` AS `center_address`, (select count(0) from `center_students_schoolyear` where `center_students_schoolyear`.`center_id` = `ecenter`.`centerId`) AS `total_students`, (select count(0) from `center_workers` where `center_workers`.`center_id` = `ecenter`.`centerId`) AS `total_workers` FROM `ecenter` ;
 
+CREATE VIEW center_schoolyear as SELECT DISTINCT `ecenter`.`centerId` AS `center_id`, `ecenter`.`centerName` AS `center_name`, `ecenter`.`barangay` AS `barangay`, `ecenter`.`centerAddress` AS `center_address`, (select count(0) from `center_students_schoolyear` where `center_students_schoolyear`.`center_id` = `ecenter`.`centerId` AND center_students_schoolyear.gender = 1 ) AS `total_students_boys`,(select count(0) from `center_students_schoolyear` where `center_students_schoolyear`.`center_id` = `ecenter`.`centerId` AND center_students_schoolyear.gender = 2 ) AS `total_students_girls`,(select count(0) from `center_students_schoolyear` where `center_students_schoolyear`.`center_id` = `ecenter`.`centerId` ) AS `total_students`,(select worker_name from center_workers WHERE center_workers.center_id = ecenter.centerId) as worker_name,(select center_workers.contact_number from center_workers WHERE center_workers.center_id = ecenter.centerId) as contact_number FROM `ecenter` ORDER BY `barangay`ASC;
 -- --------------------------------------------------------
 
 --

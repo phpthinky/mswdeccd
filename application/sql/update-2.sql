@@ -1,0 +1,1 @@
+ALTER TABLE `e_weighing` ADD `wfa_percentage` VARCHAR(4) NOT NULL DEFAULT '0' AFTER `wfh`, ADD `hfa_percentage` VARCHAR(4) NOT NULL DEFAULT '0' AFTER `wfa_percentage`, ADD `wfh_percentage` VARCHAR(4) NOT NULL DEFAULT '0' AFTER `hfa_percentage`;
