@@ -47,13 +47,42 @@
 
 
     $centers = $this->centers_model->getAll();
+    $barangay = $this->centers_model->getBarangay();
  		$data = new stdClass();
     $data->centers = $centers;
+    $data->barangay = $barangay;
  		$data->content = 'centers/index2';
 
     $this->template->dashboard($data);
 
  	}
+  public function listbarangay($barangay='',$type='')
+  {
+    // code...
+    $barangay = urldecode($barangay);
+    $result = $this->centers_model->listbyBarangay($barangay,$type);
+   // var_dump($result);
+    //exit();
+     $data = array();
+     $num=0;
+      foreach ($result as $key => $value) {
+        // code...
+
+       // $students = $this->students_model->countAll($value->centerId);
+        // $workers= $this->workers_model->getCountAll($value->centerId);
+        $data[] = array(
+          ++$num,
+          $value->center_name,
+          $value->barangay,
+          $value->center_address,
+          $value->worker_name,
+          $value->total_students,
+          '<button class="btn btn-default bt-sm btn-edit-centers" data-id="'.$value->center_id.'" type="button"><i class="fas fa-edit"></i></button> <button class="btn btn-default bt-sm btn-trash" data-id="'.$value->center_id.'" type="button"><i class="fas fa-trash"></i></button>'
+        ); 
+      }
+      echo json_encode(array('data'=>$data));
+
+  }
   public function add()
   {
     // code...

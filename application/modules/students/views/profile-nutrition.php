@@ -23,7 +23,8 @@
             <!-- Profile Image -->
             <div class="card card-primary card-outline">
               <div class="card-header">
-                <h3 class="profile-username text-center"><select class="form-control" id="select-student-profile-nutrition" style="border:none; background: #ffffff;text-align: center;font-size: 16px;">
+                <h3 class="profile-username text-center">
+                  <select class="form-control" id="select-student-profile-nutrition" style="border:none; background: #ffffff;text-align: center;font-size: 16px;">
                   <?php if (!empty($liststudents)): ?>
                     <?php foreach ($liststudents as $key => $value): ?>
                       <?php if ($value->student_id === $pupilsId): ?>
@@ -228,8 +229,9 @@
                               <label class="col-md-3">Type</label>
                               <div class="col-md-9">
                                 <select name="type_immunization" id="type_immunization" class="form-control">
-                                  <option>Vitamins</option>
-                                  <option>Vaccination</option>
+                                  <option value="deworming">Deworming</option>
+                                  <option value="vitamin_a">Vitamin A</option>
+                                  <option value="vaccination">Vaccination</option>
                                 </select>
                               </div>
                             </div>

@@ -37,6 +37,22 @@
       return $this->db->update('eschoolyear',$data);
    
   }
+
+  public function getSchoolYearTitle($id)
+  {
+    // code...
+    if($row = $this->db->get_where('eschoolyear',array('YearId'=>$id))->row(0)){
+    return toymd($row->YearStart). ' - '. toymd($row->YearEnd);
+
+    }
+    return '';
+  }
+
+  public function class_schedule_status($year_id=0)
+  {
+    $sql = sprintf("UPDATE eschoolyear set Status = 2 where Status = 1 and YearId <> %u ",$year_id);
+   return $this->db->query($sql);
+  }
   public function class_schedule_remove($data)
   {
     // code...

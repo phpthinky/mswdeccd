@@ -1,18 +1,51 @@
-<script type="text/javascript">
 $(function(){
-
-	var table = $('#table-list-data');
-
-	    table.DataTable({
-        ajax:site_url+'/centers/listall'
+	var table = $('#table-list-data').DataTable({
+        ajax:site_url+'/centers/listbarangay/0/0',
+        buttons: [
+            'excel'
+        ]
       })
+	    /**/
 
 	function refreshTable(table,url){
-	    table.DataTable({
+		console.log(url)
+	    $('#'+table).DataTable({
 	    	destroy: true,
-        ajax:url
+        ajax:{url:url/*,dataType:'text',success:function(data){
+        	console.log(data)
+        	}*/
+
+    	},
+        buttons: [
+            'excel'
+        ]
       	})
 	}
+
+	//refreshTable(table,site_url+'/centers/listall');
+
+    $('#searchstring-center').on('keyup',function(){
+
+      table.search($(this).val()).draw() ;
+    })  
+	$('select#select-center-barangay').on('change',function(){
+		//alert("Hello")
+		let barangay = $(this).val();
+		let type = $('#select-center-type').val();
+		let url = site_url+'/centers/listbarangay/'+barangay+'/'+type;
+		refreshTable('table-list-data',url);
+	})
+
+	$('#select-center-type').on('change',function(){
+		let type = $(this).val();
+		let barangay = $('#select-center-barangay').val();
+
+		let url = site_url+'/centers/listbarangay/'+barangay+'/'+type;
+
+		refreshTable('table-list-data',url);
+	})
+
+
 	$(document).on('click','.btn-trash',function() {
 		// body...
 		if (confirm('This center and all of its record will be deleted permanently. Make you have a backup.')) {
@@ -24,7 +57,7 @@ $(function(){
 			method:'post',
 
 		})
-		refreshTable(table,site_url+'/centers/listall')
+		refreshTable('table-list-data',site_url+'/centers/listall')
 		$(this).parent().parent().remove()
 
 		}
@@ -42,7 +75,7 @@ $(function(){
 				// body...
 				console.log(response)
 				if(response.status == true){
-					refreshTable(table,site_url+'/centers/listall')
+					refreshTable('table-list-data',site_url+'/centers/listall')
 					$('.error-area').addClass('text-success').text(response.msg)
 				}else{
 					$('.error-area').addClass('text-danger').text(response.msg)
@@ -89,7 +122,7 @@ $(function(){
 				// body...
 				console.log(response)
 				if(response.status == true){
-					refreshTable(table,site_url+'/centers/listall')
+					refreshTable('table-list-data',site_url+'/centers/listall')
 					$('.error-area').addClass('text-success').text(response.msg)
 				}else{
 					$('.error-area').addClass('text-danger').text(response.msg)
@@ -104,5 +137,15 @@ $(function(){
 					})
 
 	})
+
+	$('#btn-export-centers').on('click',function (e) {
+
+		let type = $('#select-center-type').val();
+		let barangay = $('#select-center-barangay').val();
+
+		$(this).attr('href','<?=site_url('export/centers/')?>'+type+'/'+barangay);
+		//window.open('<?=site_url('export/centers/')?>'+type+'/'+barangay);
+
+
+	})
 })
-</script>

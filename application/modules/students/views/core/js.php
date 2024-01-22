@@ -1,5 +1,3 @@
-<script type="text/javascript">
-
 $(function(){
 
 	$.fn.extend({
@@ -26,6 +24,4 @@ $(function(){
 <?php include_once('nut.js.php'); ?>
 <?php include_once('ass.js.php'); ?>
 <?php include_once('charts.js.php'); ?>
-
-</script>	
 

@@ -1,4 +1,3 @@
-<script type ="text/javascript">
 $(function(){
 	$('#frmupdateuser').on('submit',function(e){
 		e.preventDefault();
@@ -25,4 +24,3 @@ $(function(){
 
 	})
 })
-</script>

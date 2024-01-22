@@ -70,21 +70,32 @@
                     <div class="col-md-8 col-lg-8"><label class="text-title worker-text-title">Pupils Nutrition Status Upon Entry</label></div>
                     
                       <div class="col-md-4 col-lg-4 buttons" style="padding: 5px;text-align: right;">
+                        <button class="btn btn-outline-success btn-sm" id="btn-print"><i class="fas fa-print"></i> Print</button>
                         <button class="btn btn-outline-success btn-sm" id="btn-excel"><i class="fas fa-table"></i> Export</button>
                       </div>
                   </div>
                     <div class="container-fluid">
                       <div class="table-responsive">
                         
-                <table id="tblPupils" class="table table-bordered table-striped w-100">
+               <div class="table-responsive">
+                  <table id="tblPupils" class="table table-bordered table-striped w-100">
                    
                   <thead>
                   <tr>
+                    <th></th>
                     <th>#</th>
-                    <th>Name</th>
-                    <th>Gender</th>
-                    <th>Height</th>
-                    <th>Weight</th>
+                    <th>Firt Name</th>
+                    <th>Mi</th>
+                    <th>Last Name</th>
+                    <th>Sex</th>
+                    <th>Birthday</th>
+                    <th>Age in Months</th>
+                    <th>Sector</th>
+                    <th>Deworming Date</th>
+                    <th>Vit. A Supp. Date</th>
+                    <th>Date of Weighing</th>
+                    <th>Weight kg</th>
+                    <th>Height cm</th>
                     <th>WFA</th>
                     <th>HFA</th>
                     <th>WFH</th>
@@ -93,6 +104,8 @@
                   <tbody>
                   </tbody>
                 </table>
+                
+               </div>
 
                       </div>
                     </div>

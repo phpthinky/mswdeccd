@@ -49,8 +49,38 @@
         $postdata = new stdClass();
         $postdata->YearStart = $this->input->post('startdate');
         $postdata->YearEnd = $this->input->post('enddate');
+        $postdata->Status = $this->input->post('status');
 
-        if($result = $this->settings_model->class_schedule_save($postdata)){
+            $year1 = $postdata->YearStart;
+            $year2 = $postdata->YearEnd;
+            $date= getAge($year1,$year2);
+            if ($year2 < $year1) {
+              // code...
+              echo json_encode(array('status'=>false,'msg'=>'Invalid date!'));
+              exit();
+            }
+
+            if ($date->y > 0) {
+              // code...
+              echo json_encode(array('status'=>false,'msg'=>'Invalid! School year should not be more than a year.'));
+              exit();
+            }
+
+            
+            if (($date->y * 12) + $date->m  <= 4 ) {
+                // code...
+
+              echo json_encode(array('status'=>false,'msg'=>'Invalid! School year should not be less than 4 months.'));
+              exit();
+
+            
+            }
+        if($result_id = $this->settings_model->class_schedule_save($postdata)){
+
+          if ($postdata->Status == 1) {
+            
+            $this->settings_model->class_schedule_status($result_id);
+          }
           echo json_encode(savesuccess());
         }else{
           echo json_encode(showresponse(2));
@@ -62,6 +92,7 @@
         $postdata->YearId = $this->input->post('YearId');
         $postdata->YearStart = $this->input->post('startdate');
         $postdata->YearEnd = $this->input->post('enddate');
+        $postdata->Status = $this->input->post('status');
 
         if($result = $this->settings_model->class_schedule_save($postdata)){
           echo json_encode(update());
@@ -97,7 +128,9 @@
             $value->YearId,
             tomdy($value->YearStart).'<input type="hidden" name="td_startdate" value="'.$value->YearStart.'" >',
             tomdy($value->YearEnd).'<input type="hidden" name="td_enddate" value="'.$value->YearEnd.'" >',
-            $value->Status,
+            schoolyear_status($value->Status).'<input type="hidden" name="td_status" value="'.$value->Status.'" >',
+            '<button class="btn btn-sm btn-default add-worker-schoolyear">Select workers</button>',
+            
             '<button class="btn btn-sm btn-default btn-edit-schoolYear" data-id="'.$value->YearId.'"><i class="fas fa-edit"></i></button> | <button class="btn btn-sm btn-default btn-remove-class"  data-id="'.$value->YearId.'"><i class="fas fa-trash"></i></button>'
 
           );

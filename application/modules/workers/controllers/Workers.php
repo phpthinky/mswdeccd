@@ -196,6 +196,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
             $postdata = new stdClass();
             $postdata->YearStart = $this->input->post('startdate');
             $postdata->YearEnd = $this->input->post('enddate');
+            //$postdata->Status = $this->input->post('status');
 
             $year1 = $postdata->YearStart;
             $year2 = $postdata->YearEnd;
@@ -603,16 +604,12 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
         $data[] = array( 
           'no'=>$i,
           'id'=>$value->student_id,
-          'name'=>$value->student_name,
+          'name'=>'<a href="'.site_url('students/nutritions/'.$value->student_id).'" title="Edit user information" style="min-width:100px !important;">'.$value->student_name.'</a>',
           'age'=>$value->age,
           'gender'=>gender($value->gender),
           'address'=>$value->address,
           'student_type'=>studtype($value->student_type),
-          'class_schedule'=>tomdy($value->class_start).'-'.tomdy($value->class_end),
-          'link'=>
-            '<a href="'.site_url('students/nutritions/'.$value->student_id).'" class="btn btn-sm btn-outline-info" title="Edit user information" style="min-width:100px !important;">Nutrition</a> <a href="'.site_url('students/assessments/'.$value->student_id).'" class="btn btn-sm btn-outline-info" title="Edit user information" style="min-width:100px !important;">Assessment</a>',
-          'action'=>
-            '<button type="button" class="btn btn-sm btn-default btn-edit-student" data-id="'.$value->student_id.'"  data-year_id="'.$value->year_id.'"><i class="fas fa-edit"></i></button> <button type="button" title="Remove this student"class="btn btn-sm btn-danger btn-remove-student" data-id="'.$value->student_id.'"  data-id="'.$value->student_id.'" data-year_id="'.$value->year_id.'"><i class="fas fa-trash"></i></button>'
+          'class_schedule'=>tomdy($value->class_start).'-'.tomdy($value->class_end)
         
       );
         $i++;
@@ -894,6 +891,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
     $center_id = $this->workers_model->get_center($worker_id);
 
     $this->load->model('eccd/eccd_model');
+    $this->load->model('students/students_model');
     $result = $this->eccd_model->listachild($weighing,$year_id,$center_id,$worker_id);
 
     if(!empty($result)){
@@ -904,16 +902,81 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
               foreach ($result as $key => $value) {
                 // code...
+                $status = '';
+
+                $arr_1 = array($value->wfa,$value->hfa,$value->wfh);
+                if ($value->wfa =='UW' || $value->wfa =='SUW' || $value->wfh == 'SAM' || $value->wfh =='MAM'  || $value->wfh == 'SW' || $value->wfh =='W') {
+                  // code...
+                  $status = 'Malnourish';
+                }
+
+                if (in_array('OB',$arr_1) || in_array('OV',$arr_1) || in_array('OW',$arr_1)) {
+                  // code...
+                   if ($value->hfa == 'T' || $value->hfa == 'ST') {
+                    // code...
+                  $status = 'Malnourish';                  
+
+                  }else{
+                  $status = 'Obese';
+
+                  }
+
+                }
+                if ($value->wfa =='N' && $value->wfh == 'N') {
+                  // code...
+                  $status = 'Normal';
+                }
+
+      $info = $this->students_model->info($value->student_id);
+      $deworming = '';
+      $vitamin_a = '';
+      if($immunizations =$this->students_model->getimmunizations($value->student_id)){
+          foreach ($immunizations as $i => $v) {
+            // code...
+            if ($v->type_immunization == 'deworming') {
+              // code...
+              $deworming =toymd($v->date_immunization);
+            }
+
+            if ($v->type_immunization == 'vitamin_a') {
+              // code...
+              $vitamin_a = toymd($v->date_immunization);
+            }
+
+          }
+      }
+                
+
+        $ageinmonths = $info->age;
+
+        $getage = getAge($info->birthDate);
+          $ageinmonths  = ($getage->y * 12) + $getage->m;
+
+      if ( isset($value ->date_weighing )) {
+        // code...
+          $getage= getAge ($info->birthDate,$value->date_weighing);
+          $ageinmonths  = ($getage->y * 12) + $getage->m;
+
+      }
                $data[] = array(
+                  '<a class="link" href="'.site_url('students/nutritions/').$value->student_id.'" type="button"><i class=" fa fa-list"></i></a>',
                   $i,
-                  $value->student_name,
-                  !empty($value->date_weighing) ? tomdy($value->date_weighing) :'',
+                  $info->fName,
+                  $info->mName,
+                  $info->lName,
+                  gender($value->gender),
+                  toymd($info->birthDate),
+                  $ageinmonths,
+                  sector($info->sector),
+                  $deworming,
+                  $vitamin_a,                
+                  !empty($value->date_weighing) ? toymd($value->date_weighing) :'',
                   $value->weight,
                   $value->height,
                   $value->wfa,
                   $value->hfa,
                   $value->wfh,
-                  '<a class="btn btn-info btn-xs" href="'.site_url('students/nutritions/').$value->student_id.'" type="button"><i class="fas fa-list"></i></a> <button class="btn btn-danger btn-xs btn-trash nutritions" data-id="'.$value->weighing_id.'" type="button"><i class="fas fa-trash"></i></button>'
+                  $status
                 ); 
                $i++;
               }
@@ -938,7 +1001,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
      // code...
     foreach ($result as $key => $value) {
       // code...
-      $data[] =  array('value'=>$value->year_id,'text'=>tomdy($value->class_start).' - '.tomdy($value->class_end));
+      $data[] =  array('value'=>$value->year_id,'text'=>cmonthYear($value->class_start).' - '.cmonthYear($value->class_end));
     }
     echo json_encode($data);
    }else{

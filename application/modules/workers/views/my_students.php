@@ -27,14 +27,12 @@
               <div class="card-header p-2 no-print">
                 <ul class="nav nav-pills">
                   <li class="nav-item"><a class="nav-link active" href="#home" data-toggle="tab">Home</a></li>
-                  <li class="nav-item"><a class="nav-link" href="<?=site_url('workers/assessments')?>" >Assessment</a></li>
-
-                  <li class="nav-item"><a class="nav-link" href="<?=site_url('workers/nutritions')?>" >Nutrition</a></li>
+                 
                   <?php if (!$this->aauth->is_admin()): ?>
                   <li class="nav-item"><a class="nav-link" href="#addStudents" data-toggle="tab">Add student</a></li>
                   <li class="nav-item d-none"><a class="nav-link" href="#editStudents" data-toggle="tab">Edit student</a></li>
 
-                  <li class="nav-item"><a class="nav-link" href="#addSchoolYear" data-toggle="tab">School Years</a></li>
+                  <li class="nav-item d-none"><a class="nav-link" href="#addSchoolYear" data-toggle="tab">School Years</a></li>
                   <li class="nav-item d-none"><a class="nav-link" href="#editStudents" data-toggle="tab">Repeater</a></li>
                   <?php endif ?>
                   <li class="nav-item d-none"><a class="nav-link" href="#weighing" data-toggle="tab">Weighing</a></li>
@@ -65,13 +63,13 @@
                           <div class="col-md-4 col-sm-12 col-xs-12">
                           <select class="form-control" name="class_schedule" id="select-home-classess">
                             <option value="0">Select classes</option>
-                              <?php if (!empty($myschoolyear)): ?>
+                              <?php if (!empty($schoolyears)): ?>
 
-                                <?php foreach ($myschoolyear as $key => $value): ?>
+                                <?php foreach ($schoolyears as $key => $value): ?>
                                   <?php if ($key == 0): ?>
-                                  <option value="<?=$value->year_id?>" selected><?=tomdy($value->class_start)?> to <?=tomdy($value->class_end)?></option>
+                                  <option value="<?=$value->YearId?>" selected><?=tomdy($value->YearStart)?> to <?=tomdy($value->YearEnd)?></option>
                                     <?php else: ?>
-                                  <option value="<?=$value->year_id?>"><?=tomdy($value->class_start)?> to <?=tomdy($value->class_end)?></option>
+                                  <option value="<?=$value->YearId?>"><?=tomdy($value->YearStart)?> to <?=tomdy($value->YearEnd)?></option>
 
                                   <?php endif ?>
                                 <?php endforeach ?>
@@ -111,7 +109,6 @@
                               <th>Address</th>
                               <th>Student Type</th>
                     <th>Class Schedule</th>
-                    <th></th>
                     <th>Action</th>
                   </tr>
                   </thead>

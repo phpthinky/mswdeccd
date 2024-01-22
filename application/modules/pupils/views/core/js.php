@@ -1,5 +1,3 @@
-<script type="text/javascript">
-
 //datatable
 
     $(function(){
@@ -103,4 +101,4 @@ var options = [
 $("#foo").replaceOptions(options);
 
 */
-</script>
+    

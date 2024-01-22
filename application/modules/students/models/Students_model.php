@@ -181,6 +181,25 @@ class Students_model extends CI_model
     ->get();
     return $query->result();
   }
+
+  public function check_names($keys=array())
+  {
+    // code...
+    $query =  $this->db->select("pupilsId as student_id, CONCAT(fName,' ', mName,' ', lName,' ', ext) as student_name,age,gender,address,epupils.status,workersId as worker_id")
+    ->from('epupils')
+    ->join('eschoolyear_by_worker_students','eschoolyear_by_worker_students.studentId = epupils.pupilsId','LEFT')
+    ->where('fName',$keys['fName'])
+    ->where('lName',$keys['lName'])
+    ->get();
+    if($result = $query->result()){
+      foreach ($result as $key => $value) {
+        // code...
+        $result[$key]->student_status = student_status($value->status);
+      }
+      return $result;
+    }
+    return 0;
+  }
   private function get_weight($id)
   {
     # code...
@@ -291,7 +310,7 @@ class Students_model extends CI_model
 
 
   public function getimmunizations($id){
-    return $this->db->get_where('e_immunization',array('student_id'=>$id))->result();
+    return $this->db->order_by('date_immunization','DESC')->get_where('e_immunization',array('student_id'=>$id))->result();
   }
   public function checkimmunizations($data){
     return $this->db->get_where('e_immunization',$data)->result();
@@ -328,6 +347,11 @@ class Students_model extends CI_model
         $this->db->where('id',$data->id);
   return $this->db->update('e_feeding',$data);
   }
+  public function listfeedingbyyear($year_id='',$date_feeding=0)
+  {
+    // code...
+    return $this->db->get('e_feeding')->result();
+  }
 
  public function get_checklist($value='')
  {
@@ -338,10 +362,11 @@ class Students_model extends CI_model
  public function parents($data,$update=false)
  {
    // code...
-  if ($this->db->get_where('eparent',array('child_id'=>$data->child_id,'familyPosition'=>$data->familyPosition))->result()) {
+
+  if ($this->db->get_where('eparent',array('child_id'=>$data['child_id'],'familyPosition'=>$data['familyPosition']))->result()) {
     # code...
-    $this->db->where('familyPosition',$data->familyPosition);
-    $this->db->where('child_id',$data->child_id);
+    $this->db->where('familyPosition',$data['familyPosition']);
+    $this->db->where('child_id',$data['child_id']);
    return $this->db->update('eparent',$data);
   }
   return $this->db->insert('eparent',$data);

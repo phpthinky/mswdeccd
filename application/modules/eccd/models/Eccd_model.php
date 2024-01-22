@@ -146,10 +146,10 @@
 		}
 		if ($year_id > 0) {
 			// code...
-			return $this->listbyyear($table,$year_id,$center_id,$worker_id,$student_id);
+			return $this->listbyyear($table,$year_id,$center_id,$worker_id);
 
 		}else{
-			return $this->listall($table,$center_id,$worker_id,$student_id);
+			return $this->listall($table,$center_id,$worker_id);
 
 		}
 	}
@@ -158,7 +158,7 @@
 		// code...
 
 		// code...
-		if ($center_id && $worker_id && $student_id) {
+		if ($center_id > 0 && $worker_id >0 && $student_id>0) {
 			// code...
 
 
@@ -166,14 +166,14 @@
 
 		$query = $this->db->query($sql);
 		return $query->result();
-		}elseif($center_id && $worker_id){
+		}elseif($center_id >0 && $worker_id>0){
 
 		$sql = sprintf("SELECT DISTINCT t1.*,w.date_weighing,w.weight,w.height, w.wfa, w.hfa, w.wfh, w.status FROM `".$table."` `t1` LEFT JOIN e_weighing w ON w.id = t1.weighing_id WHERE center_id = %u and worker_id = %u and year_id = %u",$center_id,$worker_id , $year_id);
 		$query = $this->db->query($sql);
 		return $query->result();
 
 		}
-		elseif($center_id){
+		elseif($center_id >0){
 
 		$sql = sprintf("SELECT DISTINCT t1.*,w.date_weighing,w.weight,w.height, w.wfa, w.hfa, w.wfh, w.status FROM `".$table."` `t1` LEFT JOIN e_weighing w ON w.id = t1.weighing_id WHERE center_id = %u and year_id = %u",$center_id,$year_id);
 		$query = $this->db->query($sql);
@@ -194,7 +194,7 @@
 		// code...
 
 		// code...
-		if ($center_id && $worker_id && $student_id) {
+		if ($center_id > 0 && $worker_id > 0 && $student_id > 0) {
 			// code...
 
 
@@ -202,14 +202,14 @@
 
 		$query = $this->db->query($sql);
 		return $query->result();
-		}elseif($center_id && $worker_id){
+		}elseif($center_id > 0 && $worker_id > 0){
 
 		$sql = sprintf("SELECT DISTINCT t1.*,w.date_weighing,w.weight,w.height, w.wfa, w.hfa, w.wfh, w.status FROM `".$table."` `t1` LEFT JOIN e_weighing w ON w.id = t1.weighing_id WHERE center_id = %u and worker_id = %u",$center_id,$worker_id);
 		$query = $this->db->query($sql);
 		return $query->result();
 
 		}
-		elseif($center_id){
+		elseif($center_id > 0){
 
 		$sql = sprintf("SELECT DISTINCT t1.*,w.date_weighing,w.weight,w.height, w.wfa, w.hfa, w.wfh, w.status FROM `".$table."` `t1` LEFT JOIN e_weighing w ON w.id = t1.weighing_id WHERE center_id = %u",$center_id);
 		$query = $this->db->query($sql);
@@ -265,5 +265,122 @@
 		return $query->result();
 
 	}
+
+
+	public function im($value='')
+	{
+		// code...
+	}
+/*
+	public function total_students($center_id=0,$year_id=0,$worker_id=0)
+	{
+		// code...
+		$sql = "SELECT COUNT(*) as total_students,year_id,worker_id,center_id FROM `center_students_schoolyear` GROUP BY center_id,year_id,worker_id;";
+		
+		$query = $this->db->query($sql);
+		return $query->result();
+	}
+	public function total_boys_girls($value='')
+	{
+		// code...
+		$sql = "SELECT year_id,worker_id,center_id,(SELECT count(*) FROM center_students_schoolyear as t1 WHERE gender = 1 AND t1.center_id = t2.center_id and t1.worker_id = t2.worker_id AND t1.year_id = t2.year_id GROUP BY center_id,year_id,worker_id,gender limit 1) as boys,(SELECT count(*) FROM center_students_schoolyear as t3 WHERE gender = 2 AND t3.center_id = t2.center_id and t3.worker_id = t2.worker_id AND t3.year_id = t2.year_id GROUP BY center_id,year_id,worker_id,gender limit 1) as girls FROM `center_students_schoolyear` as t2 GROUP BY center_id,year_id,worker_id,gender;";
+
+		$query = $this->db->query($sql);
+		return $query->result();
+	}
+
+	public function v_uponentry_boys($value='')
+	{
+		// code...
+		$sql = "SELECT center_id,worker_id,year_id,
+	(SELECT count(*) FROM `v_uponentry_boys` as `t1` WHERE wfa = 'SUW' AND  t1.center_id = t2.center_id and t1.worker_id = t2.worker_id AND t1.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as SUW,
+	(SELECT count(*) FROM `v_uponentry_boys` as `t1` WHERE wfa = 'UW' AND  t1.center_id = t2.center_id and t1.worker_id = t2.worker_id AND t1.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as UW,
+	(SELECT count(*) FROM `v_uponentry_boys` as `t1` WHERE wfa = 'N' AND  t1.center_id = t2.center_id and t1.worker_id = t2.worker_id AND t1.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as N,
+	(SELECT count(*) FROM `v_uponentry_boys` as `t1` WHERE wfa = 'OW' AND  t1.center_id = t2.center_id and t1.worker_id = t2.worker_id AND t1.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as OW,
+	
+	(SELECT count(*) FROM `v_uponentry_boys` as `t6` WHERE hfa = 'SS' AND  t6.center_id = t2.center_id and t6.worker_id = t2.worker_id AND t6.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as HFA_SS,
+	(SELECT count(*) FROM `v_uponentry_boys` as `t6` WHERE hfa = 'S' AND  t6.center_id = t2.center_id and t6.worker_id = t2.worker_id AND t6.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as HFA_S,
+	(SELECT count(*) FROM `v_uponentry_boys` as `t6` WHERE hfa = 'N' AND  t6.center_id = t2.center_id and t6.worker_id = t2.worker_id AND t6.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as HFA_N,
+	(SELECT count(*) FROM `v_uponentry_boys` as `t6` WHERE hfa = 'T' AND  t6.center_id = t2.center_id and t6.worker_id = t2.worker_id AND t6.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as HFA_T,
+
+	(SELECT count(*) FROM `v_uponentry_boys` as `T7` WHERE wfh = 'SW' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_SW,
+	(SELECT count(*) FROM `v_uponentry_boys` as `T7` WHERE wfh = 'W' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_W,
+	(SELECT count(*) FROM `v_uponentry_boys` as `T7` WHERE wfh = 'N' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_N,
+	(SELECT count(*) FROM `v_uponentry_boys` as `T7` WHERE wfh = 'OW' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_OW,
+	(SELECT count(*) FROM `v_uponentry_boys` as `T7` WHERE wfh = 'OB' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_OB
+FROM `v_uponentry_boys` as `t2` GROUP BY center_id,worker_id,year_id;
+";
+	}
+
+
+	public function v_uponentry_girls($value='')
+	{
+		// code...
+		$sql = "SELECT center_id,worker_id,year_id,
+	(SELECT count(*) FROM `v_uponentry_girls` as `t1` WHERE wfa = 'SUW' AND  t1.center_id = t2.center_id and t1.worker_id = t2.worker_id AND t1.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as SUW,
+	(SELECT count(*) FROM `v_uponentry_girls` as `t1` WHERE wfa = 'UW' AND  t1.center_id = t2.center_id and t1.worker_id = t2.worker_id AND t1.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as UW,
+	(SELECT count(*) FROM `v_uponentry_girls` as `t1` WHERE wfa = 'N' AND  t1.center_id = t2.center_id and t1.worker_id = t2.worker_id AND t1.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as N,
+	(SELECT count(*) FROM `v_uponentry_girls` as `t1` WHERE wfa = 'OW' AND  t1.center_id = t2.center_id and t1.worker_id = t2.worker_id AND t1.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as OW,
+	
+	(SELECT count(*) FROM `v_uponentry_girls` as `t6` WHERE hfa = 'SS' AND  t6.center_id = t2.center_id and t6.worker_id = t2.worker_id AND t6.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as HFA_SS,
+	(SELECT count(*) FROM `v_uponentry_girls` as `t6` WHERE hfa = 'S' AND  t6.center_id = t2.center_id and t6.worker_id = t2.worker_id AND t6.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as HFA_S,
+	(SELECT count(*) FROM `v_uponentry_girls` as `t6` WHERE hfa = 'N' AND  t6.center_id = t2.center_id and t6.worker_id = t2.worker_id AND t6.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as HFA_N,
+	(SELECT count(*) FROM `v_uponentry_girls` as `t6` WHERE hfa = 'T' AND  t6.center_id = t2.center_id and t6.worker_id = t2.worker_id AND t6.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as HFA_T,
+
+	(SELECT count(*) FROM `v_uponentry_girls` as `T7` WHERE wfh = 'SW' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_SW,
+	(SELECT count(*) FROM `v_uponentry_girls` as `T7` WHERE wfh = 'W' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_W,
+	(SELECT count(*) FROM `v_uponentry_girls` as `T7` WHERE wfh = 'N' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_N,
+	(SELECT count(*) FROM `v_uponentry_girls` as `T7` WHERE wfh = 'OW' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_OW,
+	(SELECT count(*) FROM `v_uponentry_girls` as `T7` WHERE wfh = 'OB' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_OB
+FROM `v_uponentry_girls` as `t2` GROUP BY center_id,worker_id,year_id;";
+	}
+public function v_20days_boys($value='')
+	{
+		// code...
+		$sql = "SELECT center_id,worker_id,year_id,
+	(SELECT count(*) FROM `v_20days_boys` as `t1` WHERE wfa = 'SUW' AND  t1.center_id = t2.center_id and t1.worker_id = t2.worker_id AND t1.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as SUW,
+	(SELECT count(*) FROM `v_20days_boys` as `t1` WHERE wfa = 'UW' AND  t1.center_id = t2.center_id and t1.worker_id = t2.worker_id AND t1.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as UW,
+	(SELECT count(*) FROM `v_20days_boys` as `t1` WHERE wfa = 'N' AND  t1.center_id = t2.center_id and t1.worker_id = t2.worker_id AND t1.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as N,
+	(SELECT count(*) FROM `v_20days_boys` as `t1` WHERE wfa = 'OW' AND  t1.center_id = t2.center_id and t1.worker_id = t2.worker_id AND t1.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as OW,
+	
+	(SELECT count(*) FROM `v_20days_boys` as `t6` WHERE hfa = 'SS' AND  t6.center_id = t2.center_id and t6.worker_id = t2.worker_id AND t6.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as HFA_SS,
+	(SELECT count(*) FROM `v_20days_boys` as `t6` WHERE hfa = 'S' AND  t6.center_id = t2.center_id and t6.worker_id = t2.worker_id AND t6.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as HFA_S,
+	(SELECT count(*) FROM `v_20days_boys` as `t6` WHERE hfa = 'N' AND  t6.center_id = t2.center_id and t6.worker_id = t2.worker_id AND t6.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as HFA_N,
+	(SELECT count(*) FROM `v_20days_boys` as `t6` WHERE hfa = 'T' AND  t6.center_id = t2.center_id and t6.worker_id = t2.worker_id AND t6.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as HFA_T,
+
+	(SELECT count(*) FROM `v_20days_boys` as `T7` WHERE wfh = 'SW' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_SW,
+	(SELECT count(*) FROM `v_20days_boys` as `T7` WHERE wfh = 'W' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_W,
+	(SELECT count(*) FROM `v_20days_boys` as `T7` WHERE wfh = 'N' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_N,
+	(SELECT count(*) FROM `v_20days_boys` as `T7` WHERE wfh = 'OW' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_OW,
+	(SELECT count(*) FROM `v_20days_boys` as `T7` WHERE wfh = 'OB' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_OB
+FROM `v_20days_boys` as `t2` GROUP BY center_id,worker_id,year_id;
+";
+	}
+
+
+	public function v_20days_girls($value='')
+	{
+		// code...
+		$sql = "SELECT center_id,worker_id,year_id,
+	(SELECT count(*) FROM `v_20days_girls` as `t1` WHERE wfa = 'SUW' AND  t1.center_id = t2.center_id and t1.worker_id = t2.worker_id AND t1.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as SUW,
+	(SELECT count(*) FROM `v_20days_girls` as `t1` WHERE wfa = 'UW' AND  t1.center_id = t2.center_id and t1.worker_id = t2.worker_id AND t1.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as UW,
+	(SELECT count(*) FROM `v_20days_girls` as `t1` WHERE wfa = 'N' AND  t1.center_id = t2.center_id and t1.worker_id = t2.worker_id AND t1.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as N,
+	(SELECT count(*) FROM `v_20days_girls` as `t1` WHERE wfa = 'OW' AND  t1.center_id = t2.center_id and t1.worker_id = t2.worker_id AND t1.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as OW,
+	
+	(SELECT count(*) FROM `v_20days_girls` as `t6` WHERE hfa = 'SS' AND  t6.center_id = t2.center_id and t6.worker_id = t2.worker_id AND t6.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as HFA_SS,
+	(SELECT count(*) FROM `v_20days_girls` as `t6` WHERE hfa = 'S' AND  t6.center_id = t2.center_id and t6.worker_id = t2.worker_id AND t6.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as HFA_S,
+	(SELECT count(*) FROM `v_20days_girls` as `t6` WHERE hfa = 'N' AND  t6.center_id = t2.center_id and t6.worker_id = t2.worker_id AND t6.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as HFA_N,
+	(SELECT count(*) FROM `v_20days_girls` as `t6` WHERE hfa = 'T' AND  t6.center_id = t2.center_id and t6.worker_id = t2.worker_id AND t6.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as HFA_T,
+
+	(SELECT count(*) FROM `v_20days_girls` as `T7` WHERE wfh = 'SW' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_SW,
+	(SELECT count(*) FROM `v_20days_girls` as `T7` WHERE wfh = 'W' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_W,
+	(SELECT count(*) FROM `v_20days_girls` as `T7` WHERE wfh = 'N' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_N,
+	(SELECT count(*) FROM `v_20days_girls` as `T7` WHERE wfh = 'OW' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_OW,
+	(SELECT count(*) FROM `v_20days_girls` as `T7` WHERE wfh = 'OB' AND  T7.center_id = t2.center_id and T7.worker_id = t2.worker_id AND T7.year_id = t2.year_id  GROUP BY center_id,worker_id,year_id) as WFH_OB
+FROM `v_20days_girls` as `t2` GROUP BY center_id,worker_id,year_id;";
+	}
+*/
+
+//end of class
 
  } ?>

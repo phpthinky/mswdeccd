@@ -21,9 +21,15 @@
                               <div class="col-md-9">
                                 <select class="form-control class-schedule" id="select-add-ass-schoolyear" name="year_id" required>
                                   <option value="0">Select school year here...</option>
-                                   <?php if (!empty($myschoolyear)): ?>
-                                <?php foreach ($myschoolyear as $key => $value): ?>
-                                  <option value="<?=$value->year_id?>"><?=tomdy($value->class_start)?> to <?=tomdy($value->class_end)?></option>
+                                    <?php if (!empty($schoolyears)): ?>
+
+                                <?php foreach ($schoolyears as $key => $value): ?>
+                                  <?php if ($key == 0): ?>
+                                  <option value="<?=$value->YearId?>" selected><?=tomdy($value->YearStart)?> to <?=tomdy($value->YearEnd)?></option>
+                                    <?php else: ?>
+                                  <option value="<?=$value->YearId?>"><?=tomdy($value->YearStart)?> to <?=tomdy($value->YearEnd)?></option>
+
+                                  <?php endif ?>
                                 <?php endforeach ?>
                               <?php endif ?>
                                 </select>

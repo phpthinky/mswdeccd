@@ -1,5 +1,3 @@
-<script type="text/javascript">
-
 	  var d = new Date();
 	  var current_date = d.getFullYear() +"/"+(d.getMonth()+1)+"/"+d.getDate();
 		var worker_id = '<?=isset($worker_id)? $worker_id : 0 ?>';
@@ -262,6 +260,7 @@ if (sidebarcollapse) {
           },
           success: function(response){
             console.log(response)
+            alert(response.msg)
             if (response.status == true) {
               $('#error-area').removeClass('alert alert-danger').addClass('alert alert-success').text(response.msg);
               //$('#frmStudents')[0].reset();
@@ -281,14 +280,10 @@ if (sidebarcollapse) {
           }
         })
       });
+
+		/*
       $('#StudentType').on('change',function(){
-      	/* var i =$(this).val();
-      	$(this).val(1)
-      	if (i === '2') {
-      		$('a[href="#repeater"]').click()
-      		console.log(i)
-      	}
-      	*/
+      	
       	var i = $(this).val()
       	if (i === '1') {
       				$('#add-student').removeClass('d-none')
@@ -301,6 +296,7 @@ if (sidebarcollapse) {
 
       		}     	
       });
+      */
       $('#btn-find-oldstudent').on('click',function(){
       	$('#add-student').addClass('d-none')
       				$('#student_id').val(0)
@@ -331,6 +327,96 @@ if (sidebarcollapse) {
       		}
       	})
       })
+
+      $('input[name="fName"], input[name="lName"]').on('change',function(){
+      	$('#add-other-info').addClass('d-none')
+      })
+
+      $('#btn-check-names').on('click',function(){
+      	console.log(worker_id)
+      	$('#student_id').val(0)
+      	var frmdata = {};
+      		frmdata.fName = $('#frmaddstudents input[name="fName"]').val()
+      		frmdata.lName = $('#frmaddstudents input[name="lName"]').val()
+      		console.log(frmdata)
+      	$.ajax({
+      		url:site_url+'/students/check_names',
+      		data:frmdata,
+      		dataType:'json',
+      		method:'POST',
+      		success:function(response){
+      			//console.log(response)
+      				var ul = $('#add-student-list-group')
+      				$(ul).html('')
+
+
+	      			if (response.status == true) {
+								$(ul).append($('<li/>').addClass('list-group-item  d-flex justify-content-between align-items-center').text('Not found on the list?').append($('<a/>').addClass("badge badge-success badge-pill btn-add-as-new").attr('href','#').data('student_id',0).data('student_status',0).text('Add as new')));
+								$('.btn-add-as-new').on('click',function(e){
+								    $('#add-other-info').removeClass('d-none');
+      							$(ul).html('')
+
+								})   
+      				$.each(response.data,function(i,d){
+      					if (d.worker_id === null) {
+      					$(ul).append($('<li/>').addClass('list-group-item  d-flex justify-content-between align-items-center').text(d.student_name+' - '+d.student_status).append($('<a/>').addClass("badge badge-primary badge-pill btn-select-this-student").attr('href','#').data('student_id',d.student_id).data('student_status',d.status).data('student_name',d.student_name).text('select')));     						
+      					}else if(d.status === 3 || d.status === 4){
+
+      					$(ul).append($('<li/>').addClass('list-group-item  d-flex justify-content-between align-items-center').text(d.student_name+' - '+d.student_status).append($('<a/>').addClass("badge badge-primary badge-pill btn-select-this-student").attr('href','#').data('student_id',d.student_id).data('student_status',d.status).data('student_name',d.student_name).text('select')));  
+      					}
+      				})
+      			}else{
+      				$('#add-other-info').removeClass('d-none')
+      	
+      			}
+      		},
+      		error:function (i,e) {
+      			console.log(i.responseText)
+      		}
+      	})
+      })
+      
+     
+      $(document).on('click','.btn-select-this-student',function(){
+      	//console.log($(this).data('student_id'))
+
+
+      		$('#frm_from_list input[name="student_id"]').val($(this).data('student_id'));
+      		$('#frm_from_list input[name="worker_id"]').val(worker_id);
+      		$('#frm_from_list input[name="student_status"]').val($(this).data('student_status'));
+      		$('#modal_class_schedule').val($('form#frmaddstudents select#class_schedule').val());
+      		$('#modaladdfromlist label.modal_student_name').text($(this).data('student_name'))
+      		console.log($('form#frmaddstudents select#class_schedule').val())
+      		$('#modaladdfromlist').modal('show')
+      		return false;
+      });
+
+      $('form#frm_from_list').on('submit',function(){
+      	var frmdata = $(this).serializeObject();
+      //	console.log(frmdata);
+
+      	//return false;
+      	$.ajax({
+      			url:'<?=site_url("students/enroll_from_list")?>',
+      			method:'POST',
+      			data:frmdata,
+      			dataType:'json',
+      			success:function (response) {
+      				// body...
+      				alert(response.msg)
+      				if (response.status == true) {
+      		$('#modaladdfromlist').modal('hide')
+
+      				}
+      				console.log(response)
+      			},
+      			error:function (i,e) {
+      				// body...
+      				console.log(i.responseText)
+      			}
+      		});
+      })
+
       $(document).on('click','.btn-input',function(){
       	$('#add-student').removeClass('d-none')
       				$('#repeater-result').html('');
@@ -449,7 +535,13 @@ if (sidebarcollapse) {
 		$('a[href="#addStudents"]').click()
 
 	})
-
+$('a[href="#addStudents"]').on('click',function (e) {
+	// body...
+	e.preventDefault()
+	var sy = $('form#frmfindmystudent select#select-home-classess').val()
+	console.log(sy)
+	$('form#frmaddstudents select#class_schedule').val(sy)
+})
 	$(document).on('click','#btn-export-worker-students',function(){
 		var year_id = $('select#home-classess').val();
 		var form = $('<form/>',{'action':site_url+'/export/worker_student/','method':'POST','target':'excel_export'});
@@ -604,7 +696,9 @@ var table_mystudents = $('#tblmystudents');
   
     $('#searchstring').on('keyup',function(){
       table_mystudents.DataTable().search($(this).val()).draw() ;
-    })    
+    })
+
+
 /*
 		$('#frmfindmystudent select[name="class_schedule"]').on('change',function(e){
 			//alert($(this).val())
@@ -666,12 +760,6 @@ var table_mystudents = $('#tblmystudents');
 	        {data:'student_type'},
 	        {data:'class_schedule'},
 	        {data:null,
-	        	render: function(data,type){
-	        		return '<a href="../students/nutritions/'+data.id+'" class="btn btn-sm btn-outline-info">Nutritions</a> <a href="../students/assessments/'+data.id+'" class="btn btn-sm btn-outline-info">Assessments</a>';  
-	        	}
-
-	      	},
-	        {data:null,
 							render: function(data,type){
 	        		return '<a href="#" class="btn btn-sm btn-outline-info btn-edit-student" data-id="'+data.id+'"><i class="fa fa-edit"></i></a>'+
 	        		 ' '+'<a href="#" class="btn btn-sm btn-outline-danger btn-remove" data-id="'+data.id+'"><i class="fa fa-trash"></i></a>';  
@@ -719,6 +807,5 @@ var table_mystudents = $('#tblmystudents');
 		})
 
 	
-</script>
-<?php include_once('student_js.php'); ?>
-<?php include_once('assess-js.php'); ?>
+<?php include_once('student.js.php'); ?>
+<?php include_once('assess.js.php'); ?>

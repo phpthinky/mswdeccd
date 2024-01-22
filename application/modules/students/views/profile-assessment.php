@@ -117,8 +117,9 @@
                       
                   <div class="tab-pane active" id="tab-tab-assessment">
 
-
                     <span class="text-title">Assessment</span>
+
+
                     <?php $this->load->view('profile-ass-domain'); ?>
 
                   </div>

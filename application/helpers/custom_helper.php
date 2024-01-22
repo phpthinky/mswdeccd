@@ -9,19 +9,52 @@ if (!function_exists('gender')) {
 		switch ($num) {
 			case 1:
 				// code...
-			$gender = 'Male';
+			$gender = 'Boy';
 				break;
 			case 2:
-			$gender = 'Female';
+			$gender = 'Girl';
 			break;
 			default:
 				// code...
-			$gender ="Unknown";
+			$gender ="";
 				break;
 		}
 		return $gender;
 	}
 }
+
+
+if (!function_exists('sector')) {
+	// code...
+	function sector($num)
+	{
+		// code...
+		$gender = '';
+		switch ($num) {
+			case 1:
+				// code...
+			$gender = '4Ps';
+				break;
+			case 2:
+			$gender = 'IPs';
+			break;
+
+			case 3:
+			$gender = 'Solo Parent';
+			break;
+
+			case 4:
+			$gender = 'WDisability';
+			break;
+			default:
+				// code...
+			$gender ="";
+				break;
+		}
+		return $gender;
+	}
+}
+
 
 if (!function_exists('studtype')) {
 	// code...
@@ -36,6 +69,18 @@ if (!function_exists('studtype')) {
 		}
 	}
 }
+
+if (!function_exists('nutrition_status')) {
+	// code...
+	function nutrition_status($arr='')
+	{
+		// code...
+
+	}
+}
+
+
+
 if (!function_exists('profile')) {
 			function profile($data)
 		{
@@ -64,10 +109,34 @@ if (!function_exists('profile')) {
 			return	 $profile;
 		}
 }
+
 if (!function_exists('tomdy')) {
 			function tomdy($date){
 					$date = strtotime($date);
 					return date('m/d/Y',$date);
+		
+		}
+}
+
+if (!function_exists('toymd')) {
+			function toymd($date){
+					$date = strtotime($date);
+					return date('Y/m/d',$date);
+		
+		}
+}
+if (!function_exists('monthYear')) {
+			function monthYear($date){
+					$date = strtotime($date);
+					return date('m Y',$date);
+		
+		}
+}
+
+if (!function_exists('cMonthYear')) {
+			function cMonthYear($date){
+					$date = strtotime($date);
+					return date('M Y',$date);
 		
 		}
 }
@@ -472,5 +541,67 @@ if(!function_exists('get_colors')){
 				"violet",
 				);
 		return $colors[$num];
+	}
+}
+
+if(!function_exists('schoolyear_status')){
+
+	function schoolyear_status($num)
+	{
+		// code...
+		$status = null;
+		switch ($num) {
+			case 1:
+				// code..
+			$status = 'Present';
+				break;
+			
+			case 2:
+				// code..
+			$status = 'Completed';
+				break;
+			default:
+				// code...
+			$status = 'Pending';
+				break;
+		};
+		return $status;
+	}
+}
+
+
+
+if(!function_exists('student_status')){
+
+	function student_status($num)
+	{
+		// code...
+		$status = null;
+		switch ($num) {
+			case 1:
+				// code..
+			$status = 'Enrolled';
+				break;
+			
+			case 2:
+				// code..
+			$status = 'Graduate';
+				break;
+
+			case 3:
+				// code..
+			$status = 'Failed';
+				break;
+
+			case 4:
+				// code..
+			$status = 'Incomplete';
+				break;
+			default:
+				// code...
+			$status = 'Not enrolled';
+				break;
+		};
+		return $status;
 	}
 }

@@ -52,6 +52,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
     $data->social_emotion = $this->massessment->list('social_emotion');
 
     $data->myschoolyear = $this->workers_model->listmyschoolyear($worker_id);
+    $data->schoolyears = $this->settings_model->listschoolyears();
+    
     $data->worker_id = $worker_id;
 
     $data->content = 'assessment/students';
@@ -77,7 +79,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
           $data[] =  array(
             '<a href="'.site_url('students/assessments/').$value->student_id.'">'.$this->student->get_name($value->student_id).'</a>',
             tomdy($value->date_assessment),
-            $value->sum_scaled_score,
+            '<a href="#" data-id="'.$value->student_id.'" data-score="scaled_score" class="tomodal_sum_scaled_score">'.$value->sum_scaled_score.'</a>',
             get_scaled_interpretation($value->sum_scaled_score),
             get_standard_score($value->sum_scaled_score),
             get_standard_interpretation(get_standard_score($value->sum_scaled_score))
@@ -296,11 +298,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
       echo json_encode(array('data'=>array()));
       exit;
     }
+    $data = array();
+
     $center_id = $this->workers_model->get_center($worker_id);
 
     if ($result = $this->workers_model->my_students($worker_id,$center_id,$year_id)) {
       // code...
-      //var_dump($data);
+     // var_dump($result);
       if ($type =='raw_score') {
         // code...
       

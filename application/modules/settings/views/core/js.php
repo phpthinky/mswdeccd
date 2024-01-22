@@ -1,5 +1,3 @@
-<script type="text/javascript">
-
 $(function(){
 	'use strict'
 
@@ -93,9 +91,11 @@ $(function(){
    		var td = $(tr).children()
    				var td1 = $(td[1]).find('input').val()
    				var td2 = $(td[2]).find('input').val()
+   				var td3 = $(td[3]).find('input').val()
    							$('#e_YearId').val($(td[0]).text())
 	   						$('#e_startdate').val(td1)
 	   						$('#e_enddate').val(td2)
+	   						$('#e_status').val(td3)
 	   						$('a[href="#edit"]').click()
    })
 	function refreshTable(table){
@@ -341,5 +341,9 @@ $(document).on('click','.btn-save',function(){
 	})
 	});
 
+	$('input[name="startdate"]').datepicker({
+
+            uiLibrary: 'bootstrap4',format: 'mmm yyyy',
+	})
 });
-</script>
+

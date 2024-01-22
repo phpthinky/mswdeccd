@@ -83,9 +83,9 @@
                         <div class="col-sm-12 col-md-8">
                           <select class="form-control" name="gender" id="e_gender" required>
                             <option value="">Select gender</option>
-                            <option value="1" >Female</option>
+                            <option value="1" >Boy</option>
 
-                            <option value="2" >Male</option>
+                            <option value="2" >Girl</option>
                           </select>
                           <div class="error"></div>
                         

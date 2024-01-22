@@ -69,12 +69,17 @@
                           <div class="col-md-4 col-sm-12 col-xs-12">
                           <select class="form-control class-schedule" name="class_schedule" id="nutritions-classess">
                             <option value="0">Select classes</option>
-                              <?php if (!empty($myschoolyear)): ?>
-                                <?php foreach ($myschoolyear as $key => $value): ?>
-                                  <option value="<?=$value->year_id?>"><?=tomdy($value->class_start)?> to <?=tomdy($value->class_end)?></option>
+                              <?php if (!empty($schoolyears)): ?>
+
+                                <?php foreach ($schoolyears as $key => $value): ?>
+                                  <?php if ($key == 0): ?>
+                                  <option value="<?=$value->YearId?>" selected><?=tomdy($value->YearStart)?> to <?=tomdy($value->YearEnd)?></option>
+                                    <?php else: ?>
+                                  <option value="<?=$value->YearId?>"><?=tomdy($value->YearStart)?> to <?=tomdy($value->YearEnd)?></option>
+
+                                  <?php endif ?>
                                 <?php endforeach ?>
                               <?php endif ?>
-                            
 
                           </select>
                         </div>
@@ -101,26 +106,36 @@
                         
                         </div>
                         </form>
-
+                        <div class="table-responsive">
+                          
                         <table class="table table-bordered" id="tbl-nutritions">
                           <thead>
                             <tr>
 
-                              <th>#</th>
-                              <th>NAME</th>
-                              <th>DATE OF WEIGHING</th>
-                              <th>WEIGHT</th>
-                              <th>HEIGHT</th>
-                              <th>WFA</th>
-                              <th>HFA</th>
-                              <th>WFH</th>
-                              <th></th>
-
+                    <th></th>
+                    <th>#</th>
+                    <th>First Name</th>
+                    <th>MI</th>
+                    <th>Last Name</th>
+                    <th>Sex</th>
+                    <th>Birthday</th>
+                    <th>Age in Months</th>
+                    <th>Sector</th>
+                    <th>Deworming Date</th>
+                    <th>Vit. A Supp. Date</th>
+                    <th>Date of Weighing</th>
+                    <th>Weight kg</th>
+                    <th>Height cm</th>
+                    <th>WFA</th>
+                    <th>HFA</th>
+                    <th>WFH</th>
+                    <th>Nutrition Status</th>
                             </tr>
                           </thead>
                           <tbody>
                           </tbody>
                         </table>
+                        </div>
                       </div>
                       <div class="info-box">
                         <hr>

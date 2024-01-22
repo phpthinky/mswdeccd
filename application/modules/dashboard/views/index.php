@@ -2,26 +2,23 @@
 	<br/>
 	<section class="container-fluid" id="tab-header">
 
-		<ul class="nav nav-pills nav-justified">
-                  <li class="nav-item"><a class="nav-link active" href="#assessments" data-toggle="tab">Assessments</a></li>
-                  
-                  <li class="nav-item"><a class="nav-link " href="#activity" data-toggle="tab">Nutrition Status</a></li>
-                </ul>
+		
+		<h4>Nutrition Status</h4>
 
 	</section>
 	<section>
 		<div class="tab-content">
-		<dv class="tab-pane " id="activity">
+		<dv class="tab-pane active" id="activity">
 		
 		<hr>
+		<?php if ($this->aauth->is_admin()): ?>
 		<?php $this->load->view('nutricare');?>
+
+			<?php else: ?>
+		<?php $this->load->view('nutricare_worker');?>
+
+		<?php endif ?>
 		</dv>
-		<dv class="tab-pane active" id="assessments">
-
-		<hr>
-		<?php $this->load->view('assessments');?>
-
-	</dv>
 		
 		</div>
 		</section>

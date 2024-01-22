@@ -1,5 +1,3 @@
-
-<script type="text/javascript">
       var table =   $('#tblPupils')
       var d = new Date();
 //    var current_date = d.getFullYear() +"/"+(d.getMonth()+1)+"/"+d.getDate();
@@ -84,12 +82,14 @@
 
           }
         },complete:function(){
-                //refreshTable(center_id,worker_id,weighing,year_id)
 
-          $('#school_year').val(0)
-          $('#date_weighing').val(0)
-          $('#workersOption').val(0)
-          table.DataTable().clear().destroy();
+           $('#school_year').prop("selectedIndex",1)
+          $('#date_weighing').prop("selectedIndex",1)
+          $('#workersOption').prop("selectedIndex",1)
+          $('#school_year').trigger('change')
+           // refreshTable(center_id,worker_id,weighing,year_id)
+
+          //table.DataTable().clear().destroy();
 
 
         }
@@ -115,12 +115,13 @@
       var worker_id = $(this).val()
 
         var element = $('#school_year');
-        get_myschoolyear(worker_id,element)
+        $('#school_year')[0].selectedIndex = 1;
+       // get_myschoolyear(worker_id,element)
         
       var center_id = $('#centersOption').val();
           table.DataTable().clear().destroy();
-          $('#school_year').val(0)
-          $('#date_weighing').val(0)
+          //$('#school_year').val(0)
+          //$('#date_weighing').val(0)
                // refreshTable(center_id,worker_id,weighing,year_id)
 
 
@@ -136,8 +137,40 @@
         var  worker = $('#workersOption').val();
         var weighing = $('#date_weighing').val();
         var year_id = $('#school_year').val();
-            window.open(site_url+'/eccd/export/'+center+'/'+worker+'/'+weighing+'/'+year_id);
+        if (center.length <= 0) {
+            center = 0;
+        }
+
+        if (worker.length <= 0) {
+            worker = 0;
+        }
+
+            window.open(site_url+'/export_eccd/export/'+center+'/'+worker+'/'+weighing+'/'+year_id);
  
+        
+    })
+
+    $('#btn-print').on('click',function(){
+    //  $('.buttons-excel').click()
+        //$('#tblPupils').DataTable().destroy();
+        //window.print()
+        
+
+        var center = $('#centersOption').val();
+        var  worker = $('#workersOption').val();
+        var weighing = $('#date_weighing').val();
+        var year_id = $('#school_year').val();
+
+        var form= $('<form/>');
+            $(form).append($('<input/>').attr('name','centerId').val(center));
+            $(form).append($('<input/>').attr('name','workersId').val(worker));
+            $(form).append($('<input/>').attr('name','weighing').val(weighing));
+            $(form).append($('<input/>').attr('name','year_id').val(year_id));
+            $(form).attr('action','<?=site_url('eccd/print')?>');
+            $(form).attr('method','POST');
+
+            $('body').append($(form));
+            $(form).submit();
         
     })
 
@@ -149,9 +182,9 @@
     var center_id = $('#centersOption').val()
     var worker_id = $('#workersOption').val()
 
-    $('#date_weighing').val(0)
+   // $('#date_weighing').val(0)
 
-    //refreshTable(center_id,worker_id,weighing,year_id)
+    refreshTable(center_id,worker_id,weighing,year_id)
 
 })
   $('#date_weighing').on('change',function(){
@@ -161,6 +194,8 @@
     var year_id = $('#school_year').val()
     var center_id = $('#centersOption').val()
     var worker_id = $('#workersOption').val()
+    console.log(center_id+"/"+worker_id+"/"+weighing+"/"+year_id)
+
     refreshTable(center_id,worker_id,weighing,year_id)
   })
 
@@ -272,7 +307,9 @@ var ass_table = $('#table-assessment')
     var worker_id = $('#workersOption_ass').val()
     refreshTable_ass(center_id,worker_id,type,year_id)
   })
+
+  $('#list-pupils').on('click',function(argument) {
+      // body...
+    window.location = '<?=site_url('eccd/nutritions')?>';
+  })
 <?php include_once("charts.js.php"); ?>
-
-
-</script>

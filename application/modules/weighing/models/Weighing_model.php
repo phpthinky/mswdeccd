@@ -27,17 +27,33 @@
     }
 
   }
+
+  public function update($id,$data)
+  {
+    // code...
+      $this->db->where('id',$id);
+    if ($this->db->update('e_weighing',$data)) {
+      // code...
+      return array('status'=>true,'msg'=>'Successfully updated.');
+
+    }else{
+      return array('status'=>false,'msg'=>'Something went wrong.');
+
+    }
+
+
+  }
   public function check($student_id,$date,$type=0)
   {
     // code...
-    if($is_type = $this->db->get_where('e_weighing',array('student_id'=>$student_id,'weighing_type'=>$type))->result()){
+    if($is_type = $this->db->get_where('e_weighing',array('student_id'=>$student_id,'weighing_type'=>$type))->row(0)){
 
-      return true;
+      return $is_type->id;
     }
 
-   if($result =  $this->db->get_where('e_weighing',array('student_id'=>$student_id,'date_weighing'=>$date))->result()){
+   if($row =  $this->db->get_where('e_weighing',array('student_id'=>$student_id,'date_weighing'=>$date))->row(0)){
 
-    return true;
+    return $row->id;
    }else{
     return false;
    }

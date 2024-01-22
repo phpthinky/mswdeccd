@@ -23,34 +23,38 @@
                                   
                                   <label for="select-center-type">Type of center</label>
                                   <select id="select-center-type" name="center_type" class="form-control">
-                                    <option value="0" selected>---</option>
-                                    <option value="1">CDC</option>
-                                    <option value="2">SNP</option>
+                                    <option value="0" selected>View All</option>
+                                    <option value="CDC">CDC</option>
+                                    <option value="SNP">SNP</option>
                                   </select>
                                 </div>
                                 <div class="col-md-2">
                                   
                                   <label for="select-barangay">Select Barangay</label>
-                                  <select id="select-barangay" name="barangay" class="form-control">
+                                  <select name="barangay" id="select-center-barangay" class="form-control">
                                     <option value="0" selected>---</option>
-                                    <option value="1">Buenavista</option>
+                                    <?php if (!empty($barangay)): ?>
+                                      <?php foreach ($barangay as $key => $value): ?>
+                                        <option><?=$value->barangay?></option>
+                                      <?php endforeach ?>
+                                    <?php endif ?>
                                   </select>
                                 </div>
 
                                 <div class="col-md-6">
                                   <label for="searchstring">Searh here..</label>
-                                  <input type="search" id="searchstring" name="searchstring" placeholder="Search here..." class="form-control">
+                                  <input type="search" id="searchstring-center" name="searchstring" placeholder="Search here..." class="form-control">
                                 </div>
                                 
                                 <div class="col-md-2">
                                   <label for="filter-buttons"><span class="area-hidden">&nbsp;</span></label>
                                   <div class="row" id="filter-buttons">
-                                    <div class="col-sm-2 col-xs-2 col-md-6">
+                                    <div class="col-sm-2 col-xs-2 col-md-6 d-none">
                                   <button type="button" class="btn btn-md btn-primary">Filter</button>
                                       
                                     </div>
                                     <div class="col-sm-2 col-xs-2 col-md-6">
-                                  <button type="button" class="btn btn-md btn-success">Export</button>
+                                  <a href="#<?=site_url('export/centers/0/0')?>" class="btn btn-md btn-success" id="btn-export-centers">Export</a>
                                       
                                     </div>
                                   </div>
@@ -58,23 +62,25 @@
                               </div>
 
 </form>
-		
-				<table class="table table-bordered" id="table-list-data">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Name of center</th>
-							<th>Barangay</th>
-							<th>Complete Address</th>
-							<th>Worker Name</th>
-							<th>Total no. of pupils</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
+		      <div class="table-responsive">
+          
+        <table class="table table-bordered" id="table-list-data">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name of center</th>
+              <th>Barangay</th>
+              <th>Complete Address</th>
+              <th>Worker Name</th>
+              <th>Total no. of pupils</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
             
-					</tbody>
-				</table>
+          </tbody>
+        </table>  
+          </div>
 
 					</div>
 					<div class="tab-pane" id="add">

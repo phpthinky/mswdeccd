@@ -10,10 +10,14 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="<?=base_url('assets')?>/plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
+
   <link rel="stylesheet" href="<?=base_url('assets')?>/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="<?=base_url('assets')?>/plugins/bootstrap-select-1.13.14/css/bootstrap-select.css">
+  <link rel="stylesheet" href="<?=base_url('assets')?>/plugins/jquery-ui/jquery-ui-min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gijgo@1.9.14/css/gijgo.min.css">
 
   <link rel="stylesheet" href="<?=base_url('assets')?>/dist/css/adminlte.min.css">
+
   <link rel="stylesheet" href="<?=base_url('assets')?>/main-style.v-0.0.2.css">
   <style type="text/css">
     .loader{
@@ -41,6 +45,9 @@
       padding: 5px;
       line-height: 5px;
     }
+    .cursor-pointer{
+      cursor: pointer;
+    }
     @media print {
       .no-print{
         visibility: hidden;
@@ -58,6 +65,7 @@
     }
     }
   </style>
+
 </head>
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
@@ -183,7 +191,7 @@
             </a>
             <ul class="nav nav-treeview">
 
-          <li class="nav-item">
+          <li class="nav-item d-none">
             <a href="<?=site_url('workers/my_students')?>" class="nav-link">
               <i class="nav-icon fas fa-list"></i>
               <p>
@@ -192,7 +200,7 @@
             </a>
           </li>
 
-          <li class="nav-item">
+          <li class="nav-item d-none">
             <a href="<?=site_url('workers/assessments')?>" class="nav-link">
               <i class="nav-icon fas fa-check"></i>
               <p>
@@ -208,9 +216,16 @@
               </p>
             </a>
           </li>
-          
-
             </ul>
+          </li>
+
+          <li class="nav-item">
+            <a href="<?=site_url('workers/my_students')?>" class="nav-link">
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                My students
+              </p>
+            </a>
           </li>
         <?php endif ?>
           <?php if ($this->aauth->is_admin()): ?>
@@ -220,21 +235,13 @@
               <i class="nav-icon fas fa-users"></i>
               <p>
                 ECCD Records
-                <i class="fas fa-angle-left right"></i>
+                <i class="fas fa-angle-left rigt"></i>
 
               </p>
             </a>
             <ul class="nav nav-treeview">
 
 
-          <li class="nav-item">
-            <a href="<?=site_url('eccd/assessments')?>" class="nav-link">
-              <i class="nav-icon fas fa-check"></i>
-              <p>
-                Assessment
-              </p>
-            </a>
-          </li>
           <li class="nav-item">
             <a href="<?=site_url('eccd/nutritions')?>" class="nav-link">
               <i class="nav-icon fas fa-cross"></i>
@@ -302,24 +309,6 @@
                   <p>Tally of beneficiaries</p>
                 </a>
               </li>
-
-          <li class="nav-item">
-            <a href="<?=site_url('reports/assessment')?>" class="nav-link">
-              <i class="nav-icon fas fa-list"></i>
-              <p>
-                Assessment by domain
-              </p>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="<?=site_url('reports/assessment/all')?>" class="nav-link">
-              <i class="nav-icon fas fa-list"></i>
-              <p>
-                Assessment all domain
-              </p>
-            </a>
-          </li>
             </ul>
           </li>
           <li class="nav-item d-none">
@@ -346,59 +335,16 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <?php if ($this->aauth->is_admin()): ?>
-      
-              <li class="nav-item">
-                <a href="<?=site_url('assessment/domain_questions')?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Domain Questionaire</p>
-                </a>
-              </li>          
-              <?php endif ?>
 
-  <!-- /*            
-              <li class="nav-item">
-                <a href="<?=site_url('weighing')?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Weighing Schedule</p>
-                </a>
-              </li>
 
-              <li class="nav-item">
-                <a href="<?=site_url('nutritions/wfh')?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Weight for Height</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?=site_url('nutritions/wfa')?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Weight for Age</p>
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a href="<?=site_url('nutritions/hfA')?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Height for Age</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?=site_url('settings/feeding')?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Feeding Schedule</p>
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a href="<?=site_url('settings/assessment')?>" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Assessment Schedule</p>
-                </a>
-              </li>
-*/ -->
           <?php if ($this->aauth->is_admin()): ?>
               <li class="nav-item">
+                <a href="<?=site_url('settings/schoolyear')?>" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add School Year</p>
+                </a>
+              </li>
+              <li class="nav-item d-none">
                 <a href="<?=site_url('settings/address')?>" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add Barangay</p>
@@ -456,9 +402,12 @@
 
 <!-- jQuery -->
 <script src="<?=base_url('assets')?>/plugins/jquery/jquery.min.js"></script>
+
 <!-- Bootstrap 4 -->
 <script src="<?=base_url('assets')?>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="<?=base_url('assets')?>/plugins/bootstrap-select-1.13.14/js/bootstrap-select.min.js"></script>
+<script src='<?=base_url('assets')?>/plugins/jquery-ui/jquery-ui.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/gijgo@1.9.14/js/gijgo.min.js '></script>
 
 <!-- AdminLTE App -->
 <script src="<?=base_url('assets')?>/dist/js/adminlte.min.js"></script>
@@ -524,7 +473,9 @@ $(function(){
 })
 </script>
 <script src="<?=base_url('assets/main-script-1.0.0.js')?>"></script>
-
+<script type="text/javascript">
 <?php $this->load->view('core/js'); ?>
+  
+</script>
 </body>
 </html>

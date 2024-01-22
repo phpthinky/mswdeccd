@@ -19,64 +19,6 @@
                 </div>
 
                      
-                      <div class="row">
-                        <div class="col-sm-12 col-md-6 col-xs-12">
-                           <div class="form-group row">
-                        <label for="age" class="col-sm-12 col-md-4 col-xs-12 col-form-label">Student type</label>
-                        <div class="col-sm-12 col-md-8">
-                          <select class="form-control" name="StudentType" id="StudentType" required>
-
-                            <option value="1">New</option>
-                            <option value="2">Repeater</option>
-                          </select>
-                        </div>
-                      </div>
-
-                        </div>
-                        <div class="col-sm-12 col-md-6 col-xs-12">
-                          
-                      <div class="form-group row">
-                        <label for="age" class="col-sm-12 col-md-4 col-xs-12  col-form-label">School Year</label>
-                        <div class="col-sm-12 col-md-8">
-                          <select class="form-control class-schedule" name="class_schedule" id="class_schedule" required>
-                            <option value="0">Select class schedule</option>
-                            <?php if (!empty($schoolyears)): ?>
-                                <?php foreach ($schoolyears as $key => $value): ?>
-                                  <option value="<?=$value->YearId?>"><?=tomdy($value->YearStart)?> to <?=tomdy($value->YearEnd)?></option>
-                                <?php endforeach ?>
-                              <?php endif ?>
-                          </select>
-                        </div>
-                      </div>
-                        </div>
-                      </div>
-
-                      <div class="row d-none" id="search-student">
-                         <div class="col-md-2"><label>Search</label></div>
-                      <div class="col-md-10">
-                        
-                  <div class="input-group input-group">
-                  <input type="text" class="form-control" name="searcholdstudent" id="searcholdstudent" placeholder="Search here...">
-                  <span class="input-group-append">
-                    <button type="button" class="btn btn-info btn-flat" id="btn-find-oldstudent">Go!</button>
-                  </span>
-                </div>
-
-                      </div>
-
-                      <div class="col-md-2"></div>
-                      <div class="col-md-10">
-                        
-                    <hr>
-                    <div id="repeater-result">
-                      
-                    </div>
-                    <hr>
-                    
-                      </div>
-                    </div>
-
-                      </div>
                 <div class="form-group row d-none">
                   <label class="col-sm-12 col-md-2">Center</label>
                   <div class="col-sm-12 col-md-10">
@@ -109,10 +51,54 @@
                             <div class="col-xs-12 col-md-1"><input type="text" class="form-control" name="mName" placeholder="Mi." value=""/></div>
                             <div class="col-xs-12 col-md-4"><input type="text" class="form-control" name="lName" required placeholder="Last Name" value="" required /></div>
                             
-                            <div class="col-xs-12 col-md-3"><input type="text" name="ext" value="" class="form-control" placeholder="Extension: Jr." width="50px"></div>
+                            <div class="col-xs-12 col-md-2"><input type="text" name="ext" value="" class="form-control" placeholder="Extension: Jr." width="50px"></div>
+
+                            <div class="col-xs-12 col-md-1"><button id="btn-check-names" class="btn btn-md btn-outline-success" type="button">Check</button></div>
                             </div>
                             
 
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <ul class="list-group" id="add-student-list-group">
+                            <li class="list-group-item"><a href="#" class="nav-link">list of name will display here...</a>  </li>
+                          </ul>
+                        </div>
+                      </div>
+
+                    <div id="add-other-info" class="d-none">
+
+                      <div class="row">
+                        <div class="col-sm-12 col-md-6 col-xs-12">
+                           <div class="form-group row">
+                        <label for="age" class="col-sm-12 col-md-4 col-xs-12 col-form-label">Student type</label>
+                        <div class="col-sm-12 col-md-8">
+                          <select class="form-control" name="StudentType" id="StudentType" required>
+
+                            <option value="1">New</option>
+                            <option value="2">Repeater</option>
+                          </select>
+                        </div>
+                      </div>
+
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-xs-12">
+                          
+                      <div class="form-group row">
+                        <label for="age" class="col-sm-12 col-md-4 col-xs-12  col-form-label">School Year</label>
+                        <div class="col-sm-12 col-md-8">
+                          <select class="form-control class-schedule" name="class_schedule" id="class_schedule" required>
+                            <option value="0">Select class schedule</option>
+                            <?php if (!empty($schoolyears)): ?>
+                                <?php foreach ($schoolyears as $key => $value): ?>
+                                  <option value="<?=$value->YearId?>"><?=tomdy($value->YearStart)?> to <?=tomdy($value->YearEnd)?></option>
+                                <?php endforeach ?>
+                              <?php endif ?>
+                          </select>
+                        </div>
+                      </div>
                         </div>
                       </div>
                       <div class="row">
@@ -136,9 +122,9 @@
                         <div class="col-sm-12 col-md-8">
                           <select class="form-control" name="gender" id="gender" required>
                             <option value="">Select gender</option>
-                            <option value="1" >Female</option>
+                            <option value="1" >Boy</option>
 
-                            <option value="2" >Male</option>
+                            <option value="2" >Girl</option>
                           </select>
                           <div class="error"></div>
                         
@@ -263,8 +249,77 @@
                       <button class="btn btn-primary" type="submit">Add</button>
 
                     </div>
-                    </div>
+                    </div></div>
+
+                      <div class="row">
+                        <div class="error-area" id="error-area"></div>
+                      </div>
+
+
                       </div>
             </form>
+        </div>
       	</div>
+      </div>
+
+      <div class="modal" id="modaladdfromlist">
+        <div class="modal-dialog modal-content modal-md">
+          <div class="modal-header"><label>Enroll from list</label></div>
+          <div class="modal-body">
+            <form id="frm_from_list" action="javascript:void(0)">
+              
+            <div class="row d-none">
+              <label class="modal_student_status"></label>
+              <input type="hidden" name="student_status" value="0">
+            </div>
+            <div class="row d-none">
+              <label class="modal_student_worker_id"></label>
+              <input type="hidden" name="worker_id" value="0">
+            </div>
+
+              <div class="form-group row">
+                    <label for="age" class="col-sm-12 col-md-4 col-xs-12 col-form-label">Student name</label>
+                    <div class="col-sm-12 col-md-8">
+                      
+                        
+              <label class="modal_student_name"></label>
+              <input type="hidden" name="student_id" value="0">
+                    </div>
+              </div>
+              <div class="form-group row">
+                    <label for="age" class="col-sm-12 col-md-4 col-xs-12 col-form-label">Class Schedule</label>
+                    <div class="col-sm-12 col-md-8">
+                      
+                        <select class="form-control class-schedule" name="year_id" id="modal_class_schedule" required>
+                            <option value="0">Select class schedule</option>
+                            <?php if (!empty($schoolyears)): ?>
+                                <?php foreach ($schoolyears as $key => $value): ?>
+                                  <option value="<?=$value->YearId?>"><?=cmonthYear($value->YearStart)?> to <?=cmonthYear($value->YearEnd)?></option>
+                                <?php endforeach ?>
+                              <?php endif ?>
+                          </select>
+                    </div>
+              </div>
+              <div class="form-group row">
+                    <label for="age" class="col-sm-12 col-md-4 col-xs-12 col-form-label">Student type</label>
+                    <div class="col-sm-12 col-md-8">
+                      <select class="form-control" name="StudentType" id="StudentType" required>
+
+                        <option value="1">New</option>
+                        <option value="2">Repeater</option>
+                      </select>
+                    </div>
+              </div>
+
+              <div class="form-group row">
+                    <label for="age" class="col-sm-12 col-md-4 col-xs-12 col-form-label">&nbsp;</label>
+                    <div class="col-sm-12 col-md-8">
+                      
+                      <button class="btn btn-md btn-outline-success" type="submit">Enroll</button>
+                    </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
       </div>

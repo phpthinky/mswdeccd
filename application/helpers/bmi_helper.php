@@ -35,23 +35,23 @@ if (!function_exists('get_wfa')) {
 	{
 		// code...
 		//$percentage = ($actual_weight/$ideal_weight) * 100;
-		if ($percentage < 50) {
+		if ($percentage < 60) {
 			// code...
-			return 'SU';
-		}elseif ($percentage <= 80) {
+			return 'SUW';
+		}elseif ($percentage <= 70) {
 			// code...
 			return 'U';
 
-		} elseif ($percentage > 80 && $percentage <= 110) {
+		} elseif ($percentage > 70 && $percentage <= 110) {
 			// code...
 			return 'N';
-		}
-		elseif ($percentage > 111 && $percentage < 121) {
+		/*}
+		elseif ($percentage > 111 && $percentage < 140) {
 			// code...
-			return 'OW';
+			return 'OW';*/
 		}else {
 			// code...
-			return 'OB';
+			return 'OW';
 		}
 		
 
@@ -142,20 +142,20 @@ if (!function_exists('get_hfa')) {
 		if ($percentage < 50) {
 			// code...
 			return 'SS';
-		}elseif ($percentage <= 80) {
+		}elseif ($percentage <= 93) {
 			// code...
 			return 'S';
 
-		} elseif ($percentage > 80 && $percentage <= 110) {
+		} elseif ($percentage > 93 && $percentage <= 110) {
 			// code...
 			return 'N';
-		}
+		/*}
 		elseif ($percentage > 111 && $percentage < 120) {
 			// code...
-			return 'T';
+			return 'T';*/
 		}else {
 			// code...
-			return 'ST';
+			return 'T';
 		}
 	}
 }
@@ -190,10 +190,10 @@ if (!function_exists('get_wfh')) {
 
 		if ($percentage < 70) {
 			// code...
-			return 'SAM';
+			return 'SW';
 		}elseif ($percentage <= 80) {
 			// code...
-			return 'MAM';
+			return 'W';
 
 		} elseif ($percentage > 80 && $percentage <= 110) {
 			// code...
@@ -378,13 +378,13 @@ if (!function_exists('get_whz')) {
         		$sam = explode(";",$value["SAM"]);
         		if ($weight >= $sam[0] AND $weight <= $sam[1]) {
         			// code...
-        			return "SAM";
+        			return "SW";
         		}
 
         		$mam = explode(";",$value["MAM"]);
         		if ($weight >= $mam[0] AND $weight <= $mam[1]) {
         			// code...
-        			return "MAM";
+        			return "W";
         		}
 
         		$norm = explode(";",$value["N"]);
@@ -397,7 +397,7 @@ if (!function_exists('get_whz')) {
         		$sam = explode(";",$value["OV"]);
         		if ($weight >= $sam[0] AND $weight <= $sam[1]) {
         			// code...
-        			return "OV";
+        			return "OW";
         		}
         		$sam = explode(";",$value["OB"]);
         		if ($weight >= $sam[0]) {

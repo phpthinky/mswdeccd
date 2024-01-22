@@ -1,13 +1,18 @@
-<script type="text/javascript">
-
 	var table = $('#reports-feeding')
 	var settings;
 $(function(){
 	table.DataTable({
 		dom:'Bfrtip',
 		buttons:['excel']
-		
+		});
+	$('#btn-go-filter-feeding').on('click',function(){
+		var year_id = $('#filter-school-year').val()
+		window.location = '<?=site_url('reports/feeding/')?>'+year_id;
 	})
+
+
+
+
 	$('.generate-report-all').on('click',function(){
 
 		$('.btn-print').removeClass('disabled')
@@ -148,5 +153,3 @@ $(function(){
 		}
 
 	})
-
-</script>

@@ -38,7 +38,7 @@
                           <?php if (  !empty($schoolyears)): ?>
                             
                                 <?php foreach ($schoolyears as $key => $value): ?>
-                                  <option value="<?=$value->YearId  ?>"><?=tomdy($value->YearStart)?> to <?=tomdy($value->YearEnd )?></option>
+                                  <option value="<?=$value->YearId  ?>"><?=cMonthYear($value->YearStart)?> to <?=cMonthYear($value->YearEnd )?></option>
                                 <?php endforeach ?>
 
                           <?php endif ?>
@@ -82,6 +82,8 @@
                       </div>
                   </div>
                         <hr>
+                        <div class="table-responsive">
+                          
                         <table class="table table-bordered" id="table-assessment">
                           
                           <thead>
@@ -113,6 +115,7 @@
                             <?php endif ?>
                           </tbody>
                         </table>
+                        </div>
 
                       </div>
                       <div class="info-box">

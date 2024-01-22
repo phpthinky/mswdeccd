@@ -17,14 +17,62 @@ class Reports extends MY_Controller
 		$this->load->model('reports/reports_model');
 		$this->load->model('settings/settings_model');
 	}
-	public function feeding($worker_id=0,$year_start='',$year_end='')
+	public function feeding($year_id=0,$year_start='',$year_end='')
 	{
 		// code...
-
-
 		$data = new stdClass();
-		
+
+		if ($year_id > 0) {
+			// code...
+			$data->filter_schoolyear =  $this->settings_model->getSchoolYearTitle($year_id);
+
+		$data->list_feeding = $this->reports_model->list_feeding_by_year($year_id);
+
+	//	var_dump($data);
+		//exit();
+		}else{
 		$data->list_feeding = $this->reports_model->get_supplementary_feeding();
+
+		}
+		$boys = 0;
+		$girls = 0;
+		$cdc = 0;
+		$cdc_child = 0;
+		$snp=0;
+		$snp_child = 0;
+		if (!empty($data->list_feeding)) {
+			// code...
+			foreach ($data->list_feeding as $key => $value) {
+				// code...
+				$boys+=$value->total_students_boys;
+				$girls+=$value->total_students_girls;
+				if (strpos($value->center_name,'CDC') !==  false) {
+					// code...
+					$a = $value->total_students_boys + $value->total_students_girls;
+				$cdc_child+=$a;
+
+					$cdc++;
+				}else{
+
+					$b = $value->total_students_boys + $value->total_students_girls;
+					$snp_child+=$b;
+					$snp++;
+				}
+			}
+		}
+		$data->total_boys = $boys;
+		$data->total_girls = $girls;
+
+		$data->cdc_child = $cdc_child;
+		$data->snp_child = $snp_child;
+
+		$data->cdc = $cdc;
+		$data->snp = $snp;
+		
+    $data->centers = $this->centers_model->getCenters();
+    $data->workers = $this->workers_model->getWorkers();
+    $data->schoolyears = $this->settings_model->listschoolyears();
+
 		$data->content = 'reports/supplementaryfeeding';
 		$this->template->dashboard($data);
 	}

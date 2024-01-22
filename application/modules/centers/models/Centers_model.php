@@ -102,6 +102,38 @@ class Centers_model extends CI_model
 		$this->db->select('centerId, centerName');
 		return $this->db->get('ecenter')->result();
 	}
+
+	public function getBarangay($barangay='',$type='')
+	{
+		// code...
+		$this->db->select('barangay');
+		$this->db->group_by('barangay');
+		$this->db->order_by('barangay','ASC');
+		$query =  $this->db->get('ecenter');
+		return $query->result();
+	}
+
+	public function listbyBarangay($barangay='',$type='')
+	{
+		// code...
+		$this->db->select('*');
+
+		if (!empty($barangay) && !empty($type)) {
+		$this->db->where('barangay',$barangay);	// code...
+		$this->db->like('center_name',$type);	// code...
+
+		}
+		if (!empty($barangay) && empty($type)) {
+		$this->db->where('barangay',$barangay);	// code...
+		}
+		if (empty($barangay) && !empty($type)) {
+
+		$this->db->like('center_name',$type);	// code...
+		}
+		$this->db->order_by('barangay','ASC');
+		$query =  $this->db->get('center_schoolyear');
+		return $query->result();
+	}
 	public function remove($id)
 	{
 		// code...

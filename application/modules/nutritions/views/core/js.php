@@ -1,5 +1,3 @@
-<script type="text/javascript">
-
 $(function(){
 	'use_strict'
 	//var table;
@@ -40,4 +38,3 @@ $(function(){
 			})
 	})
 })
-</script>
