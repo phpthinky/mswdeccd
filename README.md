@@ -1,7 +1,19 @@
-# mswdeccd
- websample
-Weight estimation in paediatrics: a comparison of the APLS formula and the formula 'Weight=3(age)+7'
-For Infants < 12 months: Weight (kg) = (age in months + 9)/2.
-For Children aged 1-5 years: Weight (kg) = 2 x (age in years + 5)
-For Children aged 5-14 years: Weight (kg) = 4 x age in years.
+# Child Health Monitoring System
 
+📌 A web-based health monitoring tool for evaluating children's nutrition based on their height, weight, and age.
+
+🛠️ Built With:
+- PHP (CodeIgniter)
+- MySQL
+- Bootstrap for UI
+
+📊 Health status is computed using ECCD guidelines from the DSWD.
+
+🎓 Developed as part of a university thesis project. Sample data only.
+
+🔐 Code structure includes:
+- Input form for height/weight/age
+- Automated BMI and nutrition analysis
+- Result dashboard with categorized health indicators
+
+💬 For demo or collaboration, contact: roivanrita@gmail.com
